@@ -1,0 +1,14 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Local test artifacts
+smoke_test.js
+inspect_*.js
+*.tmp
+*.bak
