@@ -1,0 +1,3 @@
+root: .
+directory: disabled
+pushstate: disabled
