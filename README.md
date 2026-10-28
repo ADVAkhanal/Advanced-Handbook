@@ -57,3 +57,17 @@ The handbook text lives inside `Advanced_Handbook_Dashboard.html` as a `window.H
 ```
 
 The content field supports a small markdown subset: `**bold**`, `*italic*`, `-` bullets, and `1.` numbered lists.
+
+## Infographics (route map, policy drawings)
+
+The navigation map under the search box, the drawings inside ten section cards, and the
+"How answers work" drawing in the About panel are generated from
+`infographics/handbook-infographics.js` + `.css` and inlined into the HTML so the portal
+stays one offline file.
+
+- Edit the files in `infographics/`, then run `node infographics/inline.mjs`.
+- Every number in a drawing comes from the handbook text and each drawing cites its
+  section. If the policy text changes, update the matching drawing in the same commit.
+- Station circle area is proportional to a chapter's section count; bar lengths are
+  proportional to hours/weeks. Do not eyeball geometry.
+- Method: EpicInfographics (Blueprint language) adapted to the handbook brand tokens.
