@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-156 -2 312 275" role="img" aria-label="Advanced">
+<title>Advanced</title>
+<defs>
+<linearGradient id="adv-gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F5F6"/><stop offset="1" stop-color="#B4B9BE"/></linearGradient>
+<linearGradient id="adv-gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9AEB3"/><stop offset="1" stop-color="#666C72"/></linearGradient>
+<linearGradient id="adv-rl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D52E2E"/><stop offset="1" stop-color="#B42424"/></linearGradient>
+<linearGradient id="adv-rr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EE3B3B"/><stop offset="1" stop-color="#D02B2B"/></linearGradient>
+</defs>
+<path d="M0 0 L-61.6 108.1 L-34.5 155.6 L0 95Z" fill="url(#adv-gl)"/>
+<path d="M0 0 L61.6 108.1 L34.5 155.6 L0 95Z" fill="url(#adv-gr)"/>
+<path d="M-64.5 113.5 L-4.5 218.8 L-31.5 266.1 L-63.5 210 L-98.3 271 L-154.3 271Z" fill="url(#adv-rl)"/>
+<path d="M64.5 113.5 L154.3 271 L98.3 271 L63.5 210 L28.7 271 L-25.3 271Z" fill="url(#adv-rr)"/>
+</svg>
