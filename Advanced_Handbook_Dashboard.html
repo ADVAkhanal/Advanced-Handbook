@@ -2719,5 +2719,25 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
 
 </script>
 
+<!-- First Shift: a link to the handbook game, and ?q= links (the game's "Read the full section") open the search
+     already asked. Additive: remove this block to take it out. -->
+<script id="game-link-v1">
+(function () {
+  var meta = document.querySelector('.header-meta');
+  if (meta) {
+    var a = document.createElement('a');
+    a.href = 'handbook-game.html'; a.textContent = 'Play First Shift';
+    a.title = 'Learn the handbook as a short game';
+    a.style.cssText = 'color:#F4F4F5;text-decoration:none;border:1px solid #EE2D24;border-radius:2px;padding:6px 10px;font-family:var(--font-display);letter-spacing:1.5px;text-transform:uppercase;font-size:12px';
+    meta.insertBefore(a, meta.firstChild);
+  }
+  var q = new URLSearchParams(location.search).get('q');
+  if (q) {
+    var input = document.getElementById('search-input'), btn = document.getElementById('search-btn');
+    if (input && btn) { input.value = q.slice(0, 200); setTimeout(function () { btn.click(); }, 0); }
+  }
+})();
+</script>
+
 </body>
 </html>

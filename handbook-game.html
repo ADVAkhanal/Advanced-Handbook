@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First Shift · Advanced Handbook game</title>
+<link rel="icon" href="advanced-mark.svg" type="image/svg+xml">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;600;700&display=swap">
+<style>
+/* First Shift: the employee handbook as a small game, drawn like the New Work Instructions posters (pixel scenes,
+   a lit marquee, paper callouts). Every answer quotes the handbook (effective 01.01.2026) and names its section;
+   tools/check-game-quotes.mjs proves each quote is in the handbook word for word. */
+:root{--ink:#16191c;--paper:#f1ece2;--red:#EE2D24;--red2:#B81C16;--steel:#2e3338;--mid:#8d8a91;--silver:#bbb7b8;--bg:#0a0a0a;--card:#141414;--line:#2a2a2d;--ok:#3fbf7f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:#f4f4f5;font:16px/1.5 Raleway,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
+.top{display:flex;align-items:center;gap:14px;padding:10px max(16px,3vw);border-bottom:1px solid var(--line);background:#0d0d0e;position:sticky;top:0;z-index:5}
+.top img{height:26px}
+.top .name{font:400 24px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em}
+.top .name b{color:var(--red);font-weight:400}
+.xp{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver);font-variant-numeric:tabular-nums}
+.xp i{display:block;width:110px;height:6px;background:var(--steel);position:relative}
+.xp i b{position:absolute;inset:0;background:var(--red);transform-origin:0 50%;transform:scaleX(0);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.badges{display:flex;gap:4px}
+.badges span{width:12px;height:12px;border:1.5px solid var(--steel);background:transparent}
+.badges span.on{background:var(--red);border-color:var(--red)}
+.qbtn{background:transparent;color:#f4f4f5;border:1px solid var(--steel);border-radius:2px;padding:6px 10px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.qbtn[aria-pressed="true"]{border-color:var(--red)}
+.wrap{max-width:1080px;margin:0 auto;padding:16px max(16px,3vw) 40px}
+.screen{position:relative;width:100%;aspect-ratio:16/9;background:#15171a;border:1px solid var(--steel);overflow:hidden;container-type:inline-size;max-height:64vh;margin:0 auto}
+.screen canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+/* marquee and chips, as on the posters */
+.mq{position:absolute;left:50%;top:5%;transform:translateX(-50%);background:var(--paper);color:var(--ink);border:.5cqi solid var(--ink);padding:1cqi 3cqi .9cqi;white-space:nowrap;pointer-events:none}
+.mq h2{margin:0;font:400 4.6cqi/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.mq small{display:block;font:700 1.5cqi/1.2 Raleway,sans-serif;color:#3d4349;text-transform:uppercase;letter-spacing:.08em;margin-top:.3cqi}
+.mq i{position:absolute;width:.9cqi;height:.9cqi;border-radius:50%;background:#e0b24f;opacity:.35}.mq i.lit{opacity:1;background:#ffd77a}
+.sign{position:absolute;transform:translate(-50%,-100%);background:var(--paper);color:var(--ink);border:.35cqi solid var(--ink);padding:.5cqi 1.2cqi;font:400 2.4cqi/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;pointer-events:none}
+.sign.done::after{content:"";display:inline-block;width:1.2cqi;height:1.2cqi;background:var(--ok);margin-left:.8cqi;vertical-align:.1cqi}
+.prompt{position:absolute;transform:translate(-50%,0);background:var(--red);color:#fff;font:700 1.9cqi/1 Raleway,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:.8cqi 1.2cqi;white-space:nowrap;pointer-events:none}
+.co{position:absolute;transform:translate(0,-50%);display:flex;align-items:center;pointer-events:none}
+.co::before{content:"";width:1.4cqi;height:1.4cqi;border-radius:50%;background:var(--red);border:.25cqi solid #fff;flex:none;margin-left:-.9cqi}
+.co span{border-top:.3cqi solid var(--paper);width:3cqi;flex:none}
+.co em{font:700 1.8cqi/1 Raleway,sans-serif;font-style:normal;letter-spacing:.06em;text-transform:uppercase;background:var(--paper);color:var(--ink);border:.3cqi solid var(--ink);padding:.6cqi 1cqi;white-space:nowrap}
+.co.l{flex-direction:row-reverse;transform:translate(-100%,-50%)}.co.l::before{margin:0 -.9cqi 0 0}
+.spot{position:absolute;width:12%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:transparent;border:2px dashed transparent;color:transparent}
+.spot:focus-visible{border-color:var(--paper)}
+.spot.found{border:.5cqi solid var(--red);cursor:default}
+/* the panel under the screen: dialogue, choices, results */
+.panel{margin-top:14px;background:var(--card);border:1px solid var(--line);border-top:2px solid var(--red);padding:18px 20px;min-height:170px}
+.who{display:inline-block;font:400 20px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;background:var(--paper);color:var(--ink);padding:4px 8px 3px;margin-bottom:10px}
+.say{font-size:18px;line-height:1.55;min-height:3.1em}
+.q{font:400 30px/1.05 'Bebas Neue',Impact,sans-serif;letter-spacing:.02em;margin:0 0 12px}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:12px;align-items:center;text-align:left;background:#101012;color:#f4f4f5;border:1px solid var(--line);border-radius:2px;padding:12px 14px;font-size:16px}
+.choice kbd{font:700 12px/1 Raleway,sans-serif;background:var(--paper);color:var(--ink);padding:4px 7px;border-radius:2px}
+.choice:active{transform:scale(.99)}
+.res{display:flex;align-items:center;gap:10px;font:400 30px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.03em}
+.res.ok{color:var(--ok)}.res.no{color:var(--red)}
+.why{margin:8px 0 12px;color:#d8d6d6}
+blockquote{margin:0 0 12px;padding:12px 14px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);font-size:15px;line-height:1.5}
+blockquote b{display:block;font:400 18px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:var(--red2);margin-bottom:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.go{background:var(--red);color:#fff;border:1px solid var(--red);border-radius:2px;padding:10px 18px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+.go.ghost{background:transparent;color:#f4f4f5;border-color:var(--steel)}
+.link{color:var(--silver);font-size:14px}
+.hint{color:var(--mid);font-size:13px;margin-top:10px}
+.track{position:relative;height:64px;background:#101012;border:1px solid var(--line);overflow:hidden;margin:6px 0 10px}
+.track .line{position:absolute;left:22%;top:0;bottom:0;width:3px;background:var(--red)}
+.track .ev{position:absolute;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--ink);font-weight:700;font-size:13px;padding:6px 9px;border:2px solid var(--ink);white-space:nowrap}
+.track .ev.hit{background:var(--ok);color:#06210f}.track .ev.miss{background:#5a1a17;color:#fff}
+.sort{display:grid;gap:8px}
+.card{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#101012;border:1px solid var(--line);padding:10px 12px}
+.card.ok{border-color:var(--ok)}.card.no{border-color:var(--red)}
+.card small{grid-column:1/-1;color:#d8d6d6}
+.touch{display:none;gap:8px;justify-content:center;margin-top:10px}
+@media (pointer:coarse){.touch.on{display:flex}}
+.touch button{min-width:84px;padding:12px;background:#101012;color:#f4f4f5;border:1px solid var(--steel);border-radius:2px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.swatches{display:flex;gap:8px}
+.swatches button{width:34px;height:34px;border:2px solid var(--steel);border-radius:2px}
+.swatches button[aria-pressed="true"]{border-color:var(--paper)}
+.cert{background:var(--paper);color:var(--ink);border:3px solid var(--ink);padding:22px}
+.cert h2{font:400 44px/1 'Bebas Neue',Impact,sans-serif;margin:0 0 6px}
+.foot{color:var(--mid);font-size:13px;margin-top:22px;line-height:1.5}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:640px){.xp i{width:60px}.q{font-size:24px}.say{font-size:16px}.top .name{font-size:20px}}
+@media print{.top,.touch,.row,.screen{display:none}.cert{border:2px solid #000}}
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="advanced-mark.svg" alt="Advanced">
+  <span class="name">First <b>Shift</b></span>
+  <div class="xp" aria-label="Progress"><span id="xpN">0 XP</span><i><b id="xpBar"></b></i><div class="badges" id="badges" aria-hidden="true"></div></div>
+  <button type="button" class="qbtn" id="snd" aria-pressed="false">Sound off</button>
+  <a class="qbtn" href="Advanced_Handbook_Dashboard.html">Handbook</a>
+</header>
+<main class="wrap">
+  <div class="screen" id="screen"><canvas id="cv" width="256" height="144" role="img" aria-label="Game scene"></canvas></div>
+  <div class="touch" id="touch"><button type="button" data-t="left">Left</button><button type="button" data-t="go">Go in</button><button type="button" data-t="right">Right</button></div>
+  <section class="panel" id="panel" aria-live="polite"></section>
+  <p class="foot">Practice only. Every answer quotes the Advanced Companies Employee Handbook (effective 01.01.2026) and names its section. If this game and the handbook ever differ, the handbook wins. Questions about your own situation go to your manager or HR. Your progress is saved in this browser only.</p>
+</main>
+<script>
+'use strict';
+// ── pixel kit (the posters' kit and palette)
+const W = 256, H = 144, G = 118;
+const P = { wall: '#1d2024', wall2: '#23272b', sky: '#14171b', floor: '#2b3035', floor2: '#33393f', st0: '#30353a', st1: '#4c5359', st2: '#7d858c', st3: '#aab1b7', st4: '#dde1e4',
+  red: '#e03131', red2: '#a51f1f', redT: '#f0605f', dark: '#121417', blue: '#3d6fa5', blueT: '#5f8cbf', blueS: '#2b4f78', blueL: '#8fb4d9', wood: '#86684a', woodT: '#a3825f', woodS: '#63492f',
+  card: '#a07a52', cardT: '#b98f63', cardS: '#7d5c3d', paper: '#eef0f2', line: '#9aa0a4', green: '#3fbf7f', greenD: '#2b8a5a', amber: '#e0a43a', amberD: '#a8781f', lamp: '#ffd77a' };
+const clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
+const ez = (x) => x * x * (3 - 2 * x);
+const E = (t, a, b) => ez(clamp((t - a) / (b - a)));
+const lerp = (a, b, k) => a + (b - a) * k;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+const r = (x, y, w, h, c) => { w = Math.round(w); h = Math.round(h); if (w <= 0 || h <= 0) return; ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+const px = (x, y, c) => r(x, y, 1, 1, c);
+const box = (x, y, w, h, d, f, t, s) => { x = Math.round(x); y = Math.round(y); r(x, y, w, h, f); for (let i = 1; i <= d; i++) { r(x + i, y - i, w, 1, t); r(x + w - 1 + i, y - i + 1, 1, h, s); } };
+const disc = (cx, cy, R, c) => { for (let y = -R; y <= R; y++) { const w = Math.floor(Math.sqrt(R * R - y * y)); r(cx - w, cy + y, w * 2 + 1, 1, c); } };
+const person = (x, yF, pose = 'stand', o = {}) => {
+  x = Math.round(x); yF = Math.round(yF);
+  const shirt = o.shirt || P.red, shirtD = o.shirtD || P.red2, pants = o.pants || '#2f3a4a', skin = o.skin || '#c99a7a', hair = o.hair || '#3a2c22', top = yF - 19;
+  r(x + 1, top, 5, 2, hair); r(x + 1, top + 2, 5, 3, skin); r(x + 1, top + 3, 5, 1, '#1b1e21'); r(x + (o.face === -1 ? 1 : 4), top + 3, 1, 1, P.st3);
+  if (o.cap) r(x, top - 1, 7, 2, o.cap);
+  r(x, top + 5, 7, 7, shirt); r(x, top + 11, 7, 1, shirtD);
+  const arm = o.reach ? 3 : 0; r(x - 1, top + 6, 1, 5 - arm, shirtD); r(x + 7, top + 6, 1, 5 - arm, shirtD); r(x + (o.face === -1 ? -1 : 7), top + 11 - arm, 1, 1, skin);
+  const ly = top + 12, lh = yF - ly;
+  if (pose === 1) { r(x, ly, 2, lh, pants); r(x + 5, ly, 2, lh, pants); r(x - 1, yF - 1, 3, 1, '#111'); r(x + 5, yF - 1, 3, 1, '#111'); }
+  else { r(x + 1, ly, 2, lh, pants); r(x + 4, ly, 2, lh, pants); r(x + 1, yF - 1, 2, 1, '#111'); r(x + 4, yF - 1, 2, 1, '#111'); }
+};
+const room = () => { r(0, 0, W, H, P.wall); for (let x = 14; x < W; x += 30) r(x, 0, 1, G, P.wall2); r(0, G, W, H - G, P.floor); r(0, G, W, 1, P.floor2); r(0, G + 1, W, 1, P.red2); for (let x = 4; x < W; x += 16) r(x, G + 12, 8, 1, P.floor2); };
+const desk = (x, w) => { box(x, G - 16, w, 4, 3, P.wood, P.woodT, P.woodS); r(x + 2, G - 12, 2, 12, P.woodS); r(x + w - 4, G - 12, 2, 12, P.woodS); };
+const screenBox = (x, y, on) => { box(x, y, 22, 15, 2, P.st1, P.st2, P.st0); r(x + 2, y + 2, 18, 11, on || P.dark); r(x + 9, y + 15, 4, 3, P.st1); r(x + 6, y + 18, 10, 1, P.st2); };
+const machine = (x, run, t) => { box(x, G - 40, 44, 40, 4, P.st3, P.st4, P.st2); r(x + 4, G - 34, 26, 22, P.dark); r(x + 33, G - 34, 8, 12, P.dark); r(x + 34, G - 33, 6, 4, run ? P.green : P.st1);
+  r(x + 16, G - 34, 3, 10 + (run ? Math.round(Math.sin(t * 3) * 2) : 0), P.st2); if (run) for (let k = 0; k < 3; k++) px(x + 10 + ((t * 40 + k * 7) % 16), G - 16 - k, P.st3); r(x + 46, G - 52, 2, 12, P.st1); disc(x + 47, G - 54, 2, run ? P.green : P.amber); };
+const HELPER = { shirt: P.st2, shirtD: P.st1, hair: '#1f1a17', skin: '#a8765a' };
+
+// ── sound: a few blips, off until someone presses Sound
+const Snd = (() => { let ac = null, on = false;
+  const beep = (f, d, type = 'square', v = 0.05, when = 0) => { if (!on || !ac) return; const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + when; o.type = type; o.frequency.value = f; g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + 0.02); };
+  return { toggle() { if (!ac) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return false; ac = new C(); } on = !on; if (on) ac.resume(); return on; },
+    ok() { beep(660, .09); beep(990, .14, 'square', .05, .09); }, no() { beep(180, .25, 'triangle', .09); }, tick() { beep(1200, .03, 'square', .03); }, badge() { [523, 659, 784, 1046].forEach((f, i) => beep(f, .12, 'square', .05, i * .1)); } }; })();
+const sndBtn = document.getElementById('snd');
+sndBtn.onclick = () => { const on = Snd.toggle(); sndBtn.setAttribute('aria-pressed', String(on)); sndBtn.textContent = on ? 'Sound on' : 'Sound off'; };
+
+// ── save
+const KEY = 'hb-first-shift-v1';
+let save = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; } })() || { done: {}, xp: 0, shirt: 0, seen: {} };
+const store = () => { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) { /* private mode: progress lasts this visit */ } };
+const SHIRTS = [[P.red, P.red2], [P.blue, P.blueS], [P.green, P.greenD]];
+const me = () => ({ shirt: SHIRTS[save.shirt][0], shirtD: SHIRTS[save.shirt][1] });
+
+// ── the handbook, quoted. Every {sec, quote} below is checked against the handbook text by tools/check-game-quotes.mjs
+const READ = (title) => 'Advanced_Handbook_Dashboard.html?q=' + encodeURIComponent(title);
+const STORIES = [
+  { id: 'front', name: 'Front Office', sub: 'Welcome and company', who: 'HR', color: P.red, interior: (t) => { room(); desk(120, 70); screenBox(150, G - 37, '#1d3550'); person(132, G, 'stand', HELPER); person(lerp(30, 96, E(t % 9, 0, 2.2)), G, t % 9 < 2.2 ? Math.floor(t * 7) % 2 : 'stand', me()); r(30, 30, 40, 26, P.st1); r(32, 32, 36, 22, P.dark); r(36, 36, 28, 2, P.red); r(36, 41, 20, 1, P.st2); r(36, 44, 24, 1, P.st2); },
+    beats: [
+      { who: 'HR', say: 'Welcome to Advanced. Grab a seat. Your first stop is a few basics everyone learns on day one.' },
+      { q: 'How long is your introductory period?', choices: [['30 days', 0], ['90 days', 1], ['One year', 0]], sec: '3.6', title: 'New Hires and Introductory Periods', quote: 'The first 90 days of your employment is considered an introductory period.', why: 'It is when you learn the job and the company gets to see your work. It can be shortened or lengthened by management and HR.' },
+      { q: 'You ran a lathe for six years at another shop. Do you still need training here?', choices: [['No, my experience covers it', 0], ['Yes: I still learn how we do it here', 1], ['Only if I ask for it', 0]], sec: '3.7', title: 'Training Program', quote: 'Even if you have had previous experience in the specified functions of your job duties, it is necessary for you to learn our specific procedures, as well as the responsibilities of the specific position.', why: 'Every shop has its own procedures. If you ever feel you need more training, ask your manager.' },
+      { q: 'A visitor asks what the company plans to do next year. What do you say?', choices: [['Share what I have heard around the shop', 0], ['I do not speak for Advanced unless I am authorized to', 1], ['Post my guess online', 0]], sec: '2.2', title: 'Ethics Code', quote: 'We expect that all employees will not knowingly misrepresent ADVANCED and will not speak on behalf of ADVANCED unless specifically authorized.', why: 'Point them to someone who is authorized to answer.' },
+    ] },
+  { id: 'clock', name: 'Time Clock', sub: 'Pay and hours', who: 'Shift lead', color: P.amber, interior: (t, s) => { room(); box(110, 34, 30, 40, 3, P.st3, P.st4, P.st2); r(114, 40, 22, 10, P.dark); const k = s && s.punch ? E(s.punch, 0, .25) : 0; r(118, 42, 14, 6, k > .5 ? P.green : P.st1); r(121, 56, 8, 14 - Math.round(k * 6), P.paper); person(96, G, 'stand', me()); for (let i = 0; i < 6; i++) r(156 + i * 6, 40, 4, 14, i % 2 ? P.paper : P.st4); r(150, 36, 40, 1, P.st2); },
+    beats: [
+      { who: 'Shift lead', say: 'This is the time clock. You get paid for all the hours you work, so your punches have to be right. Let us practice.' },
+      { game: 'clock' },
+      { q: 'At the end of the day your lead says: punch out, then finish this last part. What do you do?', choices: [['Punch out and finish it off the clock', 0], ['Stay on the clock; if anyone asks me to work off the clock, tell HR', 1], ['Finish it and leave the punch for tomorrow', 0]], sec: '4.7', title: 'Recording Time', quote: 'Immediately report to HR any employee, supervisor, or manager who falsifies your time entries or encourages or requires you to falsify your time entries or work off the clock.', why: 'Working off the clock counts as falsifying time, and you are always paid for the time you work.' },
+      { q: 'You want to stay two extra hours tonight to get ahead. Can you?', choices: [['Yes, overtime is always welcome', 0], ['Only if it is approved in advance, in writing, by my managers', 1], ['Only on Fridays', 0]], sec: 'OK-Overtime', title: 'Overtime', quote: 'All overtime must be approved in advance, in writing, by your managers.', why: 'Working overtime that was not approved can lead to discipline.' },
+      { q: 'You know you will be late tomorrow for a dentist visit.', choices: [['Just come in when I can', 0], ['Give my manager reasonable advance notice', 1], ['Ask a coworker to cover for me', 0]], sec: '4.1', title: 'Attendance', quote: 'If you know ahead of time that you will be absent or late, provide reasonable advance notice to your manager.', why: 'You may be asked for documentation where the law allows it.' },
+      { q: 'How many days of no call and no show count as walking away from your job?', choices: [['One day', 0], ['Three consecutive days', 1], ['Five days', 0]], sec: '4.5', title: 'Job Abandonment', quote: 'If you fail to show up for work or fail to call in with an acceptable reason for the absence for a period of three consecutive days, you will be considered to have abandoned your job and voluntarily resigned from ADVANCED.', why: 'If you will be out, call in with an acceptable reason.' },
+    ] },
+  { id: 'floor', name: 'Shop Floor', sub: 'Safety', who: 'Safety lead', color: P.green, interior: (t) => { room(); machine(24, true, t); machine(150, true, t + 1); person(80, G, 'stand', me()); person(112, G, 'stand', { shirt: P.amber, shirtD: P.amberD, cap: P.st1 }); },
+    beats: [
+      { who: 'Safety lead', say: 'Welcome to the floor. Machines are running, so eyes up. Safety is everyone\'s job here. Find what is wrong in this picture.' },
+      { game: 'hunt' },
+      { q: 'You nick your finger on a burr. It is tiny. What now?', choices: [['Ignore it, it is nothing', 0], ['Report it to my manager right away', 1], ['Mention it at the end of the week', 0]], sec: '7.17', title: "Workers' Compensation Insurance", quote: 'If you are injured on the job while working at ADVANCED, no matter how slightly, you are to report the incident immediately to your manager.', why: 'Waiting can put a claim at risk, and an injury form is filled out for each incident.' },
+      { q: 'Can you wear earbuds while running a machine?', choices: [['Both in, volume up', 0], ['One earbud, at a reasonable volume', 1], ['Only noise-cancelling ones', 0]], sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Employees are permitted to wear one earbud while operating machinery or performing work on the shop floor.', why: 'The other ear stays open for instructions and alarms.' },
+    ] },
+  { id: 'break', name: 'Break Room', sub: 'Phones, social media, appearance', who: 'Coworker', color: P.blueL, interior: (t) => { room(); box(40, G - 46, 26, 46, 3, P.red, P.redT, P.red2); for (let i = 0; i < 4; i++) r(44, G - 42 + i * 8, 18, 5, i % 2 ? P.amber : P.blueL); desk(110, 80); person(124, G, 'stand', me()); person(160, G, 'stand', { shirt: P.blue, shirtD: P.blueS }); r(132, G - 26, 4, 6, P.dark); r(133, G - 25, 2, 3, Math.floor(t * 2) % 2 ? P.blueL : P.blueT); },
+    beats: [
+      { who: 'Coworker', say: 'Break time. This is where the phones come out. A few rules keep everybody focused and out of trouble.' },
+      { q: 'When can you use your phone?', choices: [['Any time a machine is running a long cycle', 0], ['During breaks and lunch', 1], ['Never at work', 0]], sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Cell phones should only be used during designated break times or lunch periods.', why: 'During work time a phone is for emergencies only. Tell your supervisor if something urgent comes up.' },
+      { q: 'A coworker wants to film a cool part on the floor for social media.', choices: [['Film it, it looks great', 0], ['Cameras on company property need management\'s OK first', 1], ['Film it but crop out the logo', 0]], sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'If you have a device that has a camera and/or audio/video recording capability, you are restricted from using those functions on ADVANCED property unless authorized in advance by management', why: 'Recording on company property needs management\'s OK in advance.' },
+      { q: 'A reporter calls your cell asking about the company.', choices: [['Give them a quote', 0], ['Send them to the Sr. Leadership Team or HR', 1], ['Say no comment and post about it', 0]], sec: '6.10', title: 'Social Media', quote: 'Direct all media inquiries for official ADVANCED responses to the Sr. Leadership Team or H.R.', why: 'Only people authorized to speak for Advanced talk to the media.' },
+      { q: 'You love a strong cologne. Is it OK at work?', choices: [['Yes, wear as much as I like', 0], ['Yes, in moderation, out of respect for others', 1], ['Fragrance is banned', 0]], sec: '6.6', title: 'Personal Appearance', quote: 'Fragrant products, including but not limited to perfumes, colognes, and scented body lotions or hair products, should be used in moderation out of concern for others with sensitivities or allergies.', why: 'Some coworkers have sensitivities or allergies.' },
+    ] },
+  { id: 'it', name: 'IT Desk', sub: 'Technology and security', who: 'IT', color: P.blue, interior: (t) => { room(); box(36, G - 60, 30, 60, 3, P.st1, P.st2, P.st0); for (let i = 0; i < 9; i++) { r(40, G - 56 + i * 6, 22, 4, P.dark); px(42 + (i * 5 + Math.floor(t * 6)) % 18, G - 55 + i * 6, i % 3 ? P.green : P.amber); } desk(120, 74); screenBox(132, G - 37, '#1d3550'); screenBox(162, G - 37, '#16301f'); person(104, G, 'stand', me()); person(184, G, 'stand', { ...HELPER, face: -1 }); },
+    beats: [
+      { who: 'IT', say: 'Here is your login. Company computers, email and phones are for work, and they belong to Advanced. A few things to know.' },
+      { q: 'Your work email has a password. Does that make it private?', choices: [['Yes, only I can see it', 0], ['No: company systems can be monitored', 1], ['Only after hours', 0]], sec: '6.12', title: 'Use of Company Technology', quote: 'You should not interpret the use of password protection as creating a right or expectation of privacy', why: 'Do not use company systems for anything you want kept private.' },
+      { q: 'A friend asks you to copy the shop\'s CAM software for them.', choices: [['Sure, it is just a copy', 0], ['No: company software is not given to outsiders', 1], ['Only the trial version', 0]], sec: '6.1', title: 'Computer Security and Copying of Software', quote: 'You may not duplicate, copy, or give software to any outsiders including clients, contractors, customers, and others.', why: 'Unauthorized copies can bring civil and criminal penalties.' },
+      { q: 'You lost your key fob on the way home.', choices: [['Wait and see if it turns up', 0], ['Report it to my manager immediately', 1], ['Borrow a coworker\'s', 0]], sec: '6.9', title: 'Security', quote: 'report any lost or stolen keys, passes, or similar devices to your manager immediately.', why: 'Lending keys or keycards to others is also against the rules.' },
+      { q: 'Someone outside the company asks how our alarm system works.', choices: [['Explain it, it is not a secret', 0], ['Do not discuss it', 1], ['Only describe the cameras', 0]], sec: '6.9', title: 'Security', quote: 'Refrain from discussing specifics regarding ADVANCED security systems, alarms, passwords, etc. with those outside of ADVANCED.', why: 'Tell your manager about anything that looks like a security risk.' },
+    ] },
+  { id: 'vault', name: 'The Vault', sub: 'Trade secrets', who: 'Shift lead', color: P.st3, interior: (t) => { room(); disc(128, G - 40, 30, P.st2); disc(128, G - 40, 26, P.st3); disc(128, G - 40, 8, P.st1); const a = t * 0.8; for (let k = 0; k < 4; k++) { const ang = a + k * Math.PI / 2; r(128 + Math.cos(ang) * 16 - 1, G - 40 + Math.sin(ang) * 16 - 1, 3, 3, P.st1); } person(70, G, 'stand', me()); },
+    beats: [
+      { who: 'Shift lead', say: 'Customers trust us with their drawings and their business. What is in the vault stays in the vault. Sort these.' },
+      { game: 'sort' },
+      { q: 'A lawyer calls you asking for the company\'s position on a lawsuit.', choices: [['Tell them what I think', 0], ['Do not speak for the company; refer the call to HR', 1], ['Hang up and forget it', 0]], sec: '6.11', title: 'Third Party Disclosures', quote: 'refer any call requesting the position of ADVANCED to HR.', why: 'If you are not sure what to do with a call like that, ask HR.' },
+      { q: 'You suspect someone is passing information to a competitor.', choices: [['Stay out of it', 0], ['Tell my manager or HR', 1], ['Confront them in front of the crew', 0]], sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'you are required to inform your manager or HR.', why: 'Protecting confidential information is a condition of employment for everyone.' },
+    ] },
+  { id: 'hr', name: 'HR Office', sub: 'Your people', who: 'HR', color: P.amber, interior: (t) => { room(); desk(100, 80); box(196, G - 22, 10, 22, 2, P.wood, P.woodT, P.woodS); disc(201, G - 30, 7, P.green); disc(197, G - 34, 4, P.greenD); person(118, G, 'stand', HELPER); person(lerp(30, 84, E(t % 8, 0, 2)), G, t % 8 < 2 ? Math.floor(t * 7) % 2 : 'stand', me()); r(30, 24, 36, 24, P.paper); for (let i = 0; i < 5; i++) r(34, 28 + i * 4, 24, 1, P.line); },
+    beats: [
+      { who: 'HR', say: 'Last stop. HR is here for you, not just for paperwork. Here is where to go when life happens.' },
+      { q: 'You have a problem, and the problem is your own manager. Where do you go?', choices: [['Nowhere, keep quiet', 0], ['HR or upper-level management', 1], ['Post about it online', 0]], sec: '5.3', title: 'Open Door/Conflict Resolution Process', quote: 'or if you believe that person is the source of the problem, present your concerns to HR or upper-level management.', why: 'Most problems are solved by talking with your manager. When that is not possible, the open door goes up the line.' },
+      { q: 'Is the Employee Assistance Program (EAP) confidential?', choices: [['No, my manager is told', 0], ['Yes, what I share is not disclosed to Advanced', 1], ['Only for managers', 0]], sec: '7.6', title: 'Employee Assistance Program (EAP)', quote: 'Any information about your contact, participation, or any recommended treatment is confidential and will not be disclosed to ADVANCED.', why: 'You can contact the EAP directly, and using it will not hurt your chances for promotion.' },
+      { q: 'How many company holidays does Advanced observe?', choices: [['Five', 0], ['Seven', 1], ['Ten', 0]], sec: '7.11', title: 'Holidays', quote: 'ADVANCED observes seven (7) company holidays.', why: 'Holiday pay starts after 90 days for full-time employees who work their full shift before and after the holiday.' },
+      { q: 'If you ever decide to move on, how much notice is requested?', choices: [['None', 0], ['At least two weeks', 1], ['One day', 0]], sec: '5.9', title: 'Resignation Policy', quote: 'ADVANCED requests that you provide a minimum of two weeks notice of your resignation.', why: 'Managers are asked for at least four weeks, in writing.' },
+    ] },
+];
+// the mini-games' own quotes (checked too)
+const CLOCK_Q = { sec: '4.7', title: 'Recording Time', quote: 'Immediately before and after any other time away from work.' };
+const HUNT = [
+  { x: 84, y: 101, label: 'Both earbuds in', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'The other ear must remain uncovered to maintain awareness of surroundings, instructions, and alarms.' },
+  { x: 47, y: 66, label: 'Video on a phone', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Watching movies, YouTube, streaming content, or any form of video during work hours is not permitted under any circumstance, including while a machine is running.' },
+  { x: 128, y: 124, label: 'Spill on the floor', sec: '8.2', title: 'General Safety', quote: 'It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.' },
+  { x: 206, y: 102, label: 'Smoking at the machine', sec: '5.10', title: 'Standards of Conduct', quote: 'Smoking in non-designated areas.' },
+];
+const SORT = [
+  { t: 'Customer lists', keep: 1, sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'customer lists' },
+  { t: 'Sales and financial reports', keep: 1, sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'financial or sales records/reports' },
+  { t: 'Product development', keep: 1, sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'product development' },
+  { t: 'Business plans and strategy', keep: 1, sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'marketing or business strategies/plans' },
+  { t: 'Your own wages, with coworkers', keep: 0, sec: '6.10', title: 'Social Media', quote: 'Nothing in this policy is designed to interfere with, restrain, or prevent employees from communications regarding wages, hours, or other terms and conditions of employment' },
+  { t: 'Your hours and working conditions', keep: 0, sec: '6.10', title: 'Social Media', quote: 'communications regarding wages, hours, or other terms and conditions of employment' },
+];
+window.__QUOTES = [...STORIES.flatMap((s) => s.beats.filter((b) => b.q)), CLOCK_Q, ...HUNT, ...SORT].map((b) => ({ sec: b.sec, quote: b.quote }));
+
+// ── DOM helpers
+const panel = document.getElementById('panel'), screen = document.getElementById('screen');
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const secName = (b) => (/^\d/.test(b.sec) ? '§' + b.sec + ' ' : '') + b.title;
+const quoteHTML = (b) => '<blockquote><b>From the handbook, ' + esc(secName(b)) + '</b>"' + esc(b.quote) + '"</blockquote>';
+const clearOver = () => screen.querySelectorAll('.mq,.sign,.prompt,.co,.spot').forEach((e) => e.remove());
+function marquee(title, sub) {
+  const m = document.createElement('div'); m.className = 'mq'; m.innerHTML = '<h2></h2>' + (sub ? '<small></small>' : '');
+  m.querySelector('h2').textContent = title; if (sub) m.querySelector('small').textContent = sub; screen.appendChild(m);
+  const place = () => { m.querySelectorAll('i').forEach((b) => b.remove()); const w = m.clientWidth, h = m.clientHeight; if (!w) return; const n = Math.max(12, Math.round((w + h) / 12)), per = 2 * (w + h);
+    for (let k = 0; k < n; k++) { const d = k / n * per; let x, y; if (d < w) { x = d; y = 0; } else if (d < w + h) { x = w; y = d - w; } else if (d < 2 * w + h) { x = 2 * w + h - d; y = h; } else { x = 0; y = per - d; } const b = document.createElement('i'); b.style.left = 'calc(' + x.toFixed(1) + 'px - .45cqi)'; b.style.top = 'calc(' + y.toFixed(1) + 'px - .45cqi)'; m.appendChild(b); } };
+  requestAnimationFrame(place); if (document.fonts) document.fonts.ready.then(place);
+  return m;
+}
+function hud() {
+  const n = Object.keys(save.done).length;
+  document.getElementById('xpN').textContent = save.xp + ' XP';
+  document.getElementById('xpBar').style.transform = 'scaleX(' + (n / STORIES.length) + ')';
+  document.getElementById('badges').innerHTML = STORIES.map((s) => '<span class="' + (save.done[s.id] ? 'on' : '') + '" title="' + esc(s.name) + '"></span>').join('');
+}
+
+// ── modes
+let mode = 'title', T = 0, story = null, beat = 0, scene = {}, keys = {};
+const world = { x: 20, face: 1, target: null, enterOnArrive: null };
+const BW = 100, GAP = 30, X0 = 70;
+const B = STORIES.map((s, i) => ({ s, x: X0 + i * (BW + GAP), w: BW, h: 56 + ((i * 17) % 3) * 10 }));
+const WORLD = X0 + STORIES.length * (BW + GAP) + 40;
+const doorX = (b) => b.x + b.w / 2;
+let cam = 0;
+
+function titleScreen() {
+  mode = 'title'; clearOver(); document.getElementById('touch').classList.remove('on');
+  marquee('First Shift', 'The Advanced handbook game');
+  const started = Object.keys(save.done).length || save.xp;
+  panel.innerHTML = '<span class="who">Day one</span><p class="say">You are new at Advanced. Walk the street, go into each building, and learn how things work here: from the time clock to the shop floor to the vault. Seven stops, one badge each.</p>' +
+    '<div class="row"><span class="link">Pick your shirt</span><div class="swatches" role="group" aria-label="Shirt colour">' + SHIRTS.map((c, i) => '<button type="button" data-sw="' + i + '" aria-pressed="' + (save.shirt === i) + '" style="background:' + c[0] + '" aria-label="Shirt ' + (i + 1) + '"></button>').join('') + '</div></div>' +
+    '<div class="row"><button type="button" class="go" id="start">' + (started ? 'Continue' : 'Start your first shift') + '</button>' + (started ? '<button type="button" class="go ghost" id="reset">Start over</button>' : '') + '</div>' +
+    '<p class="hint">Walk with the arrow keys or A and D. Press Enter to go into a building. On a phone or tablet, tap a building.</p>';
+  panel.querySelectorAll('[data-sw]').forEach((b) => b.onclick = () => { save.shirt = +b.dataset.sw; store(); titleScreen(); });
+  document.getElementById('start').onclick = streetMode;
+  const rs = document.getElementById('reset'); if (rs) rs.onclick = () => { if (confirm('Start over? Your badges and XP will be cleared.')) { save = { done: {}, xp: 0, shirt: save.shirt, seen: {} }; store(); hud(); titleScreen(); } };
+  document.getElementById('start').focus();
+}
+function streetMode(at) {
+  mode = 'world'; clearOver(); story = null; document.getElementById('touch').classList.add('on');
+  if (typeof at === 'number') world.x = at;
+  B.forEach((b) => { const s = document.createElement('div'); s.className = 'sign' + (save.done[b.s.id] ? ' done' : ''); s.textContent = b.s.name; s.dataset.id = b.s.id; screen.appendChild(s); b.el = s; });
+  const pr = document.createElement('div'); pr.className = 'prompt'; pr.style.display = 'none'; screen.appendChild(pr); world.prompt = pr;
+  const n = Object.keys(save.done).length;
+  panel.innerHTML = '<span class="who">The street</span><p class="say">' + (n === STORIES.length ? 'Every building done. Your shift is complete.' : 'Pick a building. ' + (STORIES.length - n) + ' of ' + STORIES.length + ' still to visit.') + '</p>' +
+    '<div class="row">' + B.map((b) => '<button type="button" class="go ghost" data-b="' + b.s.id + '">' + esc(b.s.name) + (save.done[b.s.id] ? ' (done)' : '') + '</button>').join('') + (n === STORIES.length ? '<button type="button" class="go" id="cert">See your certificate</button>' : '') + '</div>';
+  panel.querySelectorAll('[data-b]').forEach((bt) => bt.onclick = () => walkTo(bt.dataset.b));
+  const c = document.getElementById('cert'); if (c) c.onclick = certificate;
+}
+function walkTo(id) { const b = B.find((x) => x.s.id === id); if (!b) return; world.target = doorX(b) - 3; world.enterOnArrive = id; }
+function enter(id) {
+  const st = STORIES.find((s) => s.id === id); if (!st) return;
+  story = st; beat = 0; mode = 'story'; scene = { t0: T }; clearOver(); document.getElementById('touch').classList.remove('on');
+  marquee(st.name, st.sub); world.enterOnArrive = null; world.target = null; step();
+}
+function nextBeat() { beat++; if (beat >= story.beats.length) finishStory(); else step(); }
+function step() {
+  const b = story.beats[beat];
+  if (b.say) return sayBeat(b);
+  if (b.q) return askBeat(b);
+  if (b.game === 'clock') return clockGame();
+  if (b.game === 'hunt') return huntGame();
+  if (b.game === 'sort') return sortGame();
+}
+function sayBeat(b) {
+  panel.innerHTML = '<span class="who">' + esc(b.who) + '</span><p class="say" id="say"></p><div class="row"><button type="button" class="go" id="nx">Next</button></div>';
+  const el = document.getElementById('say'); let i = reduced ? b.say.length : 0;
+  const tick = () => { el.textContent = b.say.slice(0, i); if (i < b.say.length) { i += 2; if (i % 8 === 0) Snd.tick(); setTimeout(tick, 22); } };
+  tick();
+  const nx = document.getElementById('nx'); nx.onclick = () => { if (i < b.say.length) { i = b.say.length; el.textContent = b.say; } else nextBeat(); }; nx.focus();
+}
+function askBeat(b) {
+  panel.innerHTML = '<h3 class="q">' + esc(b.q) + '</h3><div class="choices">' + b.choices.map((c, i) => '<button type="button" class="choice" data-c="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(c[0]) + '</button>').join('') + '</div><p class="hint">Press 1, 2 or 3, or click an answer.</p>';
+  panel.querySelectorAll('[data-c]').forEach((bt) => bt.onclick = () => answer(b, +bt.dataset.c));
+  panel.querySelector('[data-c]').focus();
+}
+function answer(b, i) {
+  const ok = !!b.choices[i][1], k = story.id + ':' + beat, first = !save.seen[k];
+  if (first) { save.seen[k] = ok ? 1 : 2; if (ok) save.xp += 10; store(); hud(); }
+  ok ? Snd.ok() : Snd.no();
+  scene.react = { ok, t: T };
+  panel.innerHTML = '<div class="res ' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Right' + (first ? ' · +10 XP' : '') : 'Not quite') + '</div>' +
+    (ok ? '' : '<p class="why">The answer is: <b>' + esc(b.choices.find((c) => c[1])[0]) + '</b>.</p>') + '<p class="why">' + esc(b.why || '') + '</p>' + quoteHTML(b) +
+    '<div class="row"><button type="button" class="go" id="nx">Continue</button><a class="link" href="' + READ(b.title) + '" target="_blank" rel="noopener">Read the full section</a></div>';
+  const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus();
+}
+function finishStory() {
+  const first = !save.done[story.id]; save.done[story.id] = true; if (first) save.xp += 25; store(); hud(); Snd.badge();
+  scene.badge = T;
+  const n = Object.keys(save.done).length;
+  panel.innerHTML = '<div class="res ok">Badge earned: ' + esc(story.name) + (first ? ' · +25 XP' : '') + '</div><p class="why">' + n + ' of ' + STORIES.length + ' buildings done.</p>' +
+    '<div class="row"><button type="button" class="go" id="nx">Back to the street</button>' + (n === STORIES.length ? '<button type="button" class="go ghost" id="cert">See your certificate</button>' : '') + '</div>';
+  const b = B.find((x) => x.s.id === story.id);
+  document.getElementById('nx').onclick = () => streetMode(doorX(b) - 3); document.getElementById('nx').focus();
+  const c = document.getElementById('cert'); if (c) c.onclick = certificate;
+}
+
+// ── mini-game: punch the clock at the right moments
+function clockGame() {
+  const EV = ['Start of your shift', 'Stopping for lunch', 'Back from lunch', 'Leaving for an appointment', 'Back from the appointment', 'End of your shift'];
+  panel.innerHTML = '<h3 class="q">Punch the clock</h3><p class="why">Each moment slides toward the red line. Punch when it crosses: press Space or the Punch button.</p><div class="track" id="trk"><div class="line"></div></div>' +
+    '<div class="row"><button type="button" class="go" id="punch">Punch</button><span class="link" id="cs">0 of ' + EV.length + '</span></div>';
+  const trk = document.getElementById('trk');
+  const evs = EV.map((t, i) => { const e = document.createElement('div'); e.className = 'ev'; e.textContent = t; trk.appendChild(e); return { e, at: 2.8 + i * 2.6, done: false }; }); // the first one arrives about 3 s in, from the right edge
+  const g = { t0: performance.now(), hits: 0, over: false, evs };
+  scene.clock = g;
+  const pos = (ev, now) => 1.15 - ((now - g.t0) / 1000 - ev.at + 2.4) / 2.6 * 0.93; // fraction of the track; 0.22 is the line
+  const tickG = (now) => {
+    if (mode !== 'story' || scene.clock !== g) return;
+    let live = false;
+    for (const ev of evs) { const p = pos(ev, now); ev.e.style.left = (p * 100) + '%'; if (!ev.done && p < 0.12) { ev.done = true; ev.e.classList.add('miss'); } if (!ev.done || p > -0.3) live = true; }
+    if (live) requestAnimationFrame(tickG); else endClock();
+  };
+  const punch = () => {
+    if (g.over) return; scene.punch = 0.001; scene.punchT = T; const now = performance.now();
+    const ev = evs.find((x) => !x.done && Math.abs(pos(x, now) - 0.22) < 0.07);
+    if (ev) { ev.done = true; ev.e.classList.add('hit'); g.hits++; Snd.ok(); } else Snd.no();
+    document.getElementById('cs').textContent = g.hits + ' of ' + EV.length;
+  };
+  const endClock = () => {
+    if (g.over) return; g.over = true; const k = story.id + ':clock';
+    if (!save.seen[k]) { save.seen[k] = 1; save.xp += g.hits * 3; store(); hud(); }
+    panel.innerHTML = '<div class="res ' + (g.hits >= 5 ? 'ok' : 'no') + '">' + g.hits + ' of ' + EV.length + ' punches on time</div>' +
+      '<p class="why">Every one of those moments gets a punch: before your shift, before and after lunch, before and after any other time away, and when you finish.</p>' + quoteHTML(CLOCK_Q) +
+      '<div class="row"><button type="button" class="go" id="nx">Continue</button><button type="button" class="go ghost" id="again">Try again</button><a class="link" href="' + READ(CLOCK_Q.title) + '" target="_blank" rel="noopener">Read the full section</a></div>';
+    document.getElementById('nx').onclick = nextBeat; document.getElementById('again').onclick = clockGame; document.getElementById('nx').focus();
+  };
+  document.getElementById('punch').onclick = punch; g.punch = punch; document.getElementById('punch').focus();
+  requestAnimationFrame(tickG);
+}
+// ── mini-game: spot what is wrong on the floor
+function huntGame() {
+  scene.hunt = { found: {} };
+  panel.innerHTML = '<h3 class="q">Spot four things that need fixing</h3><p class="why">Click or tap what is wrong in the picture. Tab moves between spots on a keyboard.</p><div id="hl"></div><p class="link" id="hc">0 of 4 found</p>';
+  HUNT.forEach((h, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'spot'; b.style.left = (h.x / W * 100) + '%'; b.style.top = (h.y / H * 100) + '%'; b.setAttribute('aria-label', 'Look here, spot ' + (i + 1));
+    b.onclick = () => {
+      if (scene.hunt.found[i]) return; scene.hunt.found[i] = true; b.classList.add('found'); Snd.ok();
+      const c = document.createElement('div'); c.className = 'co' + (h.x > W * 0.6 ? ' l' : ''); c.style.left = (h.x / W * 100) + '%'; c.style.top = ((h.y - 14) / H * 100) + '%'; c.innerHTML = '<span></span><em></em>'; c.querySelector('em').textContent = h.label; screen.appendChild(c);
+      document.getElementById('hl').insertAdjacentHTML('beforeend', quoteHTML(h));
+      const n = Object.keys(scene.hunt.found).length; document.getElementById('hc').textContent = n + ' of 4 found';
+      if (n === 4) { const k = story.id + ':hunt'; if (!save.seen[k]) { save.seen[k] = 1; save.xp += 12; store(); hud(); }
+        document.getElementById('hc').insertAdjacentHTML('afterend', '<div class="row"><button type="button" class="go" id="nx">Continue</button></div>'); const nx = document.getElementById('nx'); nx.onclick = () => { clearOver(); marquee(story.name, story.sub); nextBeat(); }; nx.focus(); }
+    };
+    screen.appendChild(b);
+  });
+}
+// ── mini-game: what stays in the vault
+function sortGame() {
+  let done = 0;
+  panel.innerHTML = '<h3 class="q">Protect it, or OK to talk about?</h3><div class="sort" id="srt">' + SORT.map((s, i) => '<div class="card" data-i="' + i + '"><span>' + esc(s.t) + '</span><button type="button" class="go ghost" data-a="1">Protect it</button><button type="button" class="go ghost" data-a="0">OK to talk about</button></div>').join('') + '</div>';
+  panel.querySelectorAll('.card').forEach((c) => c.querySelectorAll('[data-a]').forEach((bt) => bt.onclick = () => {
+    const s = SORT[+c.dataset.i], ok = +bt.dataset.a === s.keep; if (c.dataset.done) return; c.dataset.done = 1; done++;
+    c.classList.add(ok ? 'ok' : 'no'); ok ? Snd.ok() : Snd.no(); c.querySelectorAll('button').forEach((x) => { x.disabled = true; });
+    c.insertAdjacentHTML('beforeend', '<small>' + (ok ? 'Right. ' : 'Not quite. ') + (s.keep ? 'This is confidential: need to know only. ' : 'You are free to talk about this. ') + esc(secName(s)) + ': "' + esc(s.quote) + '"</small>');
+    if (ok) { const k = story.id + ':sort' + c.dataset.i; if (!save.seen[k]) { save.seen[k] = 1; save.xp += 4; store(); hud(); } }
+    if (done === SORT.length) { panel.insertAdjacentHTML('beforeend', '<div class="row"><button type="button" class="go" id="nx">Continue</button><a class="link" href="' + READ('Confidentiality and Nondisclosure of Trade Secrets') + '" target="_blank" rel="noopener">Read the full section</a></div>'); const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus(); }
+  }));
+  panel.querySelector('[data-a]').focus();
+}
+function certificate() {
+  mode = 'cert'; clearOver(); marquee('Shift complete', 'All seven buildings'); document.getElementById('touch').classList.remove('on');
+  const d = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  panel.innerHTML = '<div class="cert"><h2>First Shift: complete</h2><p>All seven buildings of the Advanced handbook game, ' + save.xp + ' XP, finished ' + esc(d) + '.</p><p style="font-size:14px">Practice only. It does not replace the Acknowledgment of Receipt and Review of the handbook, which is signed with HR.</p></div>' +
+    '<div class="row"><button type="button" class="go" onclick="print()">Print</button><button type="button" class="go ghost" id="back">Back to the street</button></div>';
+  document.getElementById('back').onclick = () => streetMode(); scene.cert = T;
+}
+
+// ── drawing
+function drawWorld(t) {
+  r(0, 0, W, H, P.sky); for (let i = 0; i < 24; i++) px((i * 53 + Math.floor(cam * 0.1)) % W, (i * 29) % 50, i % 4 ? P.st0 : P.st1);
+  for (let i = 0; i < 10; i++) { const x = ((i * 110) - cam * 0.4) % (W + 120) - 60; r(x, 60 - (i % 3) * 8, 70, 60, P.wall); r(x + 50, 40 - (i % 3) * 8, 8, 22, P.wall2); }
+  r(0, G, W, H - G, P.floor); r(0, G, W, 1, P.floor2); r(0, G + 1, W, 1, P.red2); for (let x = -((cam) % 16); x < W; x += 16) r(x, G + 12, 8, 1, P.floor2);
+  B.forEach((b, i) => {
+    const x = b.x - cam; if (x > W + 10 || x + b.w < -10) return;
+    box(x, G - b.h, b.w, b.h, 4, P.st1, P.st2, P.st0); r(x, G - b.h, b.w, 3, b.s.color);
+    for (let wy = G - b.h + 10; wy < G - 30; wy += 12) for (let wx = x + 8; wx < x + b.w - 12; wx += 16) { if (Math.abs(wx + 4 - doorX(b) + cam) < 12) continue; r(wx, wy, 8, 7, ((wx + wy + i) % 3) ? '#2a3a4c' : '#d9c27a'); }
+    const dx = doorX(b) - cam; r(dx - 8, G - 24, 16, 24, P.dark); r(dx - 8, G - 25, 16, 1, b.s.color); px(dx + 4, G - 12, P.st3);
+    if (save.done[b.s.id]) disc(dx, G - 30, 2, P.green);
+    if (b.el) { b.el.style.left = ((dx) / W * 100) + '%'; b.el.style.top = ((G - b.h - 8) / H * 100) + '%'; b.el.style.display = (dx > -20 && dx < W + 20) ? '' : 'none'; }
+  });
+  const moving = !!(keys.l || keys.r || world.target != null);
+  person(world.x - cam, G, moving ? Math.floor(t * 8) % 2 : 'stand', { ...me(), face: world.face });
+}
+function frame(now) {
+  const t = now / 1000, dt = Math.min(0.05, t - (frame.last || t)); frame.last = t; T = t;
+  if (mode === 'world' || mode === 'title') {
+    if (mode === 'world') {
+      let v = 0; if (keys.l) v -= 1; if (keys.r) v += 1;
+      if (v) world.target = null;
+      if (world.target != null) { const d = world.target - world.x; if (Math.abs(d) < 1.5) { world.x = world.target; world.target = null; if (world.enterOnArrive) { const id = world.enterOnArrive; world.enterOnArrive = null; enter(id); } } else v = Math.sign(d); }
+      if (v) { world.face = v; world.x = clamp(world.x + v * 62 * dt, 6, WORLD - 14); }
+    } else world.x = 40 + Math.sin(t * 0.4) * 30 + 30;
+    cam = clamp(world.x - W * 0.4, 0, WORLD - W);
+    if (mode === 'world' || mode === 'title') drawWorld(t);
+    if (mode === 'world' && world.prompt) { const near = B.find((b) => Math.abs(doorX(b) - (world.x + 3)) < 14); world.near = near ? near.s.id : null;
+      if (near) { world.prompt.style.display = ''; world.prompt.textContent = 'Enter: go into ' + near.s.name; world.prompt.style.left = ((doorX(near) - cam) / W * 100) + '%'; world.prompt.style.top = ((G + 6) / H * 100) + '%'; } else world.prompt.style.display = 'none'; }
+  } else if (mode === 'story' && story) {
+    const st = scene.punch != null ? { punch: scene.punchT ? T - scene.punchT : 0 } : {};
+    story.interior(t - scene.t0, st);
+    if (story.beats[beat] && story.beats[beat].game === 'hunt') drawHazards(t);
+    if (scene.react && T - scene.react.t < 1.2) { const k = (T - scene.react.t) / 1.2; disc(W - 24, 30 - k * 8, 8, scene.react.ok ? P.green : P.red); if (scene.react.ok) { r(W - 28, 30 - k * 8, 3, 2, P.paper); r(W - 25, 31 - k * 8, 6, 2, P.paper); } else r(W - 28, 29 - k * 8, 8, 2, P.paper); }
+    if (scene.badge && T - scene.badge < 3) { const k = E(T - scene.badge, 0, .5); box(W / 2 - 14, 70 - k * 20, 28, 28, 3, story.color, P.paper, P.st1); disc(W / 2, 84 - k * 20, 6, P.paper); }
+  } else if (mode === 'cert') { cam = 0; drawWorld(t); for (let i = 0; i < 30; i++) { const y = ((t * 30 + i * 37) % 140); px((i * 47) % W, y, [P.red, P.amber, P.green, P.blueL][i % 4]); } }
+  // marquee bulbs chase
+  const k = Math.floor(now / 160) % 3; screen.querySelectorAll('.mq i').forEach((b, i) => b.classList.toggle('lit', !reduced && i % 3 === k));
+  requestAnimationFrame(frame);
+}
+function drawHazards(t) {
+  // both earbuds (a white dot each side of the head), a phone playing video on the machine, a coolant spill, smoke by the far machine
+    r(79, G - 17, 2, 2, P.paper); r(86, G - 17, 2, 2, P.paper); r(81, G - 19, 5, 1, P.st1);
+  r(43, G - 56, 8, 12, P.dark); r(44, G - 55, 6, 9, Math.floor(t * 3) % 2 ? P.blueL : P.blueT);
+  for (let i = 0; i < 26; i++) r(112 + i, G + 4 + Math.round(Math.sin(i / 3) * 1.5), 1, 4, i % 5 ? '#4a6a7a' : '#6a8a9a');
+  person(208, G, 'stand', { shirt: P.st2, shirtD: P.st1, face: -1 }); r(204, G - 9, 4, 1, P.paper); px(203, G - 9, P.red);
+  for (let k = 0; k < 4; k++) px(203 - k + Math.round(Math.sin(t * 2 + k) * 1.5), G - 12 - k * 3 - ((t * 8) % 3), P.st3);
+}
+
+// ── input
+const keyMap = { ArrowLeft: 'l', a: 'l', A: 'l', ArrowRight: 'r', d: 'r', D: 'r' };
+addEventListener('keydown', (e) => {
+  if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (mode === 'world' && keyMap[e.key]) { keys[keyMap[e.key]] = true; e.preventDefault(); return; }
+  if (mode === 'world' && (e.key === 'Enter' || e.key === 'e' || e.key === 'E') && world.near && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); enter(world.near); return; }
+  if (mode === 'story' && /^[1-3]$/.test(e.key)) { const b = panel.querySelector('[data-c="' + (+e.key - 1) + '"]'); if (b) { e.preventDefault(); b.click(); } }
+  if (mode === 'story' && e.key === ' ' && scene.clock && !scene.clock.over) { e.preventDefault(); scene.clock.punch(); }
+  if (e.key === 'Escape' && mode === 'story') { const b = B.find((x) => x.s.id === story.id); streetMode(doorX(b) - 3); }
+});
+addEventListener('keyup', (e) => { if (keyMap[e.key]) keys[keyMap[e.key]] = false; });
+document.getElementById('touch').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; const k = b.dataset.t; if (k === 'go') { if (world.near) enter(world.near); return; } keys[k === 'left' ? 'l' : 'r'] = true; });
+addEventListener('pointerup', () => { keys.l = keys.r = false; });
+screen.addEventListener('click', (e) => {
+  if (mode !== 'world') return; const rc = cv.getBoundingClientRect(), wx = (e.clientX - rc.left) / rc.width * W + cam, wy = (e.clientY - rc.top) / rc.height * H;
+  const b = B.find((x) => wx >= x.x && wx <= x.x + x.w && wy >= G - x.h - 10 && wy <= G); if (b) walkTo(b.s.id); else { world.target = clamp(wx, 6, WORLD - 14); world.enterOnArrive = null; }
+});
+
+hud(); titleScreen(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
