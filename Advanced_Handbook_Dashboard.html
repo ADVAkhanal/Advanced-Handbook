@@ -2914,11 +2914,6 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     if (KEY[t]) return [KEY[t], title.textContent.trim()];
     return ['search', 'Searching the handbook'];
   };
-  if (head && title) {
-    var slot = document.createElement('div'); slot.className = 'hbm-cat'; head.insertBefore(slot, title.nextSibling);
-    cat = makeStage(slot); var k0 = pick(); cat.show(k0[0], k0[1] === 'All Policies' ? null : k0[1]);
-    new MutationObserver(function () { var k = pick(); cat.set(k[0], KEY[(title.textContent || '').trim().toLowerCase()] && k[0] !== 'all' ? k[1] : null); }).observe(title, { childList: true, characterData: true, subtree: true });
-  }
   requestAnimationFrame(loop);
 
   if (reduced || !document.body.animate) return;
@@ -2942,6 +2937,322 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   var rl = document.getElementById('results-list'), ac = document.getElementById('answer-container');
   var mo = new MutationObserver(function () { requestAnimationFrame(cascade); });
   if (rl) mo.observe(rl, { childList: true }); if (ac) mo.observe(ac, { childList: true });
+})();
+</script>
+
+<script id="hb-videos-v1">
+/* Policy videos: every handbook section gets its own pixel work-instruction video, drawn like the New Work Instructions
+   posters (160 x 120 pixel scene, a lit marquee with the section number in a red disc, paper callouts on the scene).
+   It plays at the top of a section when the section is opened, and "Watch as videos" plays the listed sections back to
+   back full screen, like the posters' TV mode. The words beside each video are the handbook's own opening lines.
+   Self-contained: no files, works offline. Remove this block to take it out. */
+(function () {
+  'use strict';
+  var DATA = window.HANDBOOK_DATA; if (!DATA || !DATA.sections) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 160, H = 120, G = 94;
+  var P = { wall: '#1d2024', wall2: '#23272b', sky: '#14171b', floor: '#2b3035', floor2: '#33393f', st0: '#30353a', st1: '#4c5359', st2: '#7d858c', st3: '#aab1b7', st4: '#dde1e4',
+    red: '#e03131', red2: '#a51f1f', redT: '#f0605f', dark: '#121417', blue: '#3d6fa5', blueS: '#2b4f78', blueL: '#8fb4d9', blueT: '#5f8cbf', wood: '#86684a', woodT: '#a3825f', woodS: '#63492f',
+    paper: '#eef0f2', line: '#9aa0a4', green: '#3fbf7f', greenD: '#2b8a5a', amber: '#e0a43a', amberD: '#a8781f', lamp: '#d9c27a', glass: '#2a3a4c', card: '#a07a52', cardT: '#b98f63', cardS: '#7d5c3d', skin2: '#a8765a', skin3: '#e0b48f' };
+  var clamp = function (x, a, b) { a = a == null ? 0 : a; b = b == null ? 1 : b; return x < a ? a : x > b ? b : x; };
+  var ez = function (x) { return x * x * (3 - 2 * x); };
+  var E = function (t, a, b) { return ez(clamp((t - a) / (b - a))); };
+  var lerp = function (a, b, k) { return a + (b - a) * k; };
+
+  function kit(ctx) {
+    var r = function (x, y, w, h, c) { w = Math.round(w); h = Math.round(h); if (w <= 0 || h <= 0) return; ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+    var p = function (x, y, c) { r(x, y, 1, 1, c); };
+    var box = function (x, y, w, h, d, f, t, s) { x = Math.round(x); y = Math.round(y); r(x, y, w, h, f); for (var i = 1; i <= d; i++) { r(x + i, y - i, w, 1, t); r(x + w - 1 + i, y - i + 1, 1, h, s); } };
+    var disc = function (cx, cy, R, c) { for (var y = -R; y <= R; y++) { var w = Math.floor(Math.sqrt(R * R - y * y)); r(cx - w, cy + y, w * 2 + 1, 1, c); } };
+    var room = function (wall) { r(0, 0, W, H, wall || P.wall); for (var x = 12; x < W; x += 28) r(x, 0, 1, G, P.wall2); r(0, G, W, H - G, P.floor); r(0, G, W, 1, P.floor2); r(0, G + 1, W, 1, P.red2); for (var x2 = 4; x2 < W; x2 += 16) r(x2, G + 14, 8, 1, P.floor2); };
+    var person = function (x, yF, pose, o) {
+      o = o || {}; x = Math.round(x); yF = Math.round(yF);
+      var shirt = o.shirt || P.red, shirtD = o.shirtD || P.red2, pants = o.pants || '#2f3a4a', skin = o.skin || '#c99a7a', hair = o.hair || '#3a2c22', top = yF - 19;
+      r(x + 1, top, 5, 2, hair); r(x + 1, top + 2, 5, 3, skin); r(x + 1, top + 3, 5, 1, '#1b1e21'); r(x + (o.face === -1 ? 1 : 4), top + 3, 1, 1, P.st3);
+      if (o.glasses) r(x + 1, top + 3, 5, 1, P.blueL);
+      if (o.cap) r(x, top - 1, 7, 2, o.cap);
+      r(x, top + 5, 7, 7, shirt); r(x, top + 11, 7, 1, shirtD);
+      var arm = o.reach ? 3 : 0; r(x - 1, top + 6, 1, 5 - arm, shirtD); r(x + 7, top + 6, 1, 5 - arm, shirtD); r(x + (o.face === -1 ? -1 : 7), top + 11 - arm, 1, 1, skin);
+      if (o.hold) { r(x + (o.face === -1 ? -4 : 7), top + 8, 4, 5, o.hold); }
+      var ly = top + 12, lh = yF - ly;
+      if (pose === 1) { r(x, ly, 2, lh, pants); r(x + 5, ly, 2, lh, pants); r(x - 1, yF - 1, 3, 1, '#111'); r(x + 5, yF - 1, 3, 1, '#111'); }
+      else { r(x + 1, ly, 2, lh, pants); r(x + 4, ly, 2, lh, pants); r(x + 1, yF - 1, 2, 1, '#111'); r(x + 4, yF - 1, 2, 1, '#111'); }
+    };
+    var desk = function (x, w, y) { y = y || G; box(x, y - 16, w, 4, 3, P.wood, P.woodT, P.woodS); r(x + 2, y - 12, 2, 12, P.woodS); r(x + w - 4, y - 12, 2, 12, P.woodS); };
+    var screen = function (x, y, on) { box(x, y, 22, 15, 2, P.st1, P.st2, P.st0); r(x + 2, y + 2, 18, 11, on || P.dark); r(x + 9, y + 15, 4, 3, P.st1); r(x + 6, y + 18, 10, 1, P.st2); };
+    var paper = function (x, y, w, h, tone) { r(x, y, w, h, P.paper); r(x, y, w, 1, tone || P.st3); for (var k = 3; k < h - 1; k += 2) r(x + 2, y + k, w - 4 - (k % 3), 1, P.line); };
+    var check = function (x, y, c) { c = c || P.green; for (var d = 0; d < 2; d++) { p(x, y + 2 + d, c); p(x + 1, y + 3 + d, c); p(x + 2, y + 4 + d, c); p(x + 3, y + 3 + d, c); p(x + 4, y + 2 + d, c); p(x + 5, y + 1 + d, c); p(x + 6, y + d, c); } };
+    var cross = function (x, y, c) { for (var k = 0; k < 7; k++) { r(x + k, y + k, 2, 1, c); r(x + 6 - k, y + k, 2, 1, c); } };
+    var machine = function (x, t) { box(x, G - 44, 48, 44, 4, P.st3, P.st4, P.st2); r(x + 4, G - 38, 28, 24, P.dark); r(x + 35, G - 38, 9, 13, P.dark); r(x + 36, G - 37, 7, 4, P.green);
+      r(x + 17, G - 38, 3, 11 + Math.round(Math.sin(t * 3) * 2), P.st2); for (var k = 0; k < 3; k++) p(x + 10 + ((t * 40 + k * 7) % 18), G - 18 - k, P.st3); r(x + 50, G - 58, 2, 14, P.st1); disc(x + 51, G - 60, 2, P.green); };
+    var walk = function (t, x0, x1, a, b) { var k = E(t, a, b); return { x: lerp(x0, x1, k), pose: t > a && t < b ? Math.floor(t * 7) % 2 : 'stand' }; };
+    var bubble = function (x, y, w, on) { if (!on) return; r(x, y, w, 9, P.paper); r(x + 3, y + 9, 3, 2, P.paper); for (var k = 0; k < 3; k++) r(x + 3 + k * 4, y + 4, 2, 2, P.st1); };
+    return { r: r, p: p, box: box, disc: disc, room: room, person: person, desk: desk, screen: screen, paper: paper, check: check, cross: cross, machine: machine, walk: walk, bubble: bubble };
+  }
+  var HR = { shirt: P.st2, shirtD: P.st1, hair: '#1f1a17', skin: P.skin2 };
+  var MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#5a3a22', skin: P.skin3 };
+
+  // ── set pieces. pts: where the two callouts point (x, y in the 160 x 120 scene)
+  var A = {
+    letter: { pts: [[96, 40], [60, 70]], draw: function (g, t) { g.room(); g.desk(36, 90); var k = E(t, 0.4, 2); g.paper(58, Math.round(lerp(20, 44, k)), 34, 26, P.red); g.r(62, 64, 26, 1, P.st1);
+      var s = E(t, 2.4, 4.6); for (var x = 0; x < 20 * s; x++) g.p(64 + x, 61 + Math.round(Math.sin(x / 2) * 1.2), P.blue); g.person(118, G, 'stand', Object.assign({ face: -1 }, MGR)); } },
+    greet: { pts: [[70, 60], [118, 52]], draw: function (g, t) { g.room(); g.r(16, 22, 46, 22, P.st1); g.r(18, 24, 42, 18, P.dark); g.r(22, 28, 34, 3, P.red); g.r(22, 34, 22, 1, P.st2);
+      var w = g.walk(t, -8, 70, 0.3, 3); g.person(w.x, G, w.pose, { reach: t > 3 && t < 4.6 }); g.person(84, G, 'stand', Object.assign({ face: -1, reach: t > 3 && t < 4.6 }, HR));
+      for (var i = 0; i < 3; i++) g.person(108 + i * 14, G, 'stand', { shirt: [P.amber, P.green, P.blue][i], shirtD: [P.amberD, P.greenD, P.blueS][i], face: -1, reach: t > 5 + i * .3 && t < 6 + i * .3 }); } },
+    sign: { pts: [[80, 56], [118, 52]], draw: function (g, t) { g.room(); g.desk(40, 84); g.paper(64, 54, 32, 22, P.red); var s = E(t, 1.2, 3.4);
+      for (var x = 0; x < 22 * s; x++) g.p(68 + x, 70 + Math.round(Math.sin(x / 2) * 1.2), P.blue); g.r(68 + 22 * s, 64, 2, 7, P.st1); g.person(40, G, 'stand', { reach: t > 1 && t < 3.6 }); g.person(118, G, 'stand', Object.assign({ face: -1 }, HR)); } },
+    street: { pts: [[44, 40], [118, 44]], draw: function (g, t) { g.r(0, 0, W, H, P.sky); for (var i = 0; i < 14; i++) g.p((i * 37) % W, (i * 11) % 30 + 2, i % 3 ? P.st0 : P.st1);
+      [[8, 50, P.red], [62, 62, P.amber], [114, 46, P.blueL]].forEach(function (b, k) { g.box(b[0], G - b[1], 40, b[1], 3, P.st1, P.st2, P.st0); g.r(b[0], G - b[1], 40, 2, b[2]);
+        for (var wy = G - b[1] + 8; wy < G - 22; wy += 9) for (var wx = b[0] + 4; wx < b[0] + 34; wx += 9) if (Math.abs(wx + 3 - b[0] - 20) > 5) g.r(wx, wy, 5, 5, ((wx + wy + k + Math.floor(t)) % 5) ? P.glass : P.lamp);
+        g.r(b[0] + 15, G - 16, 10, 16, P.dark); g.r(b[0] + 15, G - 17, 10, 1, b[2]); });
+      g.r(0, G, W, H - G, P.floor); g.r(0, G, W, 1, P.floor2); g.r(0, G + 1, W, 1, P.red2); var w = g.walk(t % 9, -8, 166, 0, 8.6); g.person(w.x, G + 12, w.pose); } },
+    team: { pts: [[40, 52], [120, 52]], draw: function (g, t) { g.room(); var cols = [[P.red, P.red2], [P.blue, P.blueS], [P.amber, P.amberD], [P.green, P.greenD], [P.st2, P.st1]];
+      cols.forEach(function (c, i) { var b = Math.round(Math.sin(t * 2 + i) * 1); g.person(26 + i * 24, G + b * 0, 'stand', { shirt: c[0], shirtD: c[1], skin: [P.skin3, P.skin2, '#c99a7a', P.skin2, P.skin3][i], reach: Math.floor(t * 1.5 + i) % 4 === 0 }); });
+      for (var k = 0; k < 4; k++) g.bubble(30 + k * 26, 50 - (k % 2) * 6, 14, Math.floor(t * 1.2) % 4 === k); } },
+    docs: { pts: [[60, 48], [118, 50]], draw: function (g, t) { g.room(); g.desk(30, 96); g.box(40, 24, 34, 24, 2, P.st1, P.st2, P.st0); for (var d = 0; d < 3; d++) g.r(44, 28 + d * 6, 26, 4, P.dark);
+      var k = E(t % 5, 0.6, 2); g.paper(Math.round(lerp(50, 80, k)), Math.round(lerp(30, 64, k)), 22, 14, P.red); g.r(84, 74, 8, 6, P.blueL); g.r(86, 76, 4, 2, P.st1); g.person(118, G, 'stand', Object.assign({ face: -1 }, HR)); } },
+    accom: { pts: [[44, 60], [110, 50]], draw: function (g, t) { g.room(); g.r(78, G - 40, 30, 40, P.st0); var open = E(t, 0.8, 1.8); g.r(78, G - 40, Math.round(30 * (1 - open)) + 2, 40, P.wood); g.r(76, G - 42, 34, 2, P.green);
+      for (var s = 0; s < 4; s++) g.r(30 + s * 10, G - 2 - s * 2, 12, 2 + s * 2, P.st2); g.person(118, G, 'stand', Object.assign({ face: -1, reach: t > 1 && t < 3 }, HR));
+      var w = g.walk(t, 0, 90, 2, 5.4); g.person(w.x, G, w.pose, { shirt: P.green, shirtD: P.greenD }); } },
+    calendar: { pts: [[60, 46], [118, 52]], draw: function (g, t) { g.room(); g.box(30, 18, 60, 58, 2, P.paper, P.st4, P.st3); g.r(30, 18, 60, 10, P.red);
+      var day = Math.floor(t * 2) % 21; for (var i = 0; i < 28; i++) g.r(34 + (i % 7) * 8, 32 + Math.floor(i / 7) * 10, 6, 7, i === day ? P.red : i % 7 > 4 ? P.st3 : P.line);
+      g.disc(128, 26, 8, P.amber); for (var k = 0; k < 8; k++) { var a = k / 8 * Math.PI * 2 + t; g.p(128 + Math.round(Math.cos(a) * 12), 26 + Math.round(Math.sin(a) * 12), P.amber); }
+      g.person(112, G, 'stand', { shirt: P.blue, shirtD: P.blueS, reach: Math.floor(t) % 3 === 0 }); } },
+    train: { pts: [[58, 34], [118, 54]], draw: function (g, t) { g.room(); g.box(24, 14, 74, 40, 2, P.greenD, P.green, P.dark); g.r(26, 16, 70, 36, '#1f3a2c');
+      var s = E(t % 6, 0.4, 3); for (var x = 0; x < 50 * s; x++) g.p(32 + x, 24 + Math.round(Math.sin(x / 4) * 3), P.paper); for (var k = 0; k < 3; k++) if (t % 6 > 1 + k) g.r(32, 34 + k * 5, 30 - k * 6, 2, P.paper);
+      g.person(102, G, 'stand', Object.assign({ face: -1, reach: true }, MGR)); g.person(122, G, 'stand'); g.person(136, G, 'stand', { shirt: P.amber, shirtD: P.amberD }); } },
+    clock: { pts: [[70, 40], [112, 60]], draw: function (g, t) { g.room(); g.box(56, 20, 32, 46, 3, P.st3, P.st4, P.st2); g.r(60, 26, 24, 10, P.dark);
+      var punch = (t % 4) > 1.6 && (t % 4) < 2.2; g.r(63, 28, 18, 6, (t % 4) > 1.6 ? P.green : P.st1); g.r(66, 42, 12, 18 - (punch ? 6 : 0), P.paper);
+      for (var i = 0; i < 5; i++) g.r(102 + i * 8, 26, 5, 16, i % 2 ? P.paper : P.st4); g.r(98, 22, 48, 1, P.st2);
+      g.disc(128, 62, 10, P.st4); g.disc(128, 62, 8, P.paper); var a = t / 9 * Math.PI * 2; for (var k = 0; k < 7; k++) g.p(128 + Math.round(Math.sin(a) * k), 62 - Math.round(Math.cos(a) * k), P.red);
+      var w = g.walk(t % 4, 4, 40, 0, 1.4); g.person(w.x, G, w.pose, { reach: punch }); } },
+    money: { pts: [[64, 48], [118, 46]], draw: function (g, t) { g.room(); g.desk(30, 100); g.box(46, 50, 40, 26, 2, P.paper, P.st4, P.st3); g.r(46, 50, 40, 5, P.green);
+      for (var k = 0; k < 3; k++) g.r(50, 59 + k * 4, 24 - k * 4, 2, P.line); g.r(76, 66, 7, 6, P.green); var n = 1 + Math.floor(t / 1.4) % 5;
+      for (var c = 0; c < n; c++) { g.r(100, 70 - c * 3, 14, 2, P.amber); g.r(100, 69 - c * 3, 14, 1, P.lamp); } g.person(126, G, 'stand', { reach: Math.floor(t) % 2 === 0 }); } },
+    travel: { pts: [[60, 56], [120, 40]], draw: function (g, t) { g.r(0, 0, W, H, P.sky); g.r(0, G, W, H - G, P.floor); g.r(0, G + 8, W, 2, P.st2);
+      for (var x = -((t * 40) % 20); x < W; x += 20) g.r(x, G + 16, 10, 1, P.paper); var cx = 50;
+      g.box(cx, G - 14, 50, 12, 3, P.red, P.redT, P.red2); g.box(cx + 10, G - 24, 26, 10, 2, P.red, P.redT, P.red2); g.r(cx + 13, G - 22, 9, 7, P.blueL); g.r(cx + 24, G - 22, 9, 7, P.blueL);
+      g.disc(cx + 10, G - 1, 4, P.dark); g.disc(cx + 40, G - 1, 4, P.dark); for (var i = 0; i < 4; i++) g.r(((i * 60) - t * 30) % 220 + 160 - 60, 20 + i * 6, 16, 3, P.st0); g.paper(118, 26, 18, 22, P.green); } },
+    door: { pts: [[74, 40], [128, 46]], draw: function (g, t) { g.room(); g.r(88, G - 44, 28, 44, P.st0); var open = E(t, 0.6, 1.6); g.r(88, G - 44, Math.round(28 * (1 - open)) + 2, 44, P.wood); g.r(86, G - 46, 32, 2, P.red);
+      g.person(128, G, 'stand', Object.assign({ face: -1 }, MGR)); var w = g.walk(t, -8, 108, 1.2, 4); g.person(w.x, G, w.pose); g.bubble(104, 52, 16, t > 4.4 && Math.floor(t * 2) % 2 === 0); g.bubble(130, 50, 16, t > 5.4 && Math.floor(t * 2) % 2 === 1); } },
+    talk: { pts: [[64, 44], [112, 44]], draw: function (g, t) { g.room(); g.desk(50, 70); g.screen(84, G - 38, '#1d3550');
+      g.person(54, G, 'stand', { reach: Math.floor(t) % 3 === 0 }); g.person(100, G, 'stand', Object.assign({ face: -1, reach: Math.floor(t) % 3 === 1 }, MGR));
+      g.bubble(44, 50, 18, Math.floor(t * 1.5) % 3 === 0); g.bubble(100, 48, 18, Math.floor(t * 1.5) % 3 === 1); g.paper(64, 66, 18, 10, P.red); } },
+    ladder: { pts: [[62, 30], [118, 52]], draw: function (g, t) { g.room(); var x0 = 50; g.r(x0, 14, 2, G - 14, P.wood); g.r(x0 + 26, 14, 2, G - 14, P.wood);
+      for (var i = 0; i < 5; i++) { var y = G - 12 - i * 15; g.r(x0, y, 28, 2, P.woodT); } var step = Math.min(4, Math.floor(Math.max(0, t - 0.6) / 1.2)); g.person(x0 + 10, G - step * 15 + (step ? 1 : 0), 'stand');
+      if (t > 5.4) { g.r(x0 + 34, 14, 2, 14, P.st2); g.r(x0 + 36, 14, 12, 8, P.red); } for (var c = 0; c < 10 && t > 5.4; c++) g.p(100 + (c * 13) % 50, ((t - 5.4) * 30 + c * 9) % 80, [P.red, P.amber, P.green][c % 3]); } },
+    boxes: { pts: [[50, 56], [116, 52]], draw: function (g, t) { g.room(); for (var b = 0; b < 6; b++) { var k = E(t, 0.4 + b * 0.4, 1 + b * 0.4); g.box(24 + (b % 3) * 22, G - 14 - Math.floor(b / 3) * 14 - Math.round((1 - k) * 30), 18, 12, 2, P.card, P.cardT, P.cardS); }
+      g.person(104, G, 'stand', Object.assign({ face: -1 }, MGR)); g.paper(118, 50, 16, 20, P.red); } },
+    computer: { pts: [[62, 40], [120, 44]], draw: function (g, t) { g.room(); g.desk(36, 96); g.screen(56, G - 40, '#1d3550'); g.screen(84, G - 40, '#16301f');
+      var lk = Math.floor(t / 2) % 2; g.r(64, G - 35, 6, 5, lk ? P.amber : P.st1); g.r(65, G - 38, 4, 3, lk ? P.amber : P.st1); g.cross(92, G - 36, Math.floor(t * 2) % 2 ? P.red : P.redT);
+      g.box(126, G - 58, 22, 58, 3, P.st1, P.st2, P.st0); for (var i = 0; i < 8; i++) { g.r(129, G - 54 + i * 7, 16, 4, P.dark); g.p(131 + (i * 5 + Math.floor(t * 6)) % 12, G - 53 + i * 7, i % 3 ? P.green : P.amber); }
+      g.person(40, G, 'stand'); } },
+    party: { pts: [[60, 30], [118, 52]], draw: function (g, t) { g.room(); for (var f = 0; f < 10; f++) { g.r(10 + f * 15, 10 + (f % 2) * 4, 6, 6, [P.red, P.amber, P.green, P.blueL][f % 4]); } g.r(10, 10, 150, 1, P.st2);
+      g.desk(48, 64); g.r(60, G - 20, 8, 4, P.amber); g.r(76, G - 21, 10, 5, P.red); for (var i = 0; i < 4; i++) g.person(30 + i * 30 + (i > 1 ? 30 : 0), G, Math.floor(t * 2 + i) % 2, { shirt: [P.red, P.blue, P.amber, P.green][i], shirtD: [P.red2, P.blueS, P.amberD, P.greenD][i] }); } },
+    phone: { pts: [[60, 44], [118, 46]], draw: function (g, t) { g.room(); g.box(40, 16, 40, 66, 3, P.dark, P.st1, P.st0); g.r(44, 22, 32, 52, (Math.floor(t * 2) % 2) ? P.blueT : P.blueL);
+      for (var k = 0; k < 4; k++) g.r(48, 28 + k * 10 + ((t * 8) % 10), 24, 6, P.paper); g.r(56, 77, 8, 2, P.st1); g.person(114, G, 'stand', { reach: true, face: -1 }); } },
+    mirror: { pts: [[58, 44], [116, 46]], draw: function (g, t) { g.room(); g.box(30, 16, 40, 60, 2, P.st3, P.st4, P.st2); g.r(34, 20, 32, 52, P.glass); g.person(46, G - 18, 'stand', { glasses: true });
+      g.r(34, 20, 32, 2, P.blueL); g.person(100, G, 'stand', { glasses: Math.floor(t / 2) % 2 === 0, cap: P.st1 }); g.r(122, G - 22, 10, 10, P.amber); } },
+    lock: { pts: [[58, 46], [120, 44]], draw: function (g, t) { g.room(); for (var l = 0; l < 5; l++) { g.box(14 + l * 18, G - 54, 16, 54, 2, P.st2, P.st3, P.st1); g.r(26 + l * 18, G - 34, 2, 4, P.dark); }
+      var lk = t > 2; g.r(116, 40, 18, 14, lk ? P.amber : P.st2); g.r(119, 32, 12, 9, P.st1); g.r(121, 34, 8, 7, P.wall); g.r(123, 45, 4, 5, P.dark);
+      var w = g.walk(t, 150, 104, 0.4, 2); g.person(w.x, G, w.pose, { face: -1, reach: t > 2 && t < 3 }); } },
+    medical: { pts: [[60, 40], [118, 48]], draw: function (g, t) { g.room(); g.box(40, 20, 44, 44, 2, P.paper, P.st4, P.st3); g.r(58, 28, 8, 28, P.red); g.r(48, 38, 28, 8, P.red);
+      var b = 1 + Math.round(Math.abs(Math.sin(t * 2.4)) * 2); g.disc(122, 36, 4 + b, P.redT); g.disc(130, 36, 4 + b, P.redT); for (var k = 0; k < 6 + b; k++) g.r(118 + k / 2, 38 + k, 16 - k, 1, P.redT);
+      g.person(110, G, 'stand', { shirt: P.blue, shirtD: P.blueS }); g.person(126, G, 'stand', { shirt: P.amber, shirtD: P.amberD, face: -1 }); } },
+    flag: { pts: [[60, 30], [118, 54]], draw: function (g, t) { g.room(); g.r(50, 12, 2, G - 12, P.st3); for (var y = 0; y < 18; y++) { var off = Math.round(Math.sin(t * 3 + y / 4) * 1.5); g.r(52 + off, 14 + y, 34, 1, y < 9 ? (y % 3 ? P.red : P.paper) : (y % 2 ? P.paper : P.red)); }
+      g.r(52, 14, 14, 9, P.blueS); g.person(106, G, 'stand', { shirt: '#4a5a3a', shirtD: '#33402a', cap: '#4a5a3a' }); g.person(130, G, 'stand', Object.assign({ face: -1 }, HR)); } },
+    floor: { pts: [[44, 30], [112, 56]], draw: function (g, t) { g.room(); g.machine(14, t); g.person(76, G, 'stand', { glasses: true }); g.r(116, G - 10, 10, 10, P.amber); g.r(119, G - 14, 4, 4, P.amber); g.r(116, G - 6, 10, 2, P.paper);
+      var k = Math.floor(t / 3) % 2; g.person(136, G, 'stand', Object.assign({ face: -1, reach: k === 1 }, MGR)); if (k) g.paper(126, 58, 10, 12, P.red); } },
+    jury: { pts: [[56, 40], [118, 44]], draw: function (g, t) { g.room(); g.box(24, G - 26, 70, 26, 3, P.wood, P.woodT, P.woodS); for (var i = 0; i < 4; i++) g.person(30 + i * 16, G - 18, 'stand', { shirt: [P.st2, P.blue, P.amber, P.red][i], shirtD: [P.st1, P.blueS, P.amberD, P.red2][i] });
+      g.box(110, G - 36, 30, 36, 3, P.wood, P.woodT, P.woodS); var k = Math.floor(t * 1.2) % 4 === 0; g.r(126, k ? 44 : 40, 10, 4, P.woodS); g.r(129, k ? 48 : 44, 3, 8, P.woodS); } },
+    vote: { pts: [[56, 40], [120, 48]], draw: function (g, t) { g.room(); g.box(30, G - 46, 46, 46, 3, P.blueS, P.blue, P.dark); g.r(30, G - 46, 46, 4, P.paper); g.r(46, G - 34, 14, 2, P.dark);
+      var k = E(t % 4, 0.6, 1.8); g.paper(48, Math.round(lerp(G - 60, G - 34, k)), 10, 12, P.red); g.person(84, G, 'stand', { reach: (t % 4) < 2, face: -1 }); g.check(120, 40, P.green); } },
+    stop: { pts: [[56, 34], [118, 50]], draw: function (g, t) { g.room(); var R = 22 + (Math.floor(t * 2) % 2); for (var a = 0; a < 8; a++) { var an = a / 8 * Math.PI * 2 + Math.PI / 8; g.disc(56 + Math.round(Math.cos(an) * 14), 42 + Math.round(Math.sin(an) * 14), 9, P.red); }
+      g.disc(56, 42, R - 4, P.red); g.r(42, 40, 28, 4, P.paper); g.person(112, G, 'stand', Object.assign({ face: -1, reach: true }, MGR)); for (var k = 0; k < 3; k++) g.p(132 - k + Math.round(Math.sin(t * 2 + k) * 1.5), 60 - k * 4 - ((t * 8) % 3), P.st3); } },
+    vault: { pts: [[60, 30], [120, 54]], draw: function (g, t) { g.room(); g.disc(64, 50, 34, P.st2); g.disc(64, 50, 29, P.st3); g.disc(64, 50, 9, P.st1);
+      for (var k = 0; k < 4; k++) { var a = t * 0.9 + k * Math.PI / 2; g.r(64 + Math.cos(a) * 18 - 2, 50 + Math.sin(a) * 18 - 2, 4, 4, P.st1); } for (var b = 0; b < 6; b++) g.r(64 + Math.cos(b) * 31, 50 + Math.sin(b) * 31, 2, 2, P.st4);
+      g.person(116, G, 'stand', { face: -1, hold: P.red }); } }
+  };
+
+  // ── which set piece and callouts for each section (callouts name things in the scene, or state a fact checked in that section's text)
+  var MAP = [
+    ['1.0', 'letter', 'From the owners', 'Welcome'], ['1.1', 'greet', 'Welcome', 'Your team'], ['1.2', 'sign', 'At-will', 'Either side'],
+    ['2.1', 'street', 'Advanced', 'Our shop'], ['2.2', 'team', 'Honesty', 'Integrity'], ['2.3', 'letter', 'Handbook', 'Updates'],
+    ['3.1', 'talk', 'Conflict of interest', 'Business'], ['3.2', 'docs', 'ID documents', 'HR'], ['3.3', 'greet', 'Relatives', 'Friends'], ['3.4', 'accom', 'Accommodation', 'HR'],
+    ['3.5', 'docs', 'Job description', 'Your role'], ['3.6', 'calendar', '90 days', 'Introductory period'], ['3.7', 'train', 'Training', 'Your manager'],
+    ['OK-Disability', 'accom', 'Accommodation', 'Disability'], ['OK-EEO', 'team', 'Equal opportunity', 'Respect'], ['OK-Religious', 'accom', 'Accommodation', 'Religion'],
+    ['4.1', 'clock', 'Advance notice', 'Your manager'], ['4.2', 'money', 'Receipts', 'Expenses'], ['4.3', 'money', 'Direct deposit', 'Your bank'], ['4.4', 'clock', 'Hours', 'Pay'],
+    ['4.5', 'clock', 'Three days', 'Call in'], ['4.6', 'money', 'Deductions', 'Paycheck'], ['4.7', 'clock', 'Punch in', 'Punch out'], ['4.8', 'travel', 'Travel', 'Expenses'],
+    ['4.9', 'money', 'Company card', 'Receipts'], ['OK-Accommodations for Nursing', 'accom', 'Nursing mothers', 'Accommodation'], ['OK-Meal', 'clock', 'Meal break', 'Rest break'],
+    ['OK-Overtime', 'clock', 'Approved in advance', 'Over 40 hours'],
+    ['5.1', 'stop', 'Criminal activity', 'Conduct'], ['5.2', 'talk', 'Exit interview', 'HR'], ['5.3', 'door', 'Your manager', 'HR'], ['5.4', 'street', 'Second job', 'Your job here'],
+    ['5.5', 'money', 'Pay raise', 'Performance'], ['5.6', 'talk', 'Improvement plan', 'Your manager'], ['5.7', 'docs', 'References', 'HR'], ['5.8', 'ladder', 'Promotion', 'Next role'],
+    ['5.9', 'letter', 'Two weeks notice', 'In writing'], ['5.10', 'team', 'Respect', 'Responsibility'], ['5.11', 'greet', 'Transfer', 'New team'], ['5.12', 'boxes', 'Workforce reduction', 'Layoffs'],
+    ['OK-Disciplinary', 'talk', 'Discipline', 'Your manager'],
+    ['6.1', 'computer', 'Licensed software', 'No copies'], ['6.2', 'party', 'Company event', 'Team'], ['6.3', 'phone', 'Company phone', 'Business use'], ['6.4', 'team', 'Solicitation', 'Work time'],
+    ['6.5', 'street', 'Off duty', 'Company property'], ['6.6', 'mirror', 'Neat and clean', 'Safety gear'], ['6.7', 'phone', 'Break time', 'One earbud'], ['6.8', 'docs', 'Address', 'HR'],
+    ['6.9', 'lock', 'Lock up', 'Report lost keys'], ['6.10', 'phone', 'Social media', 'Your own voice'], ['6.11', 'phone', 'Outside calls', 'HR'], ['6.12', 'computer', 'Company systems', 'No privacy'],
+    ['6.13', 'lock', 'Lockers', 'Inspection'], ['OK-Access', 'docs', 'Personnel file', 'Medical records'],
+    ['7.1', 'money', 'Simple IRA', 'Retirement'], ['7.2', 'calendar', 'Bereavement', 'Time off'], ['7.3', 'medical', 'COBRA', 'Coverage'], ['7.4', 'medical', 'Dental', 'Insurance'],
+    ['7.5', 'medical', 'Vision', 'Insurance'], ['7.6', 'talk', 'EAP', 'Confidential'], ['7.7', 'medical', 'Disability', 'Benefits'], ['7.8', 'calendar', 'FMLA', 'Family and medical leave'],
+    ['7.9', 'money', 'FSA', 'Spending account'], ['7.10', 'medical', 'Health insurance', 'Coverage'], ['7.11', 'calendar', 'Seven holidays', 'Holiday pay'], ['7.12', 'medical', 'Life insurance', 'Coverage'],
+    ['7.13', 'flag', 'Military leave', 'USERRA'], ['7.14', 'calendar', 'Paid time off', 'Time off'], ['7.15', 'calendar', 'Leave of absence', 'Time away'], ['7.16', 'money', 'Unemployment', 'Insurance'],
+    ['7.17', 'floor', 'Report any injury', 'Your manager'], ['OK-Jury', 'jury', 'Jury duty', 'Time off'], ['OK-Voting', 'vote', 'Voting', 'Time off'],
+    ['8.1', 'stop', 'Drugs and alcohol', 'Not at work'], ['8.2', 'floor', 'Report hazards', 'Safety rules'], ['8.3', 'stop', 'Zero tolerance', 'Report it'], ['OK-Workplace Smoking', 'stop', 'No smoking', 'Office and restrooms'],
+    ['9.1', 'vault', 'Need to know', 'Confidential'], ['CLOSE-Closing', 'letter', 'Closing', 'Thank you'], ['CLOSE-Acknowledgment', 'sign', 'Acknowledgment', 'Your signature']
+  ];
+  var CAT_ARCH = { 'Welcome & Company': 'street', 'Hiring & Orientation': 'greet', 'Pay & Hours': 'clock', 'Performance & Conduct': 'talk', 'Workplace Policies': 'computer', 'Benefits & Leave': 'calendar', 'Safety': 'floor', 'Trade Secrets': 'vault', 'Closing': 'sign' };
+  var byId = {}; DATA.sections.forEach(function (s) { byId[s.id] = s; });
+  function planFor(sec) {
+    var id = sec.id || '', hit = null;
+    for (var i = 0; i < MAP.length && !hit; i++) { var k = MAP[i][0]; if (id === k || id.indexOf(k + ' ') === 0 || (k.indexOf('-') > 0 && id.indexOf(k) === 0)) hit = MAP[i]; }
+    return hit ? { arch: hit[1], labels: [hit[2], hit[3]] } : { arch: CAT_ARCH[sec.category] || 'letter', labels: [sec.title, sec.category] };
+  }
+  var numOf = function (id) { return id.indexOf('OK-') === 0 ? 'OK' : id.indexOf('CLOSE-') === 0 ? '§' : id; };
+  var clean = function (s) { return String(s || '').replace(/\*+/g, '').replace(/^\s*[-•]\s*/gm, '').replace(/\s+/g, ' ').trim(); };
+  function opening(sec) { // the section's own opening words, cut at the end of a sentence (never mid-sentence, never at i.e. or e.g.)
+    var words = clean(sec.content).split(' '), out = [];
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i]; out.push(w); var t = out.join(' ');
+      var ends = /[.!?]["')]?$/.test(w) && !/^\(?(i\.e\.|e\.g\.|etc\.|[A-Za-z]\.|no\.|vs\.)$/i.test(w);
+      if (ends && t.length >= 140) return t;
+      if (t.length > 330) return t.replace(/[,;:]$/, '') + ' ...';
+    }
+    return out.join(' ');
+  }
+  // ── styles
+  var css = document.createElement('style'); css.id = 'hb-videos-css';
+  css.textContent =
+    '.hbv{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start;margin:4px 0 22px;padding-bottom:18px;border-bottom:1px solid var(--border-subtle)}' +
+    '.hbv-st{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:#15171a;border:1px solid var(--border-strong);container-type:inline-size}' +
+    '.hbv-st canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}' +
+    '.hbv-mq{position:absolute;left:50%;top:3.5%;transform:translateX(-50%);max-width:92%;background:#f1ece2;color:#16191c;border:.55cqi solid #16191c;padding:1.4cqi 3cqi 1.2cqi 9cqi;text-align:left;white-space:nowrap}' +
+    '.hbv-mq b{position:absolute;left:1.6cqi;top:50%;transform:translateY(-50%);min-width:5.6cqi;height:5.6cqi;padding:0 .8cqi;border-radius:2.8cqi;background:#EE2D24;color:#fff;font:600 3cqi/5.6cqi var(--font-display);text-align:center}' +
+    '.hbv-mq h4{margin:0;font:600 4.4cqi/1 var(--font-display);letter-spacing:.04em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;max-width:62cqi}' +
+    '.hbv-mq small{display:block;margin-top:.4cqi;font:700 2cqi/1.15 var(--font-body);color:#3d4349;text-transform:uppercase;letter-spacing:.08em}' +
+    '.hbv-mq i{position:absolute;width:1.1cqi;height:1.1cqi;border-radius:50%;background:#e0b24f;opacity:.35}.hbv-mq i.lit{opacity:1;background:#ffd77a}' +
+    '.hbv-co{position:absolute;transform:translate(0,-50%);opacity:0;transition:opacity .35s ease;pointer-events:none;display:flex;align-items:center}' +
+    '.hbv-co.on{opacity:1}.hbv-co::before{content:"";width:1.4cqi;height:1.4cqi;border-radius:50%;background:#EE2D24;border:.3cqi solid #fff;flex:none;margin-left:-.9cqi}' +
+    '.hbv-co span{margin-left:.2cqi;border-top:.35cqi solid #f1ece2;width:3.4cqi;flex:none}' +
+    '.hbv-co em{font:700 2.6cqi/1 var(--font-body);font-style:normal;letter-spacing:.06em;text-transform:uppercase;background:#f1ece2;color:#16191c;border:.35cqi solid #16191c;padding:.8cqi 1.2cqi;white-space:nowrap}' +
+    '.hbv-co.l{flex-direction:row-reverse;transform:translate(-100%,-50%)}.hbv-co.l::before{margin:0 -.9cqi 0 0}.hbv-co.l span{margin:0 .2cqi 0 0}' +
+    '.hbv-w .n{font:600 56px/.85 var(--font-display);color:var(--brand-red,#EE2D24)}' +
+    '.hbv-w h4{margin:8px 0 10px;font:600 26px/1.05 var(--font-display);text-transform:uppercase;letter-spacing:.02em;color:var(--text-primary)}' +
+    '.hbv-w p{margin:0 0 12px;color:var(--text-secondary);font-size:15px;line-height:1.55}' +
+    '.hbv-w .c{font:600 11px/1 var(--font-display);letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted)}' +
+    '.hbv-play,.hbv-all{font-family:var(--font-display);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--text-primary);border:1px solid var(--brand-red,#EE2D24);border-radius:2px;padding:7px 12px;cursor:pointer}' +
+    '.hbv-all{margin-left:auto}' +
+    '.hbv-tv{position:fixed;inset:0;z-index:2147483100;background:#0f1113;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,30vw)}' +
+    '.hbv-tv .l{display:grid;place-items:center;padding:2vh 2vw;min-width:0;min-height:0}.hbv-tv .hbv-st{width:min(100%,calc((100vh - 4vh) * 4 / 3))}' +
+    '.hbv-tv aside{border-left:1px solid var(--border-strong);padding:5vh 3vw;display:flex;flex-direction:column;gap:2vh;background:#141414;overflow-y:auto;overflow-x:hidden;min-width:0}' +
+    '.hbv-tv .n{font:600 clamp(56px,min(13vh,7vw),160px)/.8 var(--font-display);color:#EE2D24}.hbv-tv h2{margin:0;font:600 clamp(24px,min(6vh,2.6vw),72px)/.98 var(--font-display);text-transform:uppercase;color:#F4F4F5;overflow-wrap:anywhere}' +
+    '.hbv-tv p{margin:0;font-size:clamp(15px,2.2vh,24px);line-height:1.45;color:#B5B5B8}.hbv-tv .c{font:600 clamp(12px,1.6vh,16px)/1 var(--font-display);letter-spacing:2px;text-transform:uppercase;color:#7A7A7D}' +
+    '.hbv-tv .txt{transition:opacity .45s ease}.hbv-tv .txt.out{opacity:0}' +
+    '.hbv-tv .steps{margin-top:auto;display:flex;gap:3px;flex-wrap:wrap}.hbv-tv .steps i{flex:1 0 6px;height:5px;background:#2A2A2D}.hbv-tv .steps i.on{background:#EE2D24}' +
+    '.hbv-tv .ctl{display:flex;gap:8px;flex-wrap:wrap}.hbv-tv .ctl button{font-family:var(--font-display);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:#F4F4F5;border:1px solid #3A3A3D;border-radius:2px;padding:9px 14px;cursor:pointer}' +
+    '.hbv-tv .ctl button.pri{background:#EE2D24;border-color:#EE2D24}' +
+    '@media (max-width:820px){.hbv{grid-template-columns:1fr}.hbv-tv{grid-template-columns:1fr;grid-template-rows:auto 1fr}.hbv-tv aside{border-left:0;border-top:1px solid #3A3A3D}}' +
+    '@media print{.hbv,.hbv-all,.hbv-tv{display:none!important}}' +
+    '@media (prefers-reduced-motion: reduce){.hbv-co,.hbv-tv .txt{transition:none}}';
+  document.head.appendChild(css);
+
+  // ── a video: canvas + marquee + callouts for one section
+  var live = [];
+  function video(sec) {
+    var plan = planFor(sec), arch = A[plan.arch] || A.letter;
+    var el = document.createElement('div'); el.className = 'hbv-st'; el.setAttribute('role', 'img'); el.setAttribute('aria-label', 'Animated illustration: ' + sec.title);
+    var cv = document.createElement('canvas'); cv.width = W; cv.height = H; el.appendChild(cv);
+    var ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+    var mq = document.createElement('div'); mq.className = 'hbv-mq'; mq.innerHTML = '<b></b><h4></h4><small></small>';
+    mq.querySelector('b').textContent = numOf(sec.id); mq.querySelector('h4').textContent = sec.title; mq.querySelector('small').textContent = sec.category + (sec.state ? ' · ' + sec.state : '');
+    el.appendChild(mq);
+    var L = 9, cos = plan.labels.map(function (txt, i) {
+      var pt = arch.pts[i] || arch.pts[0], c = document.createElement('div'); c.className = 'hbv-co' + (pt[0] > W * 0.62 ? ' l' : '');
+      c.style.left = (pt[0] / W * 100) + '%'; c.style.top = (pt[1] / H * 100) + '%'; c.innerHTML = '<span></span><em></em>'; c.querySelector('em').textContent = txt; el.appendChild(c);
+      return { c: c, a: i === 0 ? 1.2 : 4.6, b: i === 0 ? 4.4 : 8.6, on: false };
+    });
+    var v = { el: el, g: kit(ctx), arch: arch, cos: cos, mq: mq, bulbs: [], t0: performance.now() + Math.random() * 400, L: L, vis: true };
+    v.place = function () {
+      v.bulbs.forEach(function (b) { b.remove(); }); v.bulbs = []; var w = mq.clientWidth, h = mq.clientHeight; if (!w) return;
+      var n = Math.max(10, Math.round((w + h) / 14)), per = 2 * (w + h);
+      for (var k = 0; k < n; k++) { var d = k / n * per, x, y; if (d < w) { x = d; y = 0; } else if (d < w + h) { x = w; y = d - w; } else if (d < 2 * w + h) { x = 2 * w + h - d; y = h; } else { x = 0; y = per - d; }
+        var b = document.createElement('i'); b.style.left = 'calc(' + x.toFixed(1) + 'px - .55cqi)'; b.style.top = 'calc(' + y.toFixed(1) + 'px - .55cqi)'; mq.appendChild(b); v.bulbs.push(b); }
+    };
+    if (window.ResizeObserver) new ResizeObserver(function () { v.place(); }).observe(mq);
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) { v.vis = es[0].isIntersecting; if (v.vis) kick(); }).observe(el);
+    requestAnimationFrame(v.place);
+    live.push(v); kick(); return v;
+  }
+  var raf = 0;
+  function kick() { if (!raf) raf = requestAnimationFrame(loop); }
+  function loop(now) {
+    raf = 0; live = live.filter(function (v) { return v.el.isConnected; }); var any = false;
+    live.forEach(function (v) {
+      if (!v.vis || document.hidden) return; any = true;
+      var t = reduced ? v.L * 0.55 : Math.max(0, (now - v.t0) / 1000) % v.L;
+      try { v.arch.draw(v.g, t); } catch (e) { /* never breaks the page */ }
+      v.cos.forEach(function (o) { var on = t >= o.a && t < o.b; if (on !== o.on) { o.on = on; o.c.classList.toggle('on', on); } });
+      if (!reduced) { var k = Math.floor(now / 160) % 3; v.bulbs.forEach(function (b, i) { b.classList.toggle('lit', i % 3 === k); }); }
+    });
+    if (any) raf = requestAnimationFrame(loop);
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
+
+  // ── in an opened section: the video, the section's opening words, and Play
+  function decorate(card) {
+    if (!card.classList.contains('expanded') || card.querySelector('.hbv')) return;
+    var sec = byId[card.dataset.sectionId], body = card.querySelector('.section-card-body'); if (!sec || !body) return;
+    var wrap = document.createElement('div'); wrap.className = 'hbv';
+    var v = video(sec); wrap.appendChild(v.el);
+    var w = document.createElement('div'); w.className = 'hbv-w';
+    w.innerHTML = '<div class="n"></div><h4></h4><p></p><div class="c"></div><div style="margin-top:14px"><button type="button" class="hbv-play">Play full screen</button></div>';
+    w.querySelector('.n').textContent = numOf(sec.id); w.querySelector('h4').textContent = sec.title; w.querySelector('p').textContent = opening(sec);
+    w.querySelector('.c').textContent = sec.category + ' · the full policy is below';
+    w.querySelector('.hbv-play').addEventListener('click', function (e) { e.stopPropagation(); tv(listed(), sec.id); });
+    wrap.appendChild(w); body.insertBefore(wrap, body.firstChild);
+  }
+  var results = document.getElementById('results-list');
+  function scan() { if (results) results.querySelectorAll('.section-card.expanded').forEach(decorate); }
+  if (results) new MutationObserver(function () { requestAnimationFrame(scan); }).observe(results, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  scan();
+  function listed() { var ids = results ? Array.prototype.map.call(results.querySelectorAll('.section-card'), function (c) { return c.dataset.sectionId; }) : []; return ids.length ? ids : DATA.sections.map(function (s) { return s.id; }); }
+
+  // ── TV mode: the listed sections back to back, full screen (like the posters' "Play on a TV")
+  var HOLD = 12;
+  function tv(ids, startId) {
+    ids = ids.filter(function (id) { return byId[id]; }); if (!ids.length) return;
+    var idx = Math.max(0, ids.indexOf(startId)), t0 = performance.now(), on = true, paused = false, cur = null, prevFocus = document.activeElement;
+    var el = document.createElement('div'); el.className = 'hbv-tv'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Handbook videos');
+    el.innerHTML = '<div class="l"></div><aside><div class="c"></div><div class="txt"><div class="n"></div><h2></h2></div><div class="txt"><p></p></div><div class="steps" aria-hidden="true"></div>' +
+      '<div class="ctl"><button type="button" data-k="prev">Back</button><button type="button" data-k="pause">Pause</button><button type="button" data-k="next" class="pri">Next</button><button type="button" data-k="close">Close</button></div></aside>';
+    document.body.appendChild(el);
+    var stepsEl = el.querySelector('.steps'); stepsEl.innerHTML = ids.length <= 90 ? ids.map(function () { return '<i></i>'; }).join('') : '';
+    function show(i) {
+      idx = (i + ids.length) % ids.length; t0 = performance.now(); var sec = byId[ids[idx]];
+      var txt = el.querySelectorAll('.txt'); txt.forEach(function (x) { x.classList.add('out'); });
+      setTimeout(function () {
+        el.querySelector('.n').textContent = numOf(sec.id); el.querySelector('h2').textContent = sec.title; el.querySelector('p').textContent = opening(sec);
+        el.querySelector('.c').textContent = 'Policy ' + (idx + 1) + ' of ' + ids.length + ' · ' + sec.category; txt.forEach(function (x) { x.classList.remove('out'); });
+      }, reduced ? 0 : 240);
+      var l = el.querySelector('.l'); if (cur) cur.el.remove(); cur = video(sec); cur.t0 = performance.now(); l.appendChild(cur.el);
+      if (!reduced && cur.el.animate) cur.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease-out' });
+      stepsEl.querySelectorAll('i').forEach(function (x, k) { x.classList.toggle('on', k <= idx); });
+    }
+    function close() { if (!on) return; on = false; document.removeEventListener('keydown', key, true); el.remove(); if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); if (prevFocus && prevFocus.focus) prevFocus.focus(); }
+    function key(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } else if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); } else if (e.key === ' ') { e.preventDefault(); toggle(); } else return; e.stopPropagation(); }
+    function toggle() { paused = !paused; el.querySelector('[data-k="pause"]').textContent = paused ? 'Play' : 'Pause'; if (!paused) t0 = performance.now(); }
+    el.addEventListener('click', function (e) { var b = e.target.closest('button[data-k]'); if (!b) return; var k = b.dataset.k; if (k === 'close') close(); else if (k === 'next') show(idx + 1); else if (k === 'prev') show(idx - 1); else if (k === 'pause') toggle(); });
+    document.addEventListener('keydown', key, true);
+    function tick(now) { if (!on) return; if (!paused && !reduced && (now - t0) / 1000 > HOLD) show(idx + 1); requestAnimationFrame(tick); }
+    show(idx); requestAnimationFrame(tick); el.querySelector('[data-k="next"]').focus();
+  }
+
+  // ── "Watch as videos" beside the results title, and "Watch all 81" in the hero
+  var head = document.querySelector('.content-header'), count = document.getElementById('result-count');
+  if (head) { var b = document.createElement('button'); b.type = 'button'; b.className = 'hbv-all'; b.textContent = 'Watch as videos'; b.addEventListener('click', function () { tv(listed()); }); head.insertBefore(b, count || null); }
+  var heroSlot = document.querySelector('.hbm-hero');
+  if (heroSlot) { var a = document.createElement('button'); a.type = 'button'; a.className = 'hbv-all'; a.style.marginLeft = '8px'; a.textContent = 'Watch all ' + DATA.sections.length + ' policies'; a.addEventListener('click', function () { tv(DATA.sections.map(function (s) { return s.id; })); }); heroSlot.appendChild(a); }
+  window.HBVideos = { play: function (ids, start) { tv(ids || DATA.sections.map(function (s) { return s.id; }), start); } };
 })();
 </script>
 
