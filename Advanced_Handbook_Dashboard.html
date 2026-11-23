@@ -2719,6 +2719,232 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
 
 </script>
 
+<!-- Motion and live scenes in the New Work Instructions poster style (pixel scenes, a lit marquee, paper callouts):
+     the hero gets a street scene, every chapter gets its own scene that cross-fades in when you browse or search, and
+     the page's text and cards arrive in sequence. Self-contained (no files, works offline). Remove this block to take it out. -->
+<style id="hb-motion-css">
+  .hbm-stage{position:relative;width:100%;aspect-ratio:192/80;overflow:hidden;background:#15171a;border:1px solid #2A2A2D;border-radius:2px;container-type:inline-size}
+  .hbm-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+  .hbm-mq{position:absolute;left:3cqi;top:4cqi;background:#f1ece2;color:#16191c;border:.5cqi solid #16191c;padding:1cqi 2.4cqi .9cqi;white-space:nowrap}
+  .hbm-mq h3{margin:0;font:600 4.2cqi/1 var(--font-display);letter-spacing:.05em;text-transform:uppercase}
+  .hbm-mq i{position:absolute;width:1cqi;height:1cqi;border-radius:50%;background:#e0b24f;opacity:.35}.hbm-mq i.lit{opacity:1;background:#ffd77a}
+  .hbm-co{position:absolute;transform:translate(0,-50%);opacity:0;transition:opacity .35s ease;pointer-events:none;display:flex;align-items:center}
+  .hbm-co.on{opacity:1}.hbm-co::before{content:"";width:1.4cqi;height:1.4cqi;border-radius:50%;background:#EE2D24;border:.25cqi solid #fff;flex:none;margin-left:-.9cqi}
+  .hbm-co span{border-top:.3cqi solid #f1ece2;width:3cqi;flex:none}
+  .hbm-co em{font:700 2.3cqi/1 var(--font-body);font-style:normal;letter-spacing:.06em;text-transform:uppercase;background:#f1ece2;color:#16191c;border:.3cqi solid #16191c;padding:.7cqi 1.1cqi;white-space:nowrap}
+  .hbm-co.l{flex-direction:row-reverse;transform:translate(-100%,-50%)}.hbm-co.l::before{margin:0 -.9cqi 0 0}
+  .hero{position:relative}
+  .hbm-hero{position:absolute;right:32px;top:64px;width:min(36%,430px)}
+  .hbm-hero a{display:inline-block;margin-top:10px;color:#F4F4F5;text-decoration:none;border:1px solid #EE2D24;border-radius:2px;padding:7px 12px;font-family:var(--font-display);font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+  .content-header{gap:16px}
+  .hbm-cat{width:min(34%,280px);flex:none;margin-left:auto}
+  .content-header .result-count{order:3}
+  @media (max-width:1180px){.hbm-hero{display:none}}
+  @media (max-width:900px){.hbm-cat{display:none}}
+  @media print{.hbm-hero,.hbm-cat,.hbm-bar{display:none!important}}
+</style>
+<script id="hb-motion-v1">
+(function () {
+  'use strict';
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 192, H = 80, FL = 66;
+  var P = { wall: '#1d2024', wall2: '#23272b', sky: '#14171b', floor: '#2b3035', floor2: '#33393f', st0: '#30353a', st1: '#4c5359', st2: '#7d858c', st3: '#aab1b7', st4: '#dde1e4',
+    red: '#e03131', red2: '#a51f1f', redT: '#f0605f', dark: '#121417', blue: '#3d6fa5', blueS: '#2b4f78', blueL: '#8fb4d9', blueT: '#5f8cbf', wood: '#86684a', woodT: '#a3825f', woodS: '#63492f',
+    paper: '#eef0f2', line: '#9aa0a4', green: '#3fbf7f', greenD: '#2b8a5a', amber: '#e0a43a', amberD: '#a8781f', lamp: '#d9c27a', glass: '#2a3a4c' };
+  var clamp = function (x, a, b) { a = a == null ? 0 : a; b = b == null ? 1 : b; return x < a ? a : x > b ? b : x; };
+  var ez = function (x) { return x * x * (3 - 2 * x); };
+  var E = function (t, a, b) { return ez(clamp((t - a) / (b - a))); };
+  var lerp = function (a, b, k) { return a + (b - a) * k; };
+
+  function kit(ctx) {
+    var r = function (x, y, w, h, c) { w = Math.round(w); h = Math.round(h); if (w <= 0 || h <= 0) return; ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+    var p = function (x, y, c) { r(x, y, 1, 1, c); };
+    var box = function (x, y, w, h, d, f, t, s) { x = Math.round(x); y = Math.round(y); r(x, y, w, h, f); for (var i = 1; i <= d; i++) { r(x + i, y - i, w, 1, t); r(x + w - 1 + i, y - i + 1, 1, h, s); } };
+    var disc = function (cx, cy, R, c) { for (var y = -R; y <= R; y++) { var w = Math.floor(Math.sqrt(R * R - y * y)); r(cx - w, cy + y, w * 2 + 1, 1, c); } };
+    var room = function () { r(0, 0, W, H, P.wall); for (var x = 12; x < W; x += 28) r(x, 0, 1, FL, P.wall2); r(0, FL, W, H - FL, P.floor); r(0, FL, W, 1, P.floor2); r(0, FL + 1, W, 1, P.red2); for (var x2 = 4; x2 < W; x2 += 16) r(x2, FL + 8, 8, 1, P.floor2); };
+    var person = function (x, yF, pose, o) {
+      o = o || {}; x = Math.round(x); yF = Math.round(yF);
+      var shirt = o.shirt || P.red, shirtD = o.shirtD || P.red2, pants = o.pants || '#2f3a4a', skin = o.skin || '#c99a7a', hair = o.hair || '#3a2c22', top = yF - 19;
+      r(x + 1, top, 5, 2, hair); r(x + 1, top + 2, 5, 3, skin); r(x + 1, top + 3, 5, 1, '#1b1e21'); r(x + (o.face === -1 ? 1 : 4), top + 3, 1, 1, P.st3);
+      if (o.glasses) r(x + 1, top + 3, 5, 1, P.blueL);
+      r(x, top + 5, 7, 7, shirt); r(x, top + 11, 7, 1, shirtD);
+      var arm = o.reach ? 3 : 0; r(x - 1, top + 6, 1, 5 - arm, shirtD); r(x + 7, top + 6, 1, 5 - arm, shirtD); r(x + (o.face === -1 ? -1 : 7), top + 11 - arm, 1, 1, skin);
+      var ly = top + 12, lh = yF - ly;
+      if (pose === 1) { r(x, ly, 2, lh, pants); r(x + 5, ly, 2, lh, pants); } else { r(x + 1, ly, 2, lh, pants); r(x + 4, ly, 2, lh, pants); }
+    };
+    var desk = function (x, w) { box(x, FL - 16, w, 4, 3, P.wood, P.woodT, P.woodS); r(x + 2, FL - 12, 2, 12, P.woodS); r(x + w - 4, FL - 12, 2, 12, P.woodS); };
+    var walk = function (t, x0, x1, a, b) { var k = E(t, a, b); return { x: lerp(x0, x1, k), pose: t > a && t < b ? Math.floor(t * 7) % 2 : 'stand' }; };
+    return { r: r, p: p, box: box, disc: disc, room: room, person: person, desk: desk, walk: walk };
+  }
+  var HELP = { shirt: P.st2, shirtD: P.st1, hair: '#1f1a17', skin: '#a8765a' };
+
+  // scenes: draw(g, t) for t in [0, L); labels: [from, to, x, y, text]
+  var S = {
+    street: { L: 12, title: 'Ask the handbook', labels: [[0.5, 3, 40, 40, 'PTO'], [3.2, 6, 96, 36, 'Overtime'], [6.2, 9, 150, 40, 'Cell phones'], [9.2, 11.8, 96, 36, 'Holidays']], draw: function (g, t) {
+      g.r(0, 0, W, H, P.sky); for (var i = 0; i < 14; i++) g.p((i * 37) % W, (i * 11) % 22 + 2, i % 3 ? P.st0 : P.st1);
+      [[14, 34, P.red], [72, 44, P.amber], [130, 38, P.blueL]].forEach(function (b, k) {
+        g.box(b[0], FL - b[1], 48, b[1], 3, P.st1, P.st2, P.st0); g.r(b[0], FL - b[1], 48, 2, b[2]);
+        for (var wy = FL - b[1] + 7; wy < FL - 20; wy += 9) for (var wx = b[0] + 5; wx < b[0] + 42; wx += 10) if (Math.abs(wx + 3 - b[0] - 24) > 6) g.r(wx, wy, 6, 5, ((wx + wy + k + Math.floor(t)) % 5) ? P.glass : P.lamp);
+        g.r(b[0] + 19, FL - 16, 10, 16, P.dark); g.r(b[0] + 19, FL - 17, 10, 1, b[2]);
+      });
+      g.r(0, FL, W, H - FL, P.floor); g.r(0, FL, W, 1, P.floor2); g.r(0, FL + 1, W, 1, P.red2);
+      var w = g.walk(t % 12, -8, 196, 0, 11); g.person(w.x, FL, w.pose);
+    } },
+    all: { L: 6, title: 'The whole handbook', labels: [[0.8, 5.4, 132, 30, '81 sections']], draw: function (g, t) {
+      g.room(); g.desk(40, 110);
+      g.box(70, FL - 26, 26, 10, 2, P.paper, P.st4, P.st3); g.box(96, FL - 26, 26, 10, 2, P.paper, P.st4, P.st3); g.r(95, FL - 27, 2, 11, P.red);
+      for (var k = 0; k < 4; k++) { g.r(74, FL - 24 + k * 2, 18, 1, P.line); g.r(100, FL - 24 + k * 2, 18, 1, P.line); }
+      var f = (t % 1.5) / 1.5, w = Math.round(26 * Math.cos(f * Math.PI)); g.r(w >= 0 ? 96 : 96 + w, FL - 27 - Math.round(Math.sin(f * Math.PI) * 6), Math.abs(w), 10, P.st4);
+      for (var s = 0; s < 6; s++) g.box(150 + s * 5, FL - 28 - (s % 3) * 3, 4, 28 + (s % 3) * 3, 1, [P.red, P.blue, P.amber, P.st2, P.green, P.red2][s], P.st3, P.st1);
+    } },
+    welcome: { L: 7, title: 'Welcome to Advanced', labels: [[2.8, 6.6, 100, 30, 'Welcome']], draw: function (g, t) {
+      g.room(); g.r(146, 18, 40, 22, P.st1); g.r(148, 20, 36, 18, P.dark); g.r(152, 24, 28, 3, P.red); g.r(152, 30, 20, 1, P.st2); g.r(152, 33, 24, 1, P.st2);
+      g.person(124, FL, 'stand', Object.assign({ face: -1, reach: t > 2.6 && t < 4 }, HELP));
+      var w = g.walk(t, -8, 110, 0.2, 2.6); g.person(w.x, FL, w.pose, { reach: t > 2.6 && t < 4 });
+    } },
+    hiring: { L: 6, title: 'Your first 90 days', labels: [[1, 5.6, 126, 28, 'Day by day']], draw: function (g, t) {
+      g.room(); g.box(40, 24, 30, 36, 2, P.paper, P.st4, P.st3); g.r(52, 21, 6, 4, P.st2);
+      for (var i = 0; i < 5; i++) { var on = t > 0.6 + i * 0.9; g.r(44, 28 + i * 6, 4, 4, on ? P.green : P.st3); g.r(50, 29 + i * 6, 16, 1, P.line); }
+      g.person(96, FL, 'stand'); g.r(98, FL - 12, 3, 4, P.blueL);
+      for (var d = 0; d < 9; d++) g.r(128 + (d % 3) * 14, 24 + Math.floor(d / 3) * 12, 11, 9, d < Math.floor(t * 1.5) ? P.red : P.st1);
+    } },
+    pay: { L: 6, title: 'Pay and hours', labels: [[1.2, 5.4, 140, 26, 'Punch in and out']], draw: function (g, t) {
+      g.room(); g.box(70, 14, 26, 36, 3, P.st3, P.st4, P.st2); g.r(74, 19, 18, 8, P.dark);
+      var punch = (t % 3) < 0.5; g.r(77, 21, 12, 4, punch ? P.green : P.st1); g.r(79, 32, 8, 12 - (punch ? 4 : 0), P.paper);
+      for (var i = 0; i < 6; i++) g.r(112 + i * 6, 18, 4, 14, i % 2 ? P.paper : P.st4); g.r(106, 14, 44, 1, P.st2);
+      var w = g.walk(t % 3, 10, 56, 0, 1.2); g.person(w.x, FL, w.pose, { reach: punch });
+    } },
+    conduct: { L: 7, title: 'The open door', labels: [[2.6, 6.6, 70, 22, 'Talk it through']], draw: function (g, t) {
+      g.room(); g.r(110, FL - 34, 22, 34, P.st0); var open = E(t, 0.6, 1.4); g.r(110, FL - 34, Math.round(22 * (1 - open)) + 2, 34, P.wood); g.r(108, FL - 36, 26, 2, P.red);
+      g.person(150, FL, 'stand', Object.assign({ face: -1 }, HELP)); var w = g.walk(t, -6, 132, 1.2, 3.4); g.person(w.x, FL, w.pose);
+      if (t > 3.6) for (var k = 0; k < 3; k++) if (Math.floor(t * 3) % 3 >= k) g.r(140 + k * 4, FL - 26, 2, 2, P.paper);
+    } },
+    workplace: { L: 6, title: 'Phones, tech and security', labels: [[0.6, 2.8, 70, 30, 'Breaks only'], [3, 5.6, 120, 22, 'Lock it']], draw: function (g, t) {
+      g.room(); for (var l = 0; l < 4; l++) { g.box(20 + l * 14, FL - 40, 12, 40, 2, P.st2, P.st3, P.st1); g.r(28 + l * 14, FL - 26, 2, 3, P.dark); }
+      g.r(48, FL - 34, 4, 7, P.dark); g.r(49, FL - 33, 2, 4, Math.floor(t * 2) % 2 ? P.blueL : P.blueT);
+      g.desk(110, 60); g.box(122, FL - 38, 24, 16, 2, P.st1, P.st2, P.st0); g.r(124, FL - 36, 20, 12, P.dark);
+      var lk = t > 3; g.r(131, FL - 33, 6, 5, lk ? P.amber : P.st1); g.r(132, FL - 36, 4, 3, lk ? P.amber : P.st1); g.r(133, FL - 35, 2, 2, P.dark);
+    } },
+    benefits: { L: 6, title: 'Benefits and leave', labels: [[1.4, 5.6, 150, 28, 'Seven holidays']], draw: function (g, t) {
+      g.room(); g.box(70, 22, 40, 38, 2, P.paper, P.st4, P.st3); g.r(70, 22, 40, 7, P.red);
+      var day = Math.floor(t * 2) % 7; for (var i = 0; i < 21; i++) g.r(74 + (i % 7) * 5, 33 + Math.floor(i / 7) * 8, 3, 6, i === day + 7 ? P.red : P.line);
+      g.disc(160, 28, 7, P.amber); for (var k = 0; k < 8; k++) { var a = k / 8 * Math.PI * 2 + t; g.p(160 + Math.round(Math.cos(a) * 10), 28 + Math.round(Math.sin(a) * 10), P.amber); }
+      g.person(128, FL, 'stand', { shirt: P.blue, shirtD: P.blueS });
+    } },
+    safety: { L: 6, title: 'Safety first', labels: [[1, 5.4, 140, 18, 'Report hazards']], draw: function (g, t) {
+      g.room(); g.box(30, FL - 40, 46, 40, 4, P.st3, P.st4, P.st2); g.r(34, FL - 34, 26, 22, P.dark); g.r(64, FL - 34, 8, 10, P.dark); g.r(65, FL - 33, 6, 4, P.green);
+      for (var k = 0; k < 3; k++) g.p(40 + ((t * 40 + k * 7) % 16), FL - 16 - k, P.st3); g.r(80, FL - 52, 2, 12, P.st1); g.disc(81, FL - 54, 2, P.green);
+      g.person(100, FL, 'stand', { glasses: true }); g.r(140, FL - 10, 10, 10, P.amber); g.r(143, FL - 14, 4, 4, P.amber); g.r(140, FL - 6, 10, 2, P.paper);
+    } },
+    secrets: { L: 6, title: 'What stays in the vault', labels: [[1, 5.4, 150, 22, 'Need to know']], draw: function (g, t) {
+      g.room(); g.disc(112, FL - 28, 25, P.st2); g.disc(112, FL - 28, 21, P.st3); g.disc(112, FL - 28, 7, P.st1);
+      for (var k = 0; k < 4; k++) { var a = t * 0.9 + k * Math.PI / 2; g.r(112 + Math.cos(a) * 14 - 1, FL - 28 + Math.sin(a) * 14 - 1, 3, 3, P.st1); }
+      g.person(56, FL, 'stand');
+    } },
+    closing: { L: 6, title: 'Read and signed', labels: [[3, 5.6, 140, 30, 'Acknowledged']], draw: function (g, t) {
+      g.room(); g.desk(50, 92); g.box(78, FL - 30, 36, 12, 2, P.paper, P.st4, P.st3); for (var k = 0; k < 3; k++) g.r(82, FL - 28 + k * 3, 26, 1, P.line);
+      var s = E(t, 0.6, 2.6); for (var x = 0; x < 22 * s; x++) g.p(84 + x, FL - 20 + Math.round(Math.sin(x / 2) * 1.2), P.blue); g.r(84 + 22 * s, FL - 24, 2, 6, P.st1);
+    } },
+    search: { L: 5, title: 'Searching the handbook', labels: [[0.6, 4.6, 150, 22, 'Every word']], draw: function (g, t) {
+      g.room(); g.box(30, 22, 92, 40, 2, P.paper, P.st4, P.st3); for (var k = 0; k < 8; k++) g.r(36, 26 + k * 4, 60 + ((k * 13) % 20), 1, P.line);
+      var y = 26 + Math.floor(((t % 5) / 5) * 8) * 4, x = 50 + Math.sin(t * 1.4) * 22; g.r(36, y - 1, 78, 3, 'rgba(224,49,49,0.25)');
+      g.disc(x, y, 7, P.st1); g.disc(x, y, 5, P.blueL); for (var j = 0; j < 6; j++) g.r(x + 5 + j, y + 5 + j, 2, 2, P.st1);
+    } }
+  };
+  // which scene for which chapter (the sidebar's category names, as shown in the content title)
+  var KEY = { 'all policies': 'all', 'welcome & company': 'welcome', 'hiring & orientation': 'hiring', 'pay & hours': 'pay', 'performance & conduct': 'conduct',
+    'workplace policies': 'workplace', 'benefits & leave': 'benefits', 'safety': 'safety', 'trade secrets': 'secrets', 'closing': 'closing' };
+
+  var stages = [];
+  function makeStage(host) {
+    var el = document.createElement('div'); el.className = 'hbm-stage'; el.setAttribute('aria-hidden', 'true');
+    var cv = document.createElement('canvas'); cv.width = W; cv.height = H; el.appendChild(cv);
+    var ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+    var mq = document.createElement('div'); mq.className = 'hbm-mq'; var mt = document.createElement('h3'); mq.appendChild(mt); el.appendChild(mq);
+    host.appendChild(el);
+    var st = { el: el, g: kit(ctx), mq: mq, mt: mt, bulbs: [], cos: [], scene: null, key: '', t0: 0, visible: true };
+    st.place = function () {
+      st.bulbs.forEach(function (b) { b.remove(); }); st.bulbs = []; var w = mq.clientWidth, h = mq.clientHeight; if (!w) return;
+      var n = Math.max(10, Math.round((w + h) / 12)), per = 2 * (w + h);
+      for (var k = 0; k < n; k++) { var d = k / n * per, x, y; if (d < w) { x = d; y = 0; } else if (d < w + h) { x = w; y = d - w; } else if (d < 2 * w + h) { x = 2 * w + h - d; y = h; } else { x = 0; y = per - d; }
+        var b = document.createElement('i'); b.style.left = 'calc(' + x.toFixed(1) + 'px - .5cqi)'; b.style.top = 'calc(' + y.toFixed(1) + 'px - .5cqi)'; mq.appendChild(b); st.bulbs.push(b); }
+    };
+    st.show = function (key, title) {
+      var sc = S[key]; if (!sc) return; st.scene = sc; st.key = key; st.t0 = performance.now(); st.mt.textContent = title || sc.title;
+      st.cos.forEach(function (o) { o.c.remove(); });
+      st.cos = (sc.labels || []).map(function (L) { var c = document.createElement('div'); c.className = 'hbm-co' + (L[2] > W * 0.62 ? ' l' : ''); c.style.left = (L[2] / W * 100) + '%'; c.style.top = (L[3] / H * 100) + '%'; c.innerHTML = '<span></span><em></em>'; c.querySelector('em').textContent = L[4]; el.appendChild(c); return { c: c, a: L[0], b: L[1], on: false }; });
+      requestAnimationFrame(st.place);
+    };
+    st.set = function (key, title) {
+      if (key === st.key) return;
+      if (!st.key || reduced || !el.animate) { st.show(key, title); return; }
+      el.getAnimations().forEach(function (a) { a.cancel(); });
+      // the posters' TV change: fade out, next scene, fade in
+      el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'ease-in', fill: 'forwards' }).onfinish = function () {
+        st.show(key, title); el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
+      };
+    };
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) { st.visible = es[0].isIntersecting; }).observe(el);
+    if (window.ResizeObserver) new ResizeObserver(function () { st.place(); }).observe(mq);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { st.place(); });
+    stages.push(st); return st;
+  }
+  function loop(now) {
+    stages.forEach(function (st) {
+      if (!st.scene || !st.visible || document.hidden) return;
+      var t = reduced ? st.scene.L * 0.55 : ((now - st.t0) / 1000) % st.scene.L;
+      try { st.scene.draw(st.g, t); } catch (e) { /* a scene never breaks the page */ }
+      st.cos.forEach(function (o) { var on = t >= o.a && t < o.b; if (on !== o.on) { o.on = on; o.c.classList.toggle('on', on); } });
+      if (!reduced) { var k = Math.floor(now / 160) % 3; st.bulbs.forEach(function (b, i) { b.classList.toggle('lit', i % 3 === k); }); }
+    });
+    requestAnimationFrame(loop);
+  }
+
+  // ── hero: the street, and the way into the game
+  var hero = document.querySelector('.hero');
+  if (hero) {
+    var hh = document.createElement('div'); hh.className = 'hbm-hero'; hero.appendChild(hh);
+    makeStage(hh).show('street');
+    var a = document.createElement('a'); a.href = 'handbook-game.html'; a.textContent = 'Play First Shift, the handbook game'; hh.appendChild(a);
+  }
+  // ── the chapter scene beside the results title
+  var head = document.querySelector('.content-header'), title = document.getElementById('content-title'), cat = null;
+  var pick = function () {
+    var t = (title.textContent || '').trim().toLowerCase();
+    if (KEY[t]) return [KEY[t], title.textContent.trim()];
+    return ['search', 'Searching the handbook'];
+  };
+  if (head && title) {
+    var slot = document.createElement('div'); slot.className = 'hbm-cat'; head.insertBefore(slot, title.nextSibling);
+    cat = makeStage(slot); var k0 = pick(); cat.show(k0[0], k0[1] === 'All Policies' ? null : k0[1]);
+    new MutationObserver(function () { var k = pick(); cat.set(k[0], KEY[(title.textContent || '').trim().toLowerCase()] && k[0] !== 'all' ? k[1] : null); }).observe(title, { childList: true, characterData: true, subtree: true });
+  }
+  requestAnimationFrame(loop);
+
+  if (reduced || !document.body.animate) return;
+  var CURVE = 'cubic-bezier(.2,.7,.2,1)';
+  var rise = function (el, delay, lift) { try { el.animate([{ opacity: 0, transform: 'translateY(' + (lift || 12) + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: delay || 0, easing: CURVE, fill: 'backwards' }); } catch (e) { /* old browser */ } };
+  // ── the hero arrives in sequence, once
+  ['.hero-eyebrow', '.hero h1', '.hero p.subtitle', '.search-box', '.quick-suggestions', '.kbd-hint', '.hbm-hero'].forEach(function (s, i) { var el = document.querySelector(s); if (el) rise(el, 80 + i * 90, 16); });
+  document.querySelectorAll('.suggest-pill').forEach(function (el, i) { rise(el, 420 + i * 35, 6); });
+  setTimeout(function () { document.querySelectorAll('#category-list > *').forEach(function (el, i) { rise(el, i * 40, 8); }); }, 200);
+  // ── answers and section cards follow one another in; a red line runs across the top on each search
+  var bar = document.createElement('div'); bar.className = 'hbm-bar'; bar.setAttribute('aria-hidden', 'true');
+  bar.style.cssText = 'position:fixed;left:0;right:0;top:0;height:2px;background:#EE2D24;transform-origin:0 50%;transform:scaleX(0);opacity:0;pointer-events:none;z-index:2147483000';
+  document.body.appendChild(bar);
+  var lastRun = 0;
+  var cascade = function () {
+    var now = performance.now(); if (now - lastRun < 500) return; lastRun = now; // typing does not replay it on every key
+    try { bar.animate([{ transform: 'scaleX(0)', opacity: 1 }, { transform: 'scaleX(.85)', opacity: 1, offset: .6 }, { transform: 'scaleX(1)', opacity: 0 }], { duration: 560, easing: 'ease-out' }); } catch (e) { /* no bar */ }
+    var n = 0, Hh = innerHeight;
+    document.querySelectorAll('#answer-container > *, #results-list > *').forEach(function (el) { var r = el.getBoundingClientRect(); if (n < 10 && r.top < Hh + 40) { rise(el, n * 45, 10); n++; } });
+  };
+  var rl = document.getElementById('results-list'), ac = document.getElementById('answer-container');
+  var mo = new MutationObserver(function () { requestAnimationFrame(cascade); });
+  if (rl) mo.observe(rl, { childList: true }); if (ac) mo.observe(ac, { childList: true });
+})();
+</script>
+
 <!-- First Shift: a link to the handbook game, and ?q= links (the game's "Read the full section") open the search
      already asked. Additive: remove this block to take it out. -->
 <script id="game-link-v1">
