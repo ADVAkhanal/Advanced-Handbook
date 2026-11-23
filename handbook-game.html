@@ -700,7 +700,7 @@ function streetMode(at, fromId) {
   panel.querySelectorAll('[data-b]').forEach((bt) => bt.onclick = () => walkTo(bt.dataset.b));
   const c = document.getElementById('cert'); if (c) c.onclick = certificate;
 }
-function walkTo(id) { const b = B.find((x) => x.s.id === id); if (!b || world.entering) return; world.target = doorX(b) - 3; world.enterOnArrive = id; }
+function walkTo(id) { const b = B.find((x) => x.s.id === id); if (!b || world.entering) return; world.target = doorX(b) - 3; world.enterOnArrive = id; world.tapping = false; }
 // at the door: you turn, the door opens, you step in, then the room fades up
 function goIn(id) { if (world.entering) return; const b = B.find((x) => x.s.id === id); if (!b) return; if (reduced) return enter(id); world.x = doorX(b) - 3; world.target = null; world.entering = { id, t0: T }; Snd.door(); }
 function enter(id) {
@@ -736,8 +736,13 @@ function sayBeat(b) {
   tick();
   const nx = document.getElementById('nx'); nx.onclick = () => { if (i < b.say.length) { i = b.say.length; el.textContent = b.say; } else nextBeat(); }; nx.focus({ preventScroll: true });
 }
+// answers show in a stable shuffled order per question (seeded by the question's id, so a re-render never reorders
+// them): the right answer is not always in the same place. data-c keeps the answer's index in the data.
+const answerOrder = (id, n) => { let h = 2166136261; for (const ch of id) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+  const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; const j = (h >>> 0) % (i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 function askBeat(b) {
-  panel.innerHTML = '<h3 class="q">' + esc(b.q) + '</h3><div class="choices">' + b.choices.map((c, i) => '<button type="button" class="choice" data-c="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(c[0]) + '</button>').join('') + '</div><p class="hint">Press 1, 2 or 3, or click an answer.</p>';
+  const ord = answerOrder(story.id + ':' + beat, b.choices.length);
+  panel.innerHTML = '<h3 class="q">' + esc(b.q) + '</h3><div class="choices">' + ord.map((i, k) => '<button type="button" class="choice" data-c="' + i + '"><kbd>' + (k + 1) + '</kbd>' + esc(b.choices[i][0]) + '</button>').join('') + '</div><p class="hint">Press 1, 2 or 3, or click an answer.</p>';
   panel.querySelectorAll('[data-c]').forEach((bt) => bt.onclick = () => answer(b, +bt.dataset.c));
   panel.querySelector('[data-c]').focus({ preventScroll: true });
 }
@@ -841,11 +846,21 @@ function updateWorld(dt) {
   if (w.entering) { const a = T - w.entering.t0; w.back = a > 0.08; w.face = 1; w.y = lerp(WALK, SB + 2, E(a, 0.18, 0.6)); w.doors[w.entering.id] = 1; if (a >= 0.66) { const id = w.entering.id; enter(id); } return; }
   if (w.exiting) { const a = T - w.exiting.t0; w.back = false; w.y = lerp(SB + 2, WALK, E(a, 0, 0.45)); if (a >= 0.5) { w.exiting = null; w.y = WALK; } }
   else w.back = false;
-  let v = 0; if (keys.l) v -= 1; if (keys.r) v += 1;
-  if (v) { w.target = null; w.enterOnArrive = null; }
-  if (w.target != null && !w.exiting) { const d = w.target - w.x; if (Math.abs(d) < 1.5) { w.x = w.target; w.target = null; if (w.enterOnArrive) { const id = w.enterOnArrive; w.enterOnArrive = null; goIn(id); return; } } else v = Math.sign(d); }
-  if (v && !w.exiting) { w.face = v; const nx = clamp(w.x + v * 62 * dt, 6, WORLD - 14); w.dist += Math.abs(nx - w.x); w.x = nx; w.moving = true; } else w.moving = false;
+  // a held key walks at full speed; a tap (see stepTap) sets a target one step away, eased in the last few pixels
+  const held = (keys.l || keys.r) && T - (w.stepT || 0) > 0.18;
+  let v = 0, speed = 62, room = Infinity; if (held) { if (keys.l) v -= 1; if (keys.r) v += 1; }
+  if (v) { w.target = null; w.enterOnArrive = null; w.tapping = false; }
+  if (w.target != null && !w.exiting) { const d = w.target - w.x; if (Math.abs(d) < 0.5) { w.x = w.target; w.target = null; w.tapping = false; if (w.enterOnArrive) { const id = w.enterOnArrive; w.enterOnArrive = null; goIn(id); return; } } else { v = Math.sign(d); room = Math.abs(d); if (w.tapping) speed = Math.min(62, 12 + room * 5); } }
+  if (v && !w.exiting) { w.face = v; const nx = clamp(w.x + v * Math.min(speed * dt, room), 6, WORLD - 14); w.dist += Math.abs(nx - w.x); w.x = nx; w.moving = true; } else w.moving = false;
   B.forEach((b) => { const near = Math.abs(doorX(b) - (w.x + 3)) < 18 ? 1 : 0, cur = w.doors[b.id] || 0; w.doors[b.id] = reduced ? near : clamp(cur + Math.sign(near - cur) * dt * 5); });
+}
+// one tap = one clear step: a full walk cycle (4 frames x 4 px = 16 px, an eighth of the gap between two doors);
+// taps in a row chain from the last step's target
+const STEP = 16;
+function stepTap(dir) {
+  const w = world; if (mode !== 'world' || w.entering || w.exiting) return;
+  const base = w.tapping && w.target != null ? w.target : Math.round(w.x);
+  w.enterOnArrive = null; w.tapping = true; w.stepT = T; w.face = dir; w.target = clamp(base + dir * STEP, 6, WORLD - 14);
 }
 function frame(now) {
   const t = now / 1000, dt = Math.min(0.1, t - (frame.last || t)); frame.last = t; T = t;
@@ -893,19 +908,19 @@ function drawStory() {
 const keyMap = { ArrowLeft: 'l', a: 'l', A: 'l', ArrowRight: 'r', d: 'r', D: 'r' };
 addEventListener('keydown', (e) => {
   if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-  if (mode === 'world' && keyMap[e.key]) { keys[keyMap[e.key]] = true; e.preventDefault(); return; }
+  if (mode === 'world' && keyMap[e.key]) { const k = keyMap[e.key]; if (!e.repeat && !keys[k]) stepTap(k === 'l' ? -1 : 1); keys[k] = true; e.preventDefault(); return; }
   if (mode === 'world' && (e.key === 'Enter' || e.key === 'e' || e.key === 'E') && world.near && !(e.target && /^(BUTTON|A)$/.test(e.target.tagName))) { e.preventDefault(); goIn(world.near); return; }
-  if (mode === 'story' && /^[1-3]$/.test(e.key)) { const b = panel.querySelector('[data-c="' + (+e.key - 1) + '"]'); if (b) { e.preventDefault(); b.click(); } }
+  if (mode === 'story' && /^[1-3]$/.test(e.key)) { const b = panel.querySelectorAll('.choice')[+e.key - 1]; if (b) { e.preventDefault(); b.click(); } }
   if (mode === 'story' && e.key === ' ' && scene.clock && !scene.clock.over) { e.preventDefault(); scene.clock.punch(); }
   if (e.key === 'Escape' && mode === 'story') { const b = B.find((x) => x.s.id === story.id); transition('fade'); streetMode(doorX(b) - 3, story.id); }
 });
 addEventListener('keyup', (e) => { if (keyMap[e.key]) keys[keyMap[e.key]] = false; });
 addEventListener('blur', () => { keys.l = keys.r = false; });
-document.getElementById('touch').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; const k = b.dataset.t; if (k === 'go') { if (world.near) goIn(world.near); return; } keys[k === 'left' ? 'l' : 'r'] = true; });
+document.getElementById('touch').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; const k = b.dataset.t; if (k === 'go') { if (world.near) goIn(world.near); return; } stepTap(k === 'left' ? -1 : 1); keys[k === 'left' ? 'l' : 'r'] = true; });
 addEventListener('pointerup', () => { keys.l = keys.r = false; });
 screen.addEventListener('click', (e) => {
   if (mode !== 'world' || world.entering) return; const rc = cv.getBoundingClientRect(), wx = (e.clientX - rc.left) / rc.width * W + cam, wy = (e.clientY - rc.top) / rc.height * H;
-  const b = B.find((x) => wx >= x.x && wx <= x.x + x.w && wy >= SB - x.h - 10 && wy <= SB + 22); if (b) walkTo(b.s.id); else { world.target = clamp(wx, 6, WORLD - 14); world.enterOnArrive = null; }
+  const b = B.find((x) => wx >= x.x && wx <= x.x + x.w && wy >= SB - x.h - 10 && wy <= SB + 22); if (b) walkTo(b.s.id); else { world.target = clamp(wx, 6, WORLD - 14); world.enterOnArrive = null; world.tapping = false; }
 });
 
 hud(); titleScreen(); requestAnimationFrame(frame);
