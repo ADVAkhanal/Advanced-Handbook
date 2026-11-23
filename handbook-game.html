@@ -11,36 +11,45 @@
 <style>
 /* First Shift: the employee handbook as a small game, drawn like the New Work Instructions posters (pixel scenes,
    a lit marquee, paper callouts). Every answer quotes the handbook (effective 01.01.2026) and names its section;
-   tools/check-game-quotes.mjs proves each quote is in the handbook word for word. */
-:root{--ink:#16191c;--paper:#f1ece2;--red:#EE2D24;--red2:#B81C16;--steel:#2e3338;--mid:#8d8a91;--silver:#bbb7b8;--bg:#0a0a0a;--card:#141414;--line:#2a2a2d;--ok:#3fbf7f}
+   tools/check-game-quotes.mjs proves each quote is in the handbook word for word.
+   Every text element sets its own colour (no light text on the cream signs), and muted text stays readable on the dark. */
+:root{--ink:#16191c;--paper:#f1ece2;--red:#EE2D24;--red2:#B81C16;--steel:#2e3338;--mid:#8d8a91;--silver:#bbb7b8;--bg:#0a0a0a;--card:#141414;--line:#2a2a2d;--ok:#3fbf7f;--amber:#e0a43a}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:#f4f4f5;font:16px/1.5 Raleway,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;cursor:pointer}
 button:focus-visible,a:focus-visible{outline:2px solid var(--paper);outline-offset:2px}
-.top{display:flex;align-items:center;gap:14px;padding:10px max(16px,3vw);border-bottom:1px solid var(--line);background:#0d0d0e;position:sticky;top:0;z-index:5}
+.top{display:flex;align-items:center;gap:14px;padding:10px max(16px,3vw);border-bottom:1px solid var(--line);background:#0d0d0e;color:#f4f4f5;position:sticky;top:0;z-index:5}
 .top img{height:26px}
-.top .name{font:400 24px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em}
-.top .name b{color:var(--red);font-weight:400}
-.xp{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver);font-variant-numeric:tabular-nums}
+.top .name{font:400 24px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:#f4f4f5}
+.top .name b{color:#f4f4f5;font-weight:400;border-bottom:3px solid var(--red)}
+.xp{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver);font-variant-numeric:tabular-nums;position:relative}
 .xp i{display:block;width:110px;height:6px;background:var(--steel);position:relative}
 .xp i b{position:absolute;inset:0;background:var(--red);transform-origin:0 50%;transform:scaleX(0);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.xpf{position:absolute;left:0;top:-4px;color:var(--ok);font-weight:700;pointer-events:none;animation:xpf .9s steps(9) forwards}
+@keyframes xpf{0%{opacity:0;transform:translateY(8px)}25%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
 .badges{display:flex;gap:4px}
 .badges span{width:12px;height:12px;border:1.5px solid var(--steel);background:transparent}
 .badges span.on{background:var(--red);border-color:var(--red)}
+.badges span.pop{animation:pop .5s steps(5)}
+@keyframes pop{0%{transform:scale(.2)}60%{transform:scale(1.5)}100%{transform:scale(1)}}
 .qbtn{background:transparent;color:#f4f4f5;border:1px solid var(--steel);border-radius:2px;padding:6px 10px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
 .qbtn[aria-pressed="true"]{border-color:var(--red)}
 .wrap{max-width:1080px;margin:0 auto;padding:16px max(16px,3vw) 40px}
-.screen{position:relative;width:100%;aspect-ratio:16/9;background:#15171a;border:1px solid var(--steel);overflow:hidden;container-type:inline-size;max-height:64vh;margin:0 auto}
+.screen{position:relative;width:min(100%,calc(64vh * 16 / 9));aspect-ratio:16/9;background:#15171a;border:1px solid var(--steel);overflow:hidden;container-type:inline-size;max-height:64vh;margin:0 auto}
 .screen canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 /* marquee and chips, as on the posters */
 .mq{position:absolute;left:50%;top:5%;transform:translateX(-50%);background:var(--paper);color:var(--ink);border:.5cqi solid var(--ink);padding:1cqi 3cqi .9cqi;white-space:nowrap;pointer-events:none}
-.mq h2{margin:0;font:400 4.6cqi/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.mq.drop{animation:mqd .42s steps(7) both}
+@keyframes mqd{from{transform:translate(-50%,-160%)}to{transform:translate(-50%,0)}}
+.mq h2{margin:0;font:400 4.6cqi/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
 .mq small{display:block;font:700 1.5cqi/1.2 Raleway,sans-serif;color:#3d4349;text-transform:uppercase;letter-spacing:.08em;margin-top:.3cqi}
 .mq i{position:absolute;width:.9cqi;height:.9cqi;border-radius:50%;background:#e0b24f;opacity:.35}.mq i.lit{opacity:1;background:#ffd77a}
 .sign{position:absolute;transform:translate(-50%,-100%);background:var(--paper);color:var(--ink);border:.35cqi solid var(--ink);padding:.5cqi 1.2cqi;font:400 2.4cqi/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;pointer-events:none}
 .sign.done::after{content:"";display:inline-block;width:1.2cqi;height:1.2cqi;background:var(--ok);margin-left:.8cqi;vertical-align:.1cqi}
 .prompt{position:absolute;transform:translate(-50%,0);background:var(--red);color:#fff;font:700 1.9cqi/1 Raleway,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:.8cqi 1.2cqi;white-space:nowrap;pointer-events:none}
-.co{position:absolute;transform:translate(0,-50%);display:flex;align-items:center;pointer-events:none}
+/* callouts: a dot on the thing, a short leader, the label in a paper chip on clear wall or floor */
+.co{position:absolute;transform:translate(0,-50%);display:flex;align-items:center;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.co.on{opacity:1}
 .co::before{content:"";width:1.4cqi;height:1.4cqi;border-radius:50%;background:var(--red);border:.25cqi solid #fff;flex:none;margin-left:-.9cqi}
 .co span{border-top:.3cqi solid var(--paper);width:3cqi;flex:none}
 .co em{font:700 1.8cqi/1 Raleway,sans-serif;font-style:normal;letter-spacing:.06em;text-transform:uppercase;background:var(--paper);color:var(--ink);border:.3cqi solid var(--ink);padding:.6cqi 1cqi;white-space:nowrap}
@@ -49,31 +58,35 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--paper);outline-offs
 .spot:focus-visible{border-color:var(--paper)}
 .spot.found{border:.5cqi solid var(--red);cursor:default}
 /* the panel under the screen: dialogue, choices, results */
-.panel{margin-top:14px;background:var(--card);border:1px solid var(--line);border-top:2px solid var(--red);padding:18px 20px;min-height:170px}
+.panel{margin-top:14px;background:var(--card);color:#f4f4f5;border:1px solid var(--line);border-top:2px solid var(--red);padding:18px 20px;min-height:170px}
 .who{display:inline-block;font:400 20px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;background:var(--paper);color:var(--ink);padding:4px 8px 3px;margin-bottom:10px}
-.say{font-size:18px;line-height:1.55;min-height:3.1em}
-.q{font:400 30px/1.05 'Bebas Neue',Impact,sans-serif;letter-spacing:.02em;margin:0 0 12px}
+.say{font-size:18px;line-height:1.55;min-height:3.1em;color:#f4f4f5}
+.q{font:400 30px/1.05 'Bebas Neue',Impact,sans-serif;letter-spacing:.02em;margin:0 0 12px;color:#f4f4f5}
 .choices{display:grid;gap:8px}
 .choice{display:flex;gap:12px;align-items:center;text-align:left;background:#101012;color:#f4f4f5;border:1px solid var(--line);border-radius:2px;padding:12px 14px;font-size:16px}
 .choice kbd{font:700 12px/1 Raleway,sans-serif;background:var(--paper);color:var(--ink);padding:4px 7px;border-radius:2px}
 .choice:active{transform:scale(.99)}
-.res{display:flex;align-items:center;gap:10px;font:400 30px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.03em}
-.res.ok{color:var(--ok)}.res.no{color:var(--red)}
+.res{display:flex;align-items:center;gap:10px;font:400 30px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.03em;animation:resin .3s steps(3) both}
+@keyframes resin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.res.ok{color:var(--ok)}.res.no{color:var(--amber)}
 .why{margin:8px 0 12px;color:#d8d6d6}
+.why b{color:#f4f4f5}
 blockquote{margin:0 0 12px;padding:12px 14px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);font-size:15px;line-height:1.5}
 blockquote b{display:block;font:400 18px/1 'Bebas Neue',Impact,sans-serif;letter-spacing:.06em;color:var(--red2);margin-bottom:6px}
+.found-name{margin:12px 0 6px;font-weight:700;color:#f4f4f5}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
 .go{background:var(--red);color:#fff;border:1px solid var(--red);border-radius:2px;padding:10px 18px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
 .go.ghost{background:transparent;color:#f4f4f5;border-color:var(--steel)}
+.go:disabled{opacity:.55;cursor:default}
 .link{color:var(--silver);font-size:14px}
-.hint{color:var(--mid);font-size:13px;margin-top:10px}
+.hint{color:var(--silver);font-size:13px;margin-top:14px}
 .track{position:relative;height:64px;background:#101012;border:1px solid var(--line);overflow:hidden;margin:6px 0 10px}
 .track .line{position:absolute;left:22%;top:0;bottom:0;width:3px;background:var(--red)}
 .track .ev{position:absolute;top:50%;transform:translate(-50%,-50%);background:var(--paper);color:var(--ink);font-weight:700;font-size:13px;padding:6px 9px;border:2px solid var(--ink);white-space:nowrap}
 .track .ev.hit{background:var(--ok);color:#06210f}.track .ev.miss{background:#5a1a17;color:#fff}
 .sort{display:grid;gap:8px}
-.card{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#101012;border:1px solid var(--line);padding:10px 12px}
-.card.ok{border-color:var(--ok)}.card.no{border-color:var(--red)}
+.card{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#101012;color:#f4f4f5;border:1px solid var(--line);padding:10px 12px}
+.card.ok{border-color:var(--ok)}.card.no{border-color:var(--amber)}
 .card small{grid-column:1/-1;color:#d8d6d6}
 .touch{display:none;gap:8px;justify-content:center;margin-top:10px}
 @media (pointer:coarse){.touch.on{display:flex}}
@@ -82,10 +95,12 @@ blockquote b{display:block;font:400 18px/1 'Bebas Neue',Impact,sans-serif;letter
 .swatches button{width:34px;height:34px;border:2px solid var(--steel);border-radius:2px}
 .swatches button[aria-pressed="true"]{border-color:var(--paper)}
 .cert{background:var(--paper);color:var(--ink);border:3px solid var(--ink);padding:22px}
-.cert h2{font:400 44px/1 'Bebas Neue',Impact,sans-serif;margin:0 0 6px}
-.foot{color:var(--mid);font-size:13px;margin-top:22px;line-height:1.5}
+.cert h2{font:400 44px/1 'Bebas Neue',Impact,sans-serif;margin:0 0 6px;color:var(--ink)}
+.cert p{color:var(--ink)}
+.foot{color:var(--silver);font-size:13px;margin-top:22px;line-height:1.5}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:640px){.xp i{width:60px}.q{font-size:24px}.say{font-size:16px}.top .name{font-size:20px}}
+@media (max-width:640px){.xp i{width:60px}.q{font-size:24px}.say{font-size:16px}.top .name{font-size:20px}.top{gap:8px;flex-wrap:wrap}.panel{padding:14px}}
+@media (prefers-reduced-motion:reduce){.co{transition:none}.xpf,.badges span.pop,.mq.drop,.res{animation:none}.xpf{display:none}}
 @media print{.top,.touch,.row,.screen{display:none}.cert{border:2px solid #000}}
 </style>
 </head>
@@ -105,50 +120,442 @@ blockquote b{display:block;font:400 18px/1 'Bebas Neue',Impact,sans-serif;letter
 </main>
 <script>
 'use strict';
-// ── pixel kit (the posters' kit and palette)
-const W = 256, H = 144, G = 118;
+// ── SCENES:START. The pixel kit and every scene: pure drawing on a 256 x 144 canvas, no page access, so each scene can
+// be checked frame by frame outside the page (people never merge, nobody passes through furniture, callouts sit on
+// clear wall). Depth: the back wall meets the floor at F. People stand in two lanes: the back lane (feet at BACK or a
+// little lower, never below 114) and the front lane (feet at FRONT), so the two never overlap. Things are drawn far to
+// near. Ambient motion repeats exactly once per loop, so a room never jumps when its loop restarts.
+const W = 256, H = 144, F = 100, BACK = 112, FRONT = 134, SB = 110, WALK = 124;
 const P = { wall: '#1d2024', wall2: '#23272b', sky: '#14171b', floor: '#2b3035', floor2: '#33393f', st0: '#30353a', st1: '#4c5359', st2: '#7d858c', st3: '#aab1b7', st4: '#dde1e4',
   red: '#e03131', red2: '#a51f1f', redT: '#f0605f', dark: '#121417', blue: '#3d6fa5', blueT: '#5f8cbf', blueS: '#2b4f78', blueL: '#8fb4d9', wood: '#86684a', woodT: '#a3825f', woodS: '#63492f',
-  card: '#a07a52', cardT: '#b98f63', cardS: '#7d5c3d', paper: '#eef0f2', line: '#9aa0a4', green: '#3fbf7f', greenD: '#2b8a5a', amber: '#e0a43a', amberD: '#a8781f', lamp: '#ffd77a' };
+  card: '#a07a52', cardT: '#b98f63', cardS: '#7d5c3d', paper: '#eef0f2', line: '#9aa0a4', green: '#3fbf7f', greenD: '#2b8a5a', amber: '#e0a43a', amberD: '#a8781f', lamp: '#ffd77a',
+  night: '#0c0e11', glass: '#2a3a4c', winL: '#d9c27a', glow: '#2f2c25', road: '#17191c', pants: '#2f3a4a', pantsD: '#232b37' };
 const clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
 const ez = (x) => x * x * (3 - 2 * x);
-const E = (t, a, b) => ez(clamp((t - a) / (b - a)));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const E = (t, a, b) => ez(seg(t, a, b));
 const lerp = (a, b, k) => a + (b - a) * k;
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const cv = document.getElementById('cv'), ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
-const r = (x, y, w, h, c) => { w = Math.round(w); h = Math.round(h); if (w <= 0 || h <= 0) return; ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
-const px = (x, y, c) => r(x, y, 1, 1, c);
-const box = (x, y, w, h, d, f, t, s) => { x = Math.round(x); y = Math.round(y); r(x, y, w, h, f); for (let i = 1; i <= d; i++) { r(x + i, y - i, w, 1, t); r(x + w - 1 + i, y - i + 1, 1, h, s); } };
-const disc = (cx, cy, R, c) => { for (let y = -R; y <= R; y++) { const w = Math.floor(Math.sqrt(R * R - y * y)); r(cx - w, cy + y, w * 2 + 1, 1, c); } };
-const person = (x, yF, pose = 'stand', o = {}) => {
-  x = Math.round(x); yF = Math.round(yF);
-  const shirt = o.shirt || P.red, shirtD = o.shirtD || P.red2, pants = o.pants || '#2f3a4a', skin = o.skin || '#c99a7a', hair = o.hair || '#3a2c22', top = yF - 19;
-  r(x + 1, top, 5, 2, hair); r(x + 1, top + 2, 5, 3, skin); r(x + 1, top + 3, 5, 1, '#1b1e21'); r(x + (o.face === -1 ? 1 : 4), top + 3, 1, 1, P.st3);
-  if (o.cap) r(x, top - 1, 7, 2, o.cap);
-  r(x, top + 5, 7, 7, shirt); r(x, top + 11, 7, 1, shirtD);
-  const arm = o.reach ? 3 : 0; r(x - 1, top + 6, 1, 5 - arm, shirtD); r(x + 7, top + 6, 1, 5 - arm, shirtD); r(x + (o.face === -1 ? -1 : 7), top + 11 - arm, 1, 1, skin);
-  const ly = top + 12, lh = yF - ly;
-  if (pose === 1) { r(x, ly, 2, lh, pants); r(x + 5, ly, 2, lh, pants); r(x - 1, yF - 1, 3, 1, '#111'); r(x + 5, yF - 1, 3, 1, '#111'); }
-  else { r(x + 1, ly, 2, lh, pants); r(x + 4, ly, 2, lh, pants); r(x + 1, yF - 1, 2, 1, '#111'); r(x + 4, yF - 1, 2, 1, '#111'); }
+const rnd = (i) => { const s = Math.sin(i * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+const TAU = Math.PI * 2;
+// a walk cycle keyed to distance, so feet never skate: four frames, one every 4 px
+const gait = (d) => 'w' + (Math.floor(Math.abs(d) / 4) % 4);
+// a walker's plan over a loop: keys [[t, x, faceWhenStill], ...]; eases between keys
+const route = (keys, t) => {
+  for (let i = 0; i < keys.length - 1; i++) { const a = keys[i], b = keys[i + 1];
+    if (t >= a[0] && t < b[0]) { const k = E(t, a[0], b[0]); return { x: lerp(a[1], b[1], k), moving: a[1] !== b[1] && k > 0 && k < 1, face: b[1] > a[1] ? 1 : b[1] < a[1] ? -1 : (a[2] || 1) }; } }
+  const z = keys[keys.length - 1]; return { x: z[1], moving: false, face: z[2] || 1 };
 };
-const room = () => { r(0, 0, W, H, P.wall); for (let x = 14; x < W; x += 30) r(x, 0, 1, G, P.wall2); r(0, G, W, H - G, P.floor); r(0, G, W, 1, P.floor2); r(0, G + 1, W, 1, P.red2); for (let x = 4; x < W; x += 16) r(x, G + 12, 8, 1, P.floor2); };
-const desk = (x, w) => { box(x, G - 16, w, 4, 3, P.wood, P.woodT, P.woodS); r(x + 2, G - 12, 2, 12, P.woodS); r(x + w - 4, G - 12, 2, 12, P.woodS); };
-const screenBox = (x, y, on) => { box(x, y, 22, 15, 2, P.st1, P.st2, P.st0); r(x + 2, y + 2, 18, 11, on || P.dark); r(x + 9, y + 15, 4, 3, P.st1); r(x + 6, y + 18, 10, 1, P.st2); };
-const machine = (x, run, t) => { box(x, G - 40, 44, 40, 4, P.st3, P.st4, P.st2); r(x + 4, G - 34, 26, 22, P.dark); r(x + 33, G - 34, 8, 12, P.dark); r(x + 34, G - 33, 6, 4, run ? P.green : P.st1);
-  r(x + 16, G - 34, 3, 10 + (run ? Math.round(Math.sin(t * 3) * 2) : 0), P.st2); if (run) for (let k = 0; k < 3; k++) px(x + 10 + ((t * 40 + k * 7) % 16), G - 16 - k, P.st3); r(x + 46, G - 52, 2, 12, P.st1); disc(x + 47, G - 54, 2, run ? P.green : P.amber); };
+// a quick fade at the start and end of a loop that has a story (the opening, the finale)
+const fade = (g, t, L, out = 0.5, inn = 0.35) => { const a = Math.max(t > L - out ? seg(t, L - out, L) : 0, t < inn ? 1 - seg(t, 0, inn) : 0); if (a > 0) g.r(0, 0, W, H, 'rgba(10,11,12,' + a.toFixed(3) + ')'); };
 const HELPER = { shirt: P.st2, shirtD: P.st1, hair: '#1f1a17', skin: '#a8765a' };
+const CREW = { amber: { shirt: P.amber, shirtD: P.amberD, cap: P.st1 }, blue: { shirt: P.blue, shirtD: P.blueS, hair: '#5a4632' }, green: { shirt: P.green, shirtD: P.greenD, hair: '#2a2420', skin: '#8a5a40' },
+  steel: { shirt: P.st3, shirtD: P.st2, hair: '#6a5a48' }, wood: { shirt: P.card, shirtD: P.cardS, hair: '#1f1a17', skin: '#e0b48f' }, navy: { shirt: P.blueS, shirtD: '#1f3a59', hair: '#3a2c22', skin: '#a8765a' } };
 
-// ── sound: a few blips, off until someone presses Sound
+function kit(ctx) {
+  const r = (x, y, w, h, c) => { w = Math.round(w); h = Math.round(h); if (w <= 0 || h <= 0) return; ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+  const p = (x, y, c) => r(x, y, 1, 1, c);
+  const box = (x, y, w, h, d, f, t, s) => { x = Math.round(x); y = Math.round(y); r(x, y, w, h, f); for (let i = 1; i <= d; i++) { r(x + i, y - i, w, 1, t); r(x + w - 1 + i, y - i + 1, 1, h, s); } };
+  const disc = (cx, cy, R, c) => { cx = Math.round(cx); cy = Math.round(cy); for (let y = -R; y <= R; y++) { const w = Math.floor(Math.sqrt(R * R - y * y)); r(cx - w, cy + y, w * 2 + 1, 1, c); } };
+  const hand = (cx, cy, a, len, c) => { for (let i = 0; i <= len; i++) p(cx + Math.round(Math.sin(a) * i), cy - Math.round(Math.cos(a) * i), c); };
+  // a worker, 7 px wide and 19 tall, feet at (x, yF). pose: 'stand', 'w0'..'w3' (walk), 'crouch', 'sit'.
+  // o: face 1 right / -1 left, back (seen from behind), arms 'down' | 'reach' | 'type' | 'punch' | 'up' | 'both', nod, carry (a colour)
+  const person = (x, yF, pose = 'stand', o = {}) => {
+    x = Math.round(x); yF = Math.round(yF);
+    const f = o.face === -1 ? -1 : 1, shirt = o.shirt || P.red, shirtD = o.shirtD || P.red2, pants = o.pants || P.pants, pantsD = P.pantsD, skin = o.skin || '#c99a7a', hair = o.hair || '#3a2c22', shoe = '#111';
+    const wk = typeof pose === 'string' && pose[0] === 'w' ? +pose[1] : -1, sit = pose === 'sit', cr = pose === 'crouch' ? 5 : 0;
+    const top = yF - 19 + cr + (sit ? 4 : 0) - (wk === 1 || wk === 3 ? 1 : 0), hy = top + (o.nod ? 1 : 0);
+    if (o.back) r(x + 1, hy, 5, 5, hair);
+    else { r(x + 1, hy, 5, 2, hair); r(x + 1, hy + 2, 5, 3, skin); r(x + 1, hy + 3, 5, 1, '#1b1e21'); p(x + (f === -1 ? 1 : 4), hy + 3, P.st3); }
+    if (o.cap) r(x, hy - 1, 7, 2, o.cap);
+    r(x, top + 5, 7, 7 - cr, shirt); r(x, top + 11 - cr, 7, 1, shirtD);
+    const fx = f > 0 ? x + 7 : x - 1, bx = f > 0 ? x - 1 : x + 7, a = o.arms || 'down';
+    if (o.carry) { const ix = f > 0 ? x + 2 : x - 3; r(bx, top + 6, 1, 3, shirtD); r(fx, top + 6, 1, 3, shirtD); r(ix, top + 7, 8, 4, o.carry); r(ix, top + 7, 8, 1, P.st4); p(f > 0 ? ix + 7 : ix, top + 9, skin); }
+    else if (a === 'up') { r(fx, top + 1, 1, 5, shirtD); p(fx, top, skin); r(bx, top + 6, 1, 5, shirtD); }
+    else if (a === 'both') { r(x - 1, top + 1, 1, 5, shirtD); r(x + 7, top + 1, 1, 5, shirtD); p(x - 1, top, skin); p(x + 7, top, skin); }
+    else if (a === 'reach' || a === 'type' || a === 'punch') { const ay = a === 'punch' ? top + 5 : a === 'type' ? top + 8 : top + 7; r(bx, top + 6, 1, 4, shirtD); r(fx, ay, 1, 2, shirtD); p(fx + f, ay, shirtD); p(fx + 2 * f, ay, skin); }
+    else { r(x - 1, top + 6, 1, 5, shirtD); r(x + 7, top + 6, 1, 5, shirtD); if (wk === 0) p(fx + f, top + 10, skin); else if (wk === 2) p(bx - f, top + 10, skin); else p(fx, top + 11, skin); }
+    const ly = top + 12 - cr, lh = yF - ly;
+    if (sit) { r(f > 0 ? x + 2 : x - 2, ly, 7, 2, pants); const sx = f > 0 ? x + 7 : x - 2; r(sx, ly, 2, lh, pants); r(f > 0 ? sx : sx - 1, yF - 1, 3, 1, shoe); }
+    else if (wk === 0 || wk === 2) { const fr = wk === 0 ? pants : pantsD, bk = wk === 0 ? pantsD : pants, fl = f > 0 ? x + 5 : x, bl = f > 0 ? x : x + 5;
+      r(bl, ly, 2, lh, bk); r(fl, ly, 2, lh, fr); r(f > 0 ? fl : fl - 1, yF - 1, 3, 1, shoe); r(f > 0 ? bl : bl - 1, yF - 1, 3, 1, shoe); }
+    else if (wk === 1 || wk === 3) { const pl = wk === 1 ? pants : pantsD, sw = wk === 1 ? pantsD : pants;
+      r(x + 3, ly, 2, lh - 2, sw); r(x + (f > 0 ? 4 : 2), yF - 3, 2, 1, shoe); r(x + 2, ly, 2, lh, pl); r(x + (f > 0 ? 2 : 1), yF - 1, 3, 1, shoe); }
+    else { r(x + 1, ly, 2, lh, pants); r(x + 4, ly, 2, lh, pants); r(x + 1, yF - 1, 2, 1, shoe); r(x + 4, yF - 1, 2, 1, shoe); }
+  };
+  // a room: the wall (with an optional lower band), the floor with its own pattern, a coloured baseboard
+  const room = (o = {}) => {
+    r(0, 0, W, F, o.wall || P.wall);
+    for (let x = o.p0 || 14; x < W; x += o.ps || 30) r(x, 0, 1, o.wa || F, o.wall2 || P.wall2);
+    if (o.wa) { r(0, o.wa, W, F - o.wa, o.wc); r(0, o.wa, W, 1, o.wt); for (let x = 10; x < W; x += 24) r(x, o.wa + 3, 1, F - o.wa - 3, o.wt); }
+    const f2 = o.floor2 || P.floor2; r(0, F, W, H - F, o.floor || P.floor); r(0, F, W, 1, f2); r(0, F + 1, W, 1, o.trim || P.red2);
+    if (o.pat === 'plank') for (let y = F + 7, k = 0; y < H; y += 7, k++) { r(0, y, W, 1, f2); for (let x = (k % 2) * 20 + 6; x < W; x += 40) r(x, y - 6, 1, 6, f2); }
+    else if (o.pat === 'tile') { for (let y = F + 10; y < H; y += 11) r(0, y, W, 1, f2); for (let x = 8; x < W; x += 18) r(x, F + 2, 1, H - F - 2, f2); }
+    else if (o.pat === 'grate') for (let y = F + 6; y < H; y += 6) for (let x = (y % 12 ? 3 : 9); x < W; x += 12) r(x, y, 3, 1, f2);
+    else if (o.pat === 'plate') { for (let y = F + 14; y < H; y += 14) r(0, y, W, 1, f2); for (let x = 30; x < W; x += 60) r(x, F + 2, 1, H - F - 2, f2); }
+    else for (let x = 4; x < W; x += 16) r(x, F + 12, 8, 1, f2);
+    if (o.lights) [26, 230].forEach((x) => { r(x - 8, 0, 16, 2, P.st1); r(x - 6, 2, 12, 1, P.lamp); });
+  };
+  // ── furniture and machines (the clean-pixels check sees these as solid props); each sits on its base line yB
+  const desk = (x, yB, w) => { box(x, yB - 16, w, 4, 3, P.wood, P.woodT, P.woodS); r(x + 4, yB - 12, w - 8, 6, P.woodS); r(x + 2, yB - 12, 2, 12, P.woodS); r(x + w - 4, yB - 12, 2, 12, P.woodS); };
+  const counter = (x, yB, w, h) => { box(x, yB - h, w, h, 3, P.wood, P.woodT, P.woodS); r(x, yB - h + 4, w, 1, P.woodS); r(x, yB - 2, w, 2, P.woodS); for (let k = x + 8; k < x + w - 4; k += 16) r(k, yB - h + 7, 1, h - 10, P.woodS); };
+  const cabinet = (x, yB, w, h, open = 0) => { box(x, yB - h, w, h, 2, P.st2, P.st3, P.st1); for (let y = yB - h + 2; y < yB - 4; y += 9) { r(x + 2, y + 7, w - 4, 1, P.st1); r(x + Math.round(w / 2) - 2, y + 3, 4, 1, P.st4); }
+    if (open > 0) { const d = Math.round(open * 4), y = yB - h + 2; r(x - d, y, d, 7, P.st3); r(x - d, y, 1, 7, P.st1); r(x - d + 1, y - 1, Math.max(0, d - 1), 1, P.paper); } };
+  const rack = (x, yB, t) => { box(x, yB - 64, 30, 64, 3, P.st1, P.st2, P.st0); for (let i = 0; i < 10; i++) { const y = yB - 60 + i * 6; r(x + 3, y, 24, 4, P.dark); r(x + 18, y + 1, 7, 2, P.st0); for (let k = 0; k < 3; k++) if (rnd(i * 7 + k * 3 + Math.floor(t * 4) * 11) > 0.35) p(x + 5 + k * 3, y + 1, k === 2 ? P.amber : P.green); } };
+  const vending = (x, yB, t, drop) => { box(x, yB - 46, 26, 46, 3, P.red, P.redT, P.red2); r(x + 3, yB - 42, 15, 30, P.dark); for (let i = 0; i < 4; i++) for (let k = 0; k < 3; k++) r(x + 4 + k * 5, yB - 40 + i * 7, 3, 5, [P.amber, P.blueL, P.green, P.paper][(i + k) % 4]);
+    r(x + 20, yB - 40, 4, 12, P.st1); for (let k = 0; k < 4; k++) p(x + 21 + (k % 2), yB - 38 + Math.floor(k / 2) * 4, Math.floor(t * 2) % 4 === k ? P.lamp : P.st3); r(x + 4, yB - 9, 13, 5, P.dark); if (drop != null) r(x + 9, lerp(yB - 30, yB - 8, drop), 3, 4, P.blueL); };
+  const table = (x, yB, w) => { box(x, yB - 14, w, 3, 2, P.st3, P.st4, P.st2); r(x + 3, yB - 11, 2, 11, P.st2); r(x + w - 5, yB - 11, 2, 11, P.st2); };
+  const chair = (x, yB, f) => { r(x, yB - 6, 9, 2, P.blueS); r(x + 1, yB - 4, 1, 4, P.st1); r(x + 7, yB - 4, 1, 4, P.st1); r(f > 0 ? x : x + 8, yB - 14, 1, 8, P.blueS); };
+  const machine = (x, yB, t, L) => { box(x, yB - 40, 44, 40, 4, P.st3, P.st4, P.st2); r(x + 4, yB - 34, 26, 22, P.dark); r(x + 33, yB - 34, 8, 12, P.dark); r(x + 34, yB - 33, 6, 4, P.green); r(x + 34, yB - 27, 6, 1, P.st1);
+    const sp = Math.round(Math.sin(TAU * 3 * t / L) * 2); r(x + 15, yB - 34, 3, 10 + sp, P.st2); r(x + 16, yB - 24 + sp, 1, 2, P.st4); r(x + 9, yB - 16, 16, 4, P.st2);
+    for (let k = 0; k < 4; k++) { const c = (t / L * 6 + k / 4) % 1; p(x + 16 + Math.round((k % 2 ? 1 : -1) * c * 10), yB - 20 + sp - Math.round(Math.sin(c * Math.PI) * 6), P.st3); }
+    r(x + 46, yB - 52, 2, 12, P.st1); disc(x + 47, yB - 54, 2, P.green); };
+  const plant = (x, yB) => { box(x, yB - 8, 8, 8, 2, P.card, P.cardT, P.cardS); disc(x + 4, yB - 14, 5, P.greenD); disc(x + 2, yB - 17, 3, P.green); disc(x + 7, yB - 18, 3, P.green); };
+  const kiosk = (x, yB, lit, card) => { r(x + 4, yB - 26, 3, 26, P.st1); r(x + 1, yB - 1, 9, 1, P.st1); box(x, yB - 40, 11, 14, 2, P.st3, P.st4, P.st2); r(x + 2, yB - 37, 7, 3, lit ? P.green : P.dark); r(x + 3, yB - 31, 5, 1, P.dark); if (card > 0) r(x + 4, yB - 31 - Math.round(card * 3), 3, 3, P.paper); };
+  const lampPost = (x, yB, on) => { r(x, yB - 42, 2, 42, P.st1); r(x - 1, yB - 1, 4, 1, P.st1); r(x - 3, yB - 45, 8, 3, P.st2); r(x - 2, yB - 42, 6, 1, on ? P.lamp : P.st0); };
+  const safe = (x, yB, shut, n) => { box(x, yB - 46, 50, 46, 4, P.st2, P.st3, P.st1); r(x + 4, yB - 42, 42, 36, P.dark); for (let k = 0; k < 3; k++) r(x + 5, yB - 30 + k * 10, 40, 1, P.st0);
+    for (let k = 0; k < n; k++) { r(x + 8 + (k % 2) * 14, yB - 12 - Math.floor(k / 2) * 3 - 2, 12, 2, P.card); r(x + 8 + (k % 2) * 14, yB - 12 - Math.floor(k / 2) * 3 - 2, 12, 1, P.cardT); }
+    const dw = Math.round(lerp(4, 42, shut)); r(x + 4, yB - 42, dw, 36, P.st3); r(x + 4 + dw - 1, yB - 42, 1, 36, P.st1); if (shut > 0.8) disc(x + 25, yB - 24, 5, P.st2); };
+  const wetSign = (x, yB) => { for (let k = 0; k < 10; k++) r(x + 4 - Math.floor(k / 3), yB - 10 + k, 1 + Math.floor(k / 3) * 2, 1, P.amber); r(x + 4, yB - 7, 1, 3, P.dark); p(x + 4, yB - 3, P.dark); };
+  const puddle = (x, y, w) => { w = Math.round(w); if (w < 2) return; r(x, y, w, 2, '#4a6a7a'); r(x + 2, y - 1, Math.max(0, w - 6), 1, '#4a6a7a'); r(x + 3, y, Math.max(0, Math.round(w / 3)), 1, '#6a8a9a'); };
+  const tclock = (x, y, lit) => { box(x, y, 24, 28, 2, P.st3, P.st4, P.st2); r(x + 3, y + 3, 18, 7, P.dark); if (lit) for (let k = 0; k < 4; k++) r(x + 5 + k * 4, y + 5, 2, 3, lit); r(x + 7, y + 16, 10, 2, P.dark); p(x + 20, y + 13, lit ? P.green : P.st1); };
+  // raw parts (part of a room, not solid props)
+  const monitor = (x, y, t, scr) => { box(x, y, 22, 15, 2, P.st1, P.st2, P.st0); r(x + 2, y + 2, 18, 11, scr || P.dark); for (let k = 0; k < 4; k++) r(x + 4, y + 4 + k * 2, 4 + ((k * 5 + Math.floor(t * 2)) % 10), 1, k === 0 ? P.blueL : P.line); r(x + 9, y + 15, 4, 2, P.st1); r(x + 6, y + 17, 10, 1, P.st2); };
+  const clockFace = (cx, cy, R, hour, min) => { disc(cx, cy, R + 1, P.st1); disc(cx, cy, R, P.paper); for (let k = 0; k < 12; k++) { const a = k / 12 * TAU; p(cx + Math.round(Math.sin(a) * (R - 1)), cy - Math.round(Math.cos(a) * (R - 1)), P.st2); } hand(cx, cy, hour, Math.round(R * 0.5), P.dark); hand(cx, cy, min, Math.round(R * 0.8), P.red2); };
+  const windowBox = (x, y, w, h, ph) => { r(x - 2, y - 2, w + 4, h + 4, P.st1); r(x, y, w, h, P.blueS); r(x, y + h - 6, w, 6, '#355f8a'); const cx = x - 14 + Math.round(((ph % 1) + 1) % 1 * (w + 20));
+    for (let k = 0; k < 3; k++) { const a = Math.max(x, cx + k * 3), b = Math.min(x + w, cx + 10 + k * 2); if (b > a) r(a, y + 6 - (k === 1 ? 2 : 0), b - a, 2, P.blueL); } r(x + Math.round(w / 2), y, 1, h, P.st1); r(x - 2, y + h + 2, w + 4, 2, P.st2); };
+  const sideDoor = (x, open) => { r(x, 68, 20, 32, P.st0); r(x + 2, 70, 16, 30, open > 0 ? P.glow : P.dark); r(x + 2, 70, Math.round(16 * (1 - open)), 30, P.st1); if (open < 0.5) p(x + 14, 86, P.st3); };
+  return { r, p, box, disc, hand, person, room, desk, counter, cabinet, rack, vending, table, chair, machine, plant, kiosk, lampPost, safe, wetSign, puddle, tclock, monitor, clockFace, windowBox, sideDoor };
+}
+
+// the player walking in from the left door when a room opens, then standing at x
+const playerIn = (g, s, x, face, extra) => { const k = s.still ? 1 : E(s.age, 0.15, 1.6), px = lerp(-10, x, k), mv = k > 0 && k < 1; g.person(px, FRONT, mv ? gait(px) : 'stand', Object.assign({}, s.me, { face: mv ? 1 : face }, extra)); };
+// the guide's reaction: a raised hand and a nod for a right answer, a slow head shake for a wrong one, and a small
+// pixel mark above the head (a green tick or an amber dash). No speech bubbles.
+const guide = (s, base) => { const o = Object.assign({}, base); if (s.react && s.react.age < 1.6) { const a = s.react.age; if (s.react.ok) { o.arms = 'up'; o.nod = Math.floor(a * 4) % 2 === 1; } else { o.arms = 'down'; o.face = Math.floor(a * 3) % 2 ? -base.face : base.face; } } return o; };
+const mark = (g, s, x, yHead) => { if (!s.react || s.react.age > 1.6) return; const a = s.react.age, y = yHead - 7 - Math.round(E(a, 0, 0.3) * 2); if (s.react.ok) { const c = P.green; g.p(x + 1, y + 2, c); g.p(x + 2, y + 3, c); g.p(x + 3, y + 2, c); g.p(x + 4, y + 1, c); g.p(x + 5, y, c); } else g.r(x + 1, y + 1, 5, 2, P.amber); };
+const doorOpen = (s) => (s.still ? 0 : s.age < 0.2 ? E(s.age, 0, 0.2) : 1 - E(s.age, 1.6, 2.2));
+
+// ── the seven rooms. Each: L (loop seconds), the guide's head for the reaction mark, callouts [from, to, x, y, text, side]
+const SC = {
+  front: { L: 10, mark: [151, 93], labels: [[0.8, 4.2, 114, 106, 'Front desk', 'l']],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ wa: 78, wc: P.woodS, wt: P.wood, pat: 'tile', trim: P.red2, lights: 1 });
+      g.sideDoor(2, doorOpen(s));
+      r(28, 40, 44, 24, P.st1); r(30, 42, 40, 20, P.dark); r(34, 46, 6, 12, P.red); r(42, 47, 22, 2, P.paper); r(42, 52, 18, 1, P.st2); r(42, 55, 20, 1, P.st2);
+      g.windowBox(198, 40, 40, 26, t / 10);
+      g.clockFace(184, 52, 6, TAU * (t / 10), TAU * (t / 10) * 12);
+      // back row: a visitor reading, the plant, the guide behind the counter, the clerk at the printer
+      g.chair(39, BACK, 1); const flip = t > 6 && t < 6.4; g.person(40, BACK, 'sit', { ...CREW.blue, arms: 'reach' }); r(48, BACK - 9, flip ? 2 : 4, 5, P.paper); r(48, BACK - 9, 1, 5, P.line);
+      g.plant(25, BACK);
+      const hrBase = { ...HELPER, face: -1, arms: 'type' }; const take = t > 7.4 && t < 8.0;
+      g.person(150, BACK, 'stand', guide(s, take ? { ...hrBase, face: 1, arms: 'reach' } : hrBase));
+      const cl = route([[0, 204, 1], [2, 204, 1], [3.4, 188, -1], [4.6, 188, -1], [6, 204, 1], [10, 204, 1]], t);
+      const carrying = t >= 2 && t < 3.4, placing = t >= 3.4 && t < 4.6;
+      g.person(cl.x, BACK, cl.moving ? gait(cl.x) : 'stand', { ...CREW.wood, face: cl.face, carry: carrying ? P.paper : null, arms: placing || (!cl.moving && !carrying) ? 'reach' : 'down' });
+      g.cabinet(214, BACK, 24, 16, 0); r(216, BACK - 24, 18, 8, P.st3); r(218, BACK - 26, 14, 2, P.st2); r(219, BACK - 18, 12, 1, P.dark);
+      if (t > 0.4 && t < 2) r(220, BACK - 18 + Math.round(E(t, 0.4, 1.6) * 3), 10, 2, P.paper);
+      // the counter, its screen, the paper the clerk drops off
+      g.counter(112, 122, 66, 18); g.monitor(118, 86, t, '#1d3550');
+      if (t >= 4.0 && t < 8.0) { r(166, 102, 8, 2, P.paper); r(166, 101, 8, 1, P.st4); }
+      playerIn(g, s, 92, 1);
+      mark(g, s, 150, 93);
+    } },
+  clock: { L: 10, mark: [44, 93], labels: [[3.2, 6.6, 127, 79, 'Time clock', 'l']],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ pat: 'tile', trim: P.amberD, floor: '#2e2b27', floor2: '#3a3530' });
+      g.sideDoor(2, doorOpen(s));
+      for (let k = 0; k < 3; k++) { r(26 + k * 10, 56, 9, 44, P.st1); r(27 + k * 10, 57, 7, 42, P.st0); r(28 + k * 10, 60, 5, 1, P.st2); r(28 + k * 10, 62, 5, 1, P.st2); p(32 + k * 10, 78, P.st3); }
+      g.clockFace(82, 54, 11, TAU * (6.9 / 12) + TAU * t / 10 / 12, TAU * 0.9 + TAU * t / 10);
+      // the card rack and the back door
+      r(164, 62, 26, 34, P.st1); for (let c = 0; c < 2; c++) for (let w = 0; w < 5; w++) { r(166 + c * 12, 64 + w * 6, 10, 5, P.st0); const mine = c === 0 && w === 2, gone = mine && t > 2.2 && t < 5.0; if (!gone) { r(167 + c * 12, 63 + w * 6, 8, 5, P.paper); r(167 + c * 12, 63 + w * 6, 8, 1, mine ? P.amber : P.st3); } }
+      const dOpen = t > 6.6 && t < 7.4 ? 1 : 0; r(204, 66, 22, 34, P.st0); r(206, 68, 18, 32, dOpen ? P.glow : P.st1); r(210, 72, 10, 6, P.glass); p(221, 84, P.st3);
+      // a worker comes in, takes a card, punches in, puts it back, and heads out
+      const wk = route([[0, 268, -1], [1.8, 172, -1], [2.4, 172, -1], [3.0, 137, -1], [4.0, 137, -1], [4.6, 172, 1], [5.0, 172, 1], [7.0, 268, 1], [10, 268, 1]], t);
+      const atRack = (t >= 1.8 && t < 2.4) || (t >= 4.6 && t < 5.0), atClock = t >= 3.0 && t < 4.0;
+      const inCard = atClock && t > 3.2 && t < 3.7;
+      g.tclock(124, 64, t > 3.4 && t < 5.6 ? P.green : null); if (inCard) r(132, 76, 6, 4, P.paper);
+      g.person(44, BACK, 'stand', guide(s, { ...CREW.amber, face: 1 }));
+      g.person(wk.x, BACK, wk.moving ? gait(wk.x) : 'stand', { ...CREW.navy, face: wk.face, back: atRack || atClock, arms: atRack ? 'up' : atClock ? 'punch' : 'down' });
+      playerIn(g, s, 86, 1);
+      mark(g, s, 44, 93);
+    } },
+  floor: { L: 12, mark: [133, 115], labels: [],
+    draw(g, t, s) {
+      const { r, p } = g, L = 12;
+      g.room({ wall: '#1b1e22', pat: 'grate', floor: P.floor, floor2: P.st0, trim: P.amberD, ps: 40, lights: 1 });
+      for (let x = 30; x < W; x += 56) r(x, 40, 28, 12, P.glass);
+      // the crane carries a part between the two machines, high over everyone's heads
+      r(0, 34, W, 2, P.st1); const cr = route([[0, 74], [1.5, 74], [5.5, 160], [7, 160], [11, 74], [12, 74]], t); r(cr.x, 36, 12, 3, P.amber); r(cr.x + 5, 39, 1, 16, P.st2); r(cr.x + 1, 55, 10, 6, P.st3); r(cr.x + 1, 55, 10, 1, P.st4);
+      r(0, 124, W, 1, P.amberD);
+      g.sideDoor(234, s.still ? 0 : 0);
+      g.machine(12, 106, t, L); g.machine(184, 106, t + 3, L);
+      const hunt = s.hunt, found = hunt && hunt.found || {}, live = (i) => hunt && hunt.on && found[i] == null, fixAge = (i) => (found[i] == null ? null : s.still ? 9 : found[i]);
+      // operator A: watching a video on a phone while the hunt is on
+      const phone = live(1);
+      g.person(62, 114, 'stand', { ...CREW.green, face: -1, arms: phone ? 'reach' : Math.floor(t / 1.5) % 2 ? 'reach' : 'down' });
+      if (phone) { r(57, 99, 3, 5, P.dark); p(58, 100, Math.floor(t * 3) % 2 ? P.blueL : P.blueT); p(58, 102, P.blueT); }
+      g.person(172, 114, 'stand', { ...CREW.steel, face: 1, arms: Math.floor((t + 0.75) / 1.5) % 2 ? 'reach' : 'down' });
+      // the far worker: smoking during the hunt, wiping down the machine otherwise
+      const smoke = live(3);
+      g.person(236, 114, 'stand', { ...HELPER, face: -1, arms: smoke ? 'punch' : 'reach' });
+      if (smoke) { r(232, 99, 3, 1, P.paper); p(231, 99, P.red); for (let k = 0; k < 4; k++) p(231 - k + Math.round(Math.sin(TAU * t / L * 6 + k) * 1.5), 96 - k * 3 - Math.floor((t * 6) % 3), P.st3); }
+      // the spill and, once spotted, a wet-floor sign while it dries up
+      const sp = fixAge(2); if (hunt && hunt.on && sp == null) g.puddle(150, 129, 26); else if (sp != null && sp < 2.4) { g.puddle(150, 129, 26 * (1 - E(sp, 0.4, 2.4))); }
+      if (sp != null || (hunt && hunt.done)) g.wetSign(178, 132);
+      g.person(132, FRONT, 'stand', guide(s, { ...CREW.amber, face: -1 }));
+      const buds = live(0), b0 = fixAge(0);
+      playerIn(g, s, 104, 1);
+      if (hunt && (buds || (b0 != null && b0 < 0.5))) { const dy = b0 == null ? 0 : Math.round(E(b0, 0, 0.5) * 8); if (b0 == null || b0 < 0.5) p(104, 118 + dy, P.paper); }
+      if (hunt && hunt.on) p(110, 118, P.paper);
+      mark(g, s, 132, 115);
+    } },
+  break: { L: 10, mark: [180, 109], labels: [[0.6, 4.6, 41, 74, 'Vending', 'r']],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ wa: 70, wc: P.blueS, wt: P.blueT, pat: 'tile', floor: '#2d3238', floor2: '#383e45', trim: P.blueS });
+      g.sideDoor(2, doorOpen(s));
+      r(60, 42, 30, 20, P.woodS); r(62, 44, 26, 16, P.wood); r(64, 46, 8, 6, P.paper); r(75, 47, 10, 8, P.paper); r(66, 54, 6, 4, P.amber);
+      // the coffee counter: coffee maker with steam, microwave counting down
+      g.counter(200, 106, 48, 20); r(206, 72, 12, 14, P.st1); r(208, 80, 8, 6, P.dark); r(209, 82, 6, 4, P.woodS);
+      for (let k = 0; k < 3; k++) { const c = (t / 10 * 5 + k / 3) % 1; p(212 + Math.round(Math.sin(c * 6 + k) * 1.5), 70 - Math.round(c * 12), P.st3); }
+      r(224, 76, 18, 10, P.st3); r(226, 78, 10, 6, P.dark); r(237, 78, 3, 1, Math.floor(t * 2) % 2 ? P.green : P.st1);
+      // the vending machine: a buyer presses, a drink drops, the buyer picks it up and drinks
+      const drop = t > 2.0 && t < 2.6 ? E(t, 2.0, 2.6) : null;
+      g.vending(14, 108, t, drop);
+      const crouch = t > 2.8 && t < 3.8, drink = t >= 4.2 && t < 8.6;
+      g.person(48, 114, crouch ? 'crouch' : 'stand', { ...CREW.green, face: -1, arms: drink ? 'punch' : 'reach' });
+      if (drink) r(46, 99, 2, 3, P.blueL);
+      // the table: someone eating on the left, the coworker (your guide) on the right, phone in hand
+      g.chair(105, 124, 1); g.chair(176, 124, -1);
+      const bite = Math.floor(t * 1.2) % 2 === 0;
+      g.person(106, 124, 'sit', { ...CREW.steel, face: 1, arms: bite ? 'punch' : 'type' });
+      g.person(178, 124, 'sit', guide(s, { ...CREW.blue, face: -1, arms: 'type' }));
+      r(173, 112, 2, 3, P.dark); p(173, 113, Math.floor(t * 2) % 2 ? P.blueL : P.blueT);
+      g.table(120, 126, 50); r(126, 110, 8, 1, P.paper); r(127, 109, 6, 1, P.amber); r(158, 108, 4, 4, P.red);
+      playerIn(g, s, 84, 1);
+      mark(g, s, 178, 109);
+    } },
+  it: { L: 10, mark: [185, 93], labels: [[0.8, 4.8, 75, 52, 'Servers', 'r']],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ wall: '#1a1e24', wall2: '#20252c', pat: 'tile', floor: '#262b31', floor2: '#30363d', trim: P.blue });
+      // the whiteboard: a little network gets drawn, then wiped
+      r(204, 40, 46, 30, P.st2); r(206, 42, 42, 26, P.paper); const d = E(t, 0.6, 6.0), wipe = t > 8 ? E(t, 8, 9.4) : 0;
+      const marks = [[210, 48, 8, 5], [234, 48, 8, 5], [222, 58, 8, 5]]; marks.forEach((m, i) => { if (d > i / 4 && wipe < 1 - i / 4) { r(m[0], m[1], m[2], 1, P.blue); r(m[0], m[1] + m[3], m[2], 1, P.blue); r(m[0], m[1], 1, m[3], P.blue); r(m[0] + m[2], m[1], 1, m[3] + 1, P.blue); } });
+      if (d > 0.8 && wipe < 0.3) { r(218, 50, 16, 1, P.red); r(226, 54, 1, 4, P.red); }
+      g.rack(12, 108, t); g.rack(46, 108, t + 0.5);
+      // the technician swaps a drive in the rack, then checks a clipboard
+      const pull = t > 1 && t < 4 ? Math.round(E(t, 1, 1.6) * 4 - E(t, 3.2, 3.8) * 4) : 0; r(70 + pull, 78, 6, 3, P.st3);
+      const clip = t > 5.6 && t < 8.6;
+      g.person(84, 114, 'stand', { ...CREW.navy, face: clip ? 1 : -1, arms: clip ? 'down' : 'reach', carry: clip ? P.paper : null });
+      g.person(184, BACK, 'stand', guide(s, { ...HELPER, face: -1, arms: 'type' }));
+      g.desk(124, 122, 74); g.monitor(130, 88, t, '#1d3550'); g.monitor(156, 88, t + 2.3, '#16301f');
+      r(134, 104, 14, 2, P.st1); p(140 + (Math.floor(t * 2) % 2), 92, P.paper);
+      playerIn(g, s, 100, 1);
+      mark(g, s, 184, 93);
+    } },
+  vault: { L: 10, mark: [105, 115], labels: [],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ wall: '#1b1d20', wall2: '#24272b', pat: 'plate', floor: '#2a2d31', floor2: '#383c41', trim: P.st2 });
+      // shelf of binders on the left wall
+      r(10, 50, 50, 2, P.st2); r(10, 72, 50, 2, P.st2); for (let k = 0; k < 9; k++) { r(12 + k * 5, 38, 4, 12, [P.red2, P.blueS, P.amberD, P.greenD][k % 4]); r(12 + k * 5, 60, 4, 12, [P.blueS, P.amberD, P.red2, P.st1][k % 4]); }
+      // the vault door: the wheel turns, the door swings open and shut again
+      const op = t < 3 ? 0 : t < 4 ? E(t, 3, 4) : t < 7 ? 1 : t < 8 ? 1 - E(t, 7, 8) : 0;
+      g.disc(128, 64, 30, P.st1); g.disc(128, 64, 27, P.dark); r(112, 52, 32, 1, P.st0); r(112, 64, 32, 1, P.st0); r(112, 76, 32, 1, P.st0); for (let k = 0; k < 3; k++) r(116 + k * 9, 66, 6, 10, P.card);
+      const dw = Math.max(3, Math.round(27 * (1 - op)));
+      // the door swings on its left hinge: seen edge-on it narrows toward the hinge
+      for (let y = -27; y <= 27; y++) { const hw = Math.floor(Math.sqrt(27 * 27 - y * y)), w = Math.max(1, Math.round((hw * 2 + 1) * dw / 27)); r(128 - hw, 64 + y, w, 1, P.st3); }
+      if (op < 0.3) { g.disc(128, 64, 8, P.st2); const a = TAU * (t < 3 ? t / 3 : t > 8 ? -(t - 8) / 2 : 0); for (let k = 0; k < 4; k++) { const an = a + k * Math.PI / 2; r(128 + Math.round(Math.cos(an) * 14) - 1, 64 + Math.round(Math.sin(an) * 14) - 1, 3, 3, P.st1); g.hand(128, 64, an + Math.PI / 2, 13, P.st2); } }
+      // the deposit boxes and the clerk who files a folder in one of them
+      r(184, 44, 64, 52, P.st1); for (let c = 0; c < 6; c++) for (let w = 0; w < 5; w++) { r(186 + c * 10, 46 + w * 10, 9, 9, P.st2); p(190 + c * 10, 50 + w * 10, P.dark); }
+      const boxOpen = t > 3.0 && t < 4.2; if (boxOpen) r(196, 86, 9, 9, P.dark);
+      g.table(144, BACK, 18); r(147, 96, 10, 2, P.card); r(147, 95, 10, 1, P.cardT);
+      const ck = route([[0, 170, 1], [1.4, 170, 1], [2.8, 194, 1], [4.4, 194, 1], [5.8, 170, -1], [8, 170, -1], [8.01, 170, 1], [10, 170, 1]], t);
+      const filing = t >= 2.8 && t < 4.4, hold = t < 3.4 || t >= 7.0;
+      g.person(ck.x, BACK, ck.moving ? gait(ck.x) : 'stand', { ...CREW.wood, face: ck.face, back: filing, arms: filing ? 'up' : t >= 5.8 && t < 7.0 ? 'reach' : 'down', carry: !filing && hold && !(t >= 5.8 && t < 7.0) ? P.card : null });
+      g.person(104, FRONT, 'stand', guide(s, { ...CREW.amber, face: -1 }));
+      playerIn(g, s, 70, 1);
+      mark(g, s, 104, 115);
+    } },
+  hr: { L: 10, mark: [161, 93], labels: [[0.8, 4.6, 216, 84, 'Files', 'l']],
+    draw(g, t, s) {
+      const { r, p } = g;
+      g.room({ wa: 76, wc: P.woodS, wt: P.woodT, wall: '#221f1c', wall2: '#2a2622', pat: 'plank', floor: '#3a3128', floor2: '#4a3e31', trim: P.amberD, lights: 1 });
+      g.sideDoor(2, doorOpen(s));
+      r(26, 40, 46, 28, P.cardS); r(28, 42, 42, 24, P.card); const fl = Math.round(Math.sin(TAU * t / 10 * 3)); r(31, 45, 10, 12, P.paper); r(44, 44 + fl, 10, 9, P.paper); r(57, 46, 10, 14, P.paper); r(46, 56, 12, 8, P.blueL); [36, 49, 62].forEach((x) => p(x, 44, P.red));
+      r(86, 42, 16, 18, P.paper); r(86, 42, 16, 4, P.red2); const turn = t > 6 && t < 6.5; if (!turn) for (let k = 0; k < 3; k++) r(88, 49 + k * 3, 12, 1, P.line); else r(86, 46, 16, Math.round(14 * (1 - E(t, 6, 6.5))), P.st4);
+      g.windowBox(196, 40, 42, 26, t / 10); const bx = 196 + Math.round((t / 10) * 60) - 10; if (bx > 196 && bx < 236) { p(bx, 48, P.dark); p(bx + 1, 47 + (Math.floor(t * 4) % 2), P.dark); p(bx - 1, 47 + (Math.floor(t * 4) % 2), P.dark); }
+      g.plant(66, 110);
+      // a coworker files paperwork in the cabinet, then reads a page
+      const op = t < 1 ? 0 : t < 1.6 ? E(t, 1, 1.6) : t < 4.6 ? 1 : t < 5.2 ? 1 - E(t, 4.6, 5.2) : 0; g.cabinet(214, 108, 26, 32, op);
+      const read = t > 5.5 && t < 9.2;
+      g.person(200, 114, 'stand', { ...CREW.blue, face: read ? -1 : 1, arms: read ? 'down' : 'reach', carry: read ? P.paper : null });
+      g.person(160, BACK, 'stand', guide(s, { ...HELPER, face: -1, arms: 'type' }));
+      g.desk(112, 122, 74); g.monitor(120, 88, t, '#2b2420'); r(150, 101, 5, 5, P.paper); r(155, 102, 1, 2, P.paper); for (let k = 0; k < 2; k++) { const c = (t / 10 * 4 + k / 2) % 1; p(152 + k, 99 - Math.round(c * 6), P.st3); }
+      playerIn(g, s, 84, 1);
+      mark(g, s, 160, 93);
+    } },
+};
+
+// ── the mini-game stages
+const EVT = [6 * 60 + 58, 11 * 60 + 30, 12 * 60, 14 * 60 + 15, 15 * 60 + 30, 17 * 60];
+SC.clockStage = { L: 6, labels: [],
+  draw(g, t, s) {
+    const { r, p } = g;
+    g.room({ pat: 'tile', trim: P.amberD, floor: '#2e2b27', floor2: '#3a3530', lights: 1 });
+    // the wall clock follows the moments of the day as they come up
+    const at = s.clockAt || 0; let m = 6 * 60 + 30; for (let i = 0; i < EVT.length; i++) { const ta = 2.8 + i * 2.6; if (at >= ta - 2.6) m = lerp(i ? EVT[i - 1] : 6 * 60 + 30, EVT[i], E(at, ta - 2.6, ta - 1.6)); }
+    g.clockFace(56, 60, 16, TAU * (m / 720), TAU * (m % 60) / 60);
+    // the time clock: tally lamps for every on-time punch, the card going in and out
+    const last = s.punches && s.punches.length ? s.punches[s.punches.length - 1] : null, a = last ? (s.still ? 9 : last.age) : 9;
+    g.tclock(116, 66, last && a < 1.2 ? (last.ok ? P.green : P.amber) : null);
+    for (let i = 0; i < 6; i++) r(118 + i * 4, 58, 2, 2, i < (s.hits || 0) ? P.green : P.st1);
+    r(158, 62, 28, 36, P.st1); for (let w = 0; w < 5; w++) { r(161, 64 + w * 7, 10, 6, P.st0); r(173, 64 + w * 7, 10, 6, P.st0); r(162, 63 + w * 7, 8, 5, P.paper); if (w !== 1) r(174, 63 + w * 7, 8, 5, P.paper); }
+    const punching = a < 0.45;
+    g.person(102, BACK, 'stand', { ...s.me, face: 1, arms: punching ? 'punch' : 'down' });
+    if (a < 0.45) { const k = a < 0.12 ? E(a, 0, 0.12) : a < 0.3 ? 1 : 1 - E(a, 0.3, 0.45); r(lerp(111, 125, k), lerp(98, 81, k), 5, 4, P.paper); }
+    g.person(176, FRONT, 'stand', { ...CREW.amber, face: -1, arms: last && last.ok && a < 0.8 ? 'up' : 'down' });
+  } };
+SC.sortStage = { L: 8, labels: [],
+  draw(g, t, s) {
+    const { r, p } = g;
+    g.room({ wall: '#1b1d20', wall2: '#24272b', pat: 'plate', floor: '#2a2d31', floor2: '#383c41', trim: P.st2 });
+    r(100, 44, 56, 4, P.st1); for (let k = 0; k < 6; k++) r(104 + k * 8, 48, 6, 8, P.st2);
+    const items = s.sorted || [], dest = (keep) => (keep ? [60, 86] : [196, 97]);
+    let n = 0, shut = 0, talk = 0;
+    items.forEach((it) => { const a = s.still ? 9 : it.age; if (it.keep && a > (it.pick === it.keep ? 0.6 : 1.5)) n++; if (it.keep) { const land = it.pick === it.keep ? 0.6 : 1.5; if (a > land && a < land + 0.45) shut = Math.max(shut, 1 - Math.abs(a - land - 0.22) / 0.23); } if (!it.keep && a > (it.pick === it.keep ? 0.6 : 1.5)) talk++; });
+    g.safe(36, 116, clamp(shut), n);
+    g.person(172, BACK, 'stand', { ...CREW.blue, face: 1, nod: talk > 0 && Math.floor(t * 2) % 4 === 0 });
+    g.person(214, BACK, 'stand', { ...CREW.green, face: -1, nod: talk > 0 && Math.floor(t * 2) % 4 === 2 });
+    g.table(186, 114, 22); for (let k = 0; k < talk; k++) r(191, 98 - k, 10, 1, k % 2 ? P.paper : P.st4);
+    g.person(124, FRONT, 'stand', { ...s.me, face: 1 });
+    // the folder in flight: to your choice, and if that was wrong, on to where it belongs
+    items.forEach((it) => { const a = s.still ? 9 : it.age, right = it.pick === it.keep, from = [124, 50], d1 = dest(it.pick), d2 = dest(it.keep);
+      let pos = null; if (a < 0.6) { const k = E(a, 0, 0.6); pos = [lerp(from[0], d1[0], k), lerp(from[1], d1[1], k) - Math.round(Math.sin(k * Math.PI) * 14)]; }
+      else if (!right && a < 0.9) pos = [d1[0] + (Math.floor(a * 16) % 2 ? 1 : -1), d1[1]];
+      else if (!right && a < 1.5) { const k = E(a, 0.9, 1.5); pos = [lerp(d1[0], d2[0], k), lerp(d1[1], d2[1], k) - Math.round(Math.sin(k * Math.PI) * 18)]; }
+      if (pos) { r(pos[0] - 5, pos[1] - 3, 10, 7, P.card); r(pos[0] - 5, pos[1] - 4, 4, 1, P.cardT); r(pos[0] - 5, pos[1] - 3, 10, 1, P.cardT); }
+      const end = right ? 0.6 : 1.5; if (a > end && a < end + 0.8) { const d = d2, c = right ? P.green : P.amber; if (right) { p(d[0] - 2, d[1] - 14, c); p(d[0] - 1, d[1] - 13, c); p(d[0], d[1] - 14, c); p(d[0] + 1, d[1] - 15, c); p(d[0] + 2, d[1] - 16, c); } else r(d[0] - 2, d[1] - 15, 5, 2, c); } });
+  } };
+
+// ── the badge: the room dims, the badge drops in, spins once and settles while paper confetti falls
+const BCOL = { front: P.red, clock: P.amber, floor: P.green, break: P.blueL, it: P.blue, vault: P.st3, hr: P.amber };
+function emblem(g, id, cx, cy, c) {
+  const { r, p, disc } = g;
+  if (id === 'front') { r(cx - 3, cy - 5, 7, 10, c); r(cx - 2, cy - 4, 5, 9, P.dark); p(cx + 1, cy, c); }
+  else if (id === 'clock') { disc(cx, cy, 5, c); disc(cx, cy, 4, P.paper); r(cx, cy - 3, 1, 3, P.dark); r(cx, cy, 3, 1, P.dark); }
+  else if (id === 'floor') { disc(cx, cy, 4, c); for (let k = 0; k < 8; k++) { const a = k / 8 * TAU; r(cx + Math.round(Math.cos(a) * 5) - 1, cy + Math.round(Math.sin(a) * 5) - 1, 2, 2, c); } disc(cx, cy, 1, P.paper); }
+  else if (id === 'break') { r(cx - 4, cy - 3, 7, 8, c); r(cx + 3, cy - 1, 2, 4, c); r(cx - 3, cy - 2, 5, 1, P.woodS); }
+  else if (id === 'it') { r(cx - 5, cy - 4, 11, 8, c); r(cx - 4, cy - 3, 9, 6, P.dark); r(cx - 1, cy + 4, 3, 2, c); r(cx - 3, cy - 1, 4, 1, P.green); }
+  else if (id === 'vault') { disc(cx, cy, 5, c); disc(cx, cy, 2, P.dark); r(cx - 5, cy, 11, 1, P.dark); r(cx, cy - 5, 1, 11, P.dark); }
+  else { disc(cx - 2, cy - 2, 2, c); disc(cx + 3, cy - 2, 2, c); r(cx - 5, cy + 1, 5, 4, c); r(cx + 1, cy + 1, 5, 4, c); }
+}
+function drawBadge(g, id, a) {
+  const { r, box } = g, c = BCOL[id] || P.red, cx = 128;
+  g.r(0, 0, W, H, 'rgba(10,11,12,' + (clamp(a / 0.3) * 0.55).toFixed(3) + ')');
+  for (let i = 0; i < 40; i++) { const t0 = 0.5 + rnd(i) * 1.4, k = a - t0; if (k < 0 || k > 2.6) continue; const x = 20 + Math.round(rnd(i + 40) * 216 + Math.sin(k * 3 + i) * 3), y = Math.round(-4 + k * 58); if (y > 98) continue; r(x, y, i % 3 ? 2 : 1, i % 3 ? 1 : 2, [P.red, P.amber, P.paper, P.green, P.blueL][i % 5]); }
+  const y = a < 0.7 ? Math.round(lerp(-40, 58, E(a, 0.1, 0.7))) : 58 - Math.round(Math.sin(clamp((a - 0.7) / 0.25) * Math.PI) * 3);
+  const ph = clamp((a - 0.95) / 0.7) * TAU, w = Math.max(2, Math.round(30 * Math.abs(Math.cos(ph)) / 2) * 2);
+  r(cx - 10, y + 28, 6, 12, c); r(cx + 4, y + 28, 6, 12, c); r(cx - 10, y + 38, 2, 2, P.dark); r(cx + 8, y + 38, 2, 2, P.dark);
+  box(cx - w / 2, y, w, 30, w > 10 ? 3 : 0, c, P.paper, P.st1);
+  if (w >= 22) { r(cx - 11, y + 4, 22, 22, P.paper); emblem(g, id, cx, y + 15, c); }
+}
+
+// ── the street: seven buildings, lamp posts, the time clock by the gate, and you
+const IDS = ['front', 'clock', 'floor', 'break', 'it', 'vault', 'hr'];
+const X0 = 70, BW = 100, GAP = 30, KIOSK = 40;
+const BLD = IDS.map((id, i) => ({ id, i, x: X0 + i * (BW + GAP), w: BW, h: 56 + ((i * 17) % 3) * 10, color: BCOL[id] }));
+const WORLD = X0 + IDS.length * (BW + GAP) + 40;
+const LAMPS = [14].concat(BLD.map((b) => b.x + BW + GAP / 2));
+const doorX = (b) => b.x + b.w / 2;
+function facade(g, b, x, s, t) {
+  const { r, p, box, disc } = g, top = SB - b.h, dx = x + 50, lit = s.lit ? s.lit(b.i) : 1;
+  box(x, top, b.w, b.h, 4, P.st1, P.st2, P.st0); r(x, top, b.w, 3, b.color);
+  let row = 0; for (let wy = top + 10; wy < SB - 34; wy += 12, row++) for (let col = 0, wx = x + 8; wx < x + b.w - 12; wx += 16, col++) {
+    if (Math.abs(wx + 4 - dx) < 12) continue; if (b.id === 'floor' && wx < x + 36 && wy > SB - 40) continue;
+    const on = lit > 0.5 && rnd(b.i * 31 + row * 7 + col) > 0.3; r(wx, wy, 8, 7, on ? P.winL : P.glass);
+    if (on && rnd(b.i * 13 + row * 5 + col * 3) > 0.6) { const ox = 2 + Math.round((Math.sin(t * 0.7 + col + row * 2) + 1) * 1.5); r(wx + ox, wy + 3, 2, 4, P.woodS); r(wx + ox, wy + 2, 2, 1, P.woodS); }
+  }
+  const o = s.doors ? s.doors[b.id] || 0 : 0;
+  r(dx - 9, SB - 26, 18, 26, P.st0); r(dx - 8, SB - 25, 16, 25, o > 0 ? '#4a4230' : P.dark); if (o > 0) r(dx - 8, SB - 6, 16, 6, '#5a5038');
+  const pw = Math.round(8 * (1 - o)); r(dx - 8, SB - 25, pw, 25, P.st1); r(dx + 8 - pw, SB - 25, pw, 25, P.st1); if (pw > 1) { p(dx - 8 + pw - 1, SB - 12, P.st3); p(dx + 8 - pw, SB - 12, P.st3); }
+  r(dx - 8, SB - 26, 16, 1, b.color);
+  if (b.id === 'front') for (let k = 0; k < 7; k++) r(dx - 14 + k * 4, SB - 31, 4, 3, k % 2 ? P.paper : P.red);
+  if (b.id === 'clock') g.clockFace(x + 80, top + 16, 6, TAU * (t / 120), TAU * (t / 10));
+  if (b.id === 'floor') { r(x + 6, SB - 30, 28, 18, P.st2); for (let y = SB - 28; y < SB - 12; y += 3) r(x + 6, y, 28, 1, P.st1); box(x + 4, SB - 12, 32, 12, 2, P.st0, P.st2, P.dark); for (let k = 0; k < 2; k++) box(x + 26, SB - 18 - k * 6, 6, 6, 1, P.card, P.cardT, P.cardS); }
+  if (b.id === 'break') { r(x + 74, top - 10, 8, 10, P.st1); for (let k = 0; k < 4; k++) { const c = (t * 0.4 + k / 4) % 1; p(x + 77 + Math.round(Math.sin(c * 5 + k) * 2), top - 12 - Math.round(c * 16), P.st2); } }
+  if (b.id === 'it') { r(x + 18, top - 12, 1, 12, P.st2); disc(x + 18, top - 13, 1, Math.floor(t * 1.5) % 2 ? P.red : P.red2); }
+  if (b.id === 'vault') { for (let k = x + 3; k < x + b.w - 2; k += 6) { p(k, top + 5, P.st3); p(k, SB - 3, P.st3); } disc(x + 80, top + 16, 5, P.st2); disc(x + 80, top + 16, 2, P.st0); }
+  if (b.id === 'hr') { for (let k = 0; k < 7; k++) r(dx - 14 + k * 4, SB - 31, 4, 3, k % 2 ? P.paper : P.amber); box(dx - 22, SB - 6, 10, 6, 1, P.card, P.cardT, P.cardS); box(dx + 12, SB - 6, 10, 6, 1, P.card, P.cardT, P.cardS); disc(dx - 17, SB - 9, 3, P.greenD); disc(dx + 17, SB - 9, 3, P.greenD); }
+  if (s.done && s.done[b.id]) { const j = s.just === b.id ? s.justAge : 9, on = j > 0.7 || Math.floor(j * 6) % 2 === 0; disc(dx, SB - 33, 2, on ? P.green : P.greenD); r(dx + 11, SB - 22, 7, 7, b.color); r(dx + 13, SB - 20, 3, 3, P.paper); }
+}
+SC.street = { L: 8, labels: [],
+  draw(g, t, s) {
+    const { r, p } = g, cam = Math.round(s.cam || 0), on = (i) => (s.lamp ? s.lamp(i) : 1);
+    r(0, 0, W, SB, s.sky || P.sky); for (let i = 0; i < 24; i++) p(((i * 53 - Math.floor(cam * 0.1)) % W + W) % W, (i * 29) % 50, i % 4 ? P.st0 : P.st1);
+    for (let i = 0; i < 10; i++) { const x = ((Math.round(i * 110 - cam * 0.4) % 376) + 376) % 376 - 60; r(x, 60 - (i % 3) * 8, 70, SB - 60 + (i % 3) * 8, '#191c20'); r(x + 50, 40 - (i % 3) * 8, 8, 22, '#1e2125'); }
+    r(0, SB, W, 22, P.floor); r(0, SB, W, 1, P.floor2); for (let x = -(cam % 16); x < W; x += 16) r(x, SB + 1, 1, 21, P.floor2);
+    LAMPS.forEach((lx, i) => { if (on(i) > 0.5) r(lx - 10 - cam, SB + 1, 22, 21, P.glow); });
+    r(0, 132, W, 2, P.st1); r(0, 134, W, 10, P.road); for (let x = -(cam % 24); x < W; x += 24) r(x, 139, 10, 1, P.st0);
+    BLD.forEach((b) => { const x = b.x - cam; if (x > W + 10 || x + b.w < -10) return; facade(g, b, x, s, t); });
+    // the dock worker at the shop floor moves boxes from the stack to the bay
+    const fb = BLD[2], dk = fb.x - cam; if (dk > -40 && dk < W + 10) { const lt = t % 8, d = route([[0, 22, 1], [1, 22, 1], [3, 8, -1], [4, 8, -1], [6, 22, 1], [8, 22, 1]], lt); g.person(dk + d.x, SB - 12, d.moving ? gait(d.x) : 'stand', { ...CREW.amber, face: d.face, carry: lt > 1 && lt < 3 ? P.card : null }); }
+    LAMPS.forEach((lx, i) => { const x = lx - cam; if (x > -8 && x < W + 8) g.lampPost(x, SB + 2, on(i) > 0.5); });
+    if (KIOSK - cam > -12) g.kiosk(KIOSK - cam, SB + 4, s.kioskLit, s.kioskCard || 0);
+    const pl = s.player; if (pl) g.person(pl.x - cam, pl.y, pl.pose, Object.assign({}, s.me, { face: pl.face, back: pl.back, arms: pl.arms }));
+  } };
+// the opening: the street before the shift, lamps and windows coming on one by one, you walking in and clocking in
+SC.opening = { L: 12, labels: [[7.6, 11.2, 45, 92, 'Clocked in', 'r']],
+  draw(g, t, s) {
+    const lampOn = (i) => { const k = t - (1.0 + i * 0.45); return k > 0 && !(k > 0.08 && k < 0.16) ? 1 : 0; };
+    const k = E(t, 3.6, 6.4), x = lerp(-12, 30, k), mv = k > 0 && k < 1, punch = t > 6.8 && t < 7.6;
+    SC.street.draw(g, t, { cam: 0, me: s.me, sky: t < 1.8 ? P.night : t < 3.2 ? '#101317' : P.sky, lamp: lampOn, lit: (i) => (t > 1.4 + i * 0.45 ? 1 : 0),
+      doors: { front: E(t, 8.6, 9.4) }, kioskLit: t > 7.3, kioskCard: punch ? 1 - Math.abs(t - 7.2) / 0.4 : 0,
+      player: { x, y: WALK, face: 1, pose: mv ? gait(x) : 'stand', arms: punch ? 'punch' : 'down' } });
+    fade(g, t, 12);
+  } };
+// the finale: everyone you met lines up on the street, the seven badges light up, waves and fireworks
+SC.finale = { L: 14, labels: [],
+  draw(g, t, s) {
+    const { r, p } = g;
+    r(0, 0, W, SB, P.night); for (let i = 0; i < 30; i++) p((i * 53) % W, (i * 29) % 60, i % 4 ? P.st0 : P.st1);
+    BLD.forEach((b, i) => { const x = 8 + i * 35, h = 30 + (i % 3) * 8, top = SB - h; g.box(x, top, 30, h, 2, P.st1, P.st2, P.st0); r(x, top, 30, 2, b.color); for (let wy = top + 6; wy < SB - 12; wy += 8) for (let wx = x + 4; wx < x + 26; wx += 8) r(wx, wy, 4, 4, t > 3 + i * 0.3 ? P.winL : P.glass); r(x + 11, SB - 10, 8, 10, t > 3 + i * 0.3 ? '#4a4230' : P.dark); });
+    r(0, SB, W, 22, P.floor); r(0, SB, W, 1, P.floor2); r(0, 132, W, 2, P.st1); r(0, 134, W, 10, P.road);
+    // fireworks, in the sky beside the sign
+    [[40, 44, 6.8], [216, 40, 7.5], [70, 62, 8.2], [190, 64, 8.9], [32, 60, 10.2], [224, 56, 10.9]].forEach(([fx, fy, t0], j) => { const a = t - t0; if (a < 0 || a > 1.4) return; const R = Math.round(14 * E(a, 0, 0.8)), n = a > 1.0 ? 6 : 12;
+      for (let k = 0; k < n; k++) { const an = k / 12 * TAU; r(fx + Math.round(Math.cos(an) * R), fy + Math.round(Math.sin(an) * R) + Math.round(a * a * 4), 2, 2, [P.amber, P.paper, P.red, P.lamp][(j + k) % 4]); } });
+    // the seven badges in a row
+    IDS.forEach((id, i) => { const t0 = 3.2 + i * 0.3; if (t < t0) return; const cx = 30 + i * 33, y = Math.round(lerp(26, 50, E(t, t0, t0 + 0.4))); g.box(cx - 8, y, 16, 16, 2, BCOL[id], P.paper, P.st1); r(cx - 6, y + 2, 12, 12, P.paper); emblem(g, id, cx, y + 8, BCOL[id]); });
+    // paper confetti, behind the crew
+    if (t > 6) for (let i = 0; i < 36; i++) { const k = t - 6 - rnd(i) * 3; if (k < 0) continue; const y = Math.round(-4 + k * 26); if (y > 128) continue; r(Math.round(rnd(i + 9) * 250 + Math.sin(k * 2 + i) * 3), y, i % 3 ? 2 : 1, i % 3 ? 1 : 2, [P.red, P.amber, P.paper, P.green][i % 4]); }
+    // the crew walks in from both sides and stops, evenly spaced; the wave runs along the line
+    const crew = [HELPER, CREW.amber, CREW.green, null, CREW.blue, HELPER, CREW.steel, CREW.wood];
+    const kin = E(t, 0.4, 3.0);
+    crew.forEach((o, k) => { const slot = 22 + k * 30, x = k < 4 ? slot - 130 * (1 - kin) : slot + 130 * (1 - kin), mv = kin > 0 && kin < 1, wave = t > 6 + k * 0.2 && t < 6.7 + k * 0.2;
+      const arms = o === null && t > 8.4 && t < 12.6 ? 'both' : wave ? 'up' : 'down';
+      g.person(x, WALK + 6, mv ? gait(x) : 'stand', Object.assign({}, o || s.me, { face: k < 4 ? 1 : -1, arms })); });
+    fade(g, t, 14);
+  } };
+// ── SCENES:END
+
+// ── the game: the canvas, sound, save
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+const g = kit(ctx);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const Snd = (() => { let ac = null, on = false;
-  const beep = (f, d, type = 'square', v = 0.05, when = 0) => { if (!on || !ac) return; const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + when; o.type = type; o.frequency.value = f; g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + 0.02); };
+  const beep = (f, d, type = 'square', v = 0.05, when = 0) => { if (!on || !ac) return; const o = ac.createOscillator(), gn = ac.createGain(), t = ac.currentTime + when; o.type = type; o.frequency.value = f; gn.gain.setValueAtTime(v, t); gn.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(gn); gn.connect(ac.destination); o.start(t); o.stop(t + d + 0.02); };
   return { toggle() { if (!ac) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return false; ac = new C(); } on = !on; if (on) ac.resume(); return on; },
-    ok() { beep(660, .09); beep(990, .14, 'square', .05, .09); }, no() { beep(180, .25, 'triangle', .09); }, tick() { beep(1200, .03, 'square', .03); }, badge() { [523, 659, 784, 1046].forEach((f, i) => beep(f, .12, 'square', .05, i * .1)); } }; })();
+    ok() { beep(660, .09); beep(990, .14, 'square', .05, .09); }, no() { beep(220, .22, 'triangle', .07); }, tick() { beep(1200, .03, 'square', .03); }, door() { beep(330, .06, 'triangle', .04); beep(440, .08, 'triangle', .04, .06); },
+    badge() { [523, 659, 784, 1046].forEach((f, i) => beep(f, .12, 'square', .05, i * .1)); }, fin() { [523, 659, 784, 1046, 784, 1046, 1318].forEach((f, i) => beep(f, .14, 'square', .05, i * .12)); } }; })();
 const sndBtn = document.getElementById('snd');
 sndBtn.onclick = () => { const on = Snd.toggle(); sndBtn.setAttribute('aria-pressed', String(on)); sndBtn.textContent = on ? 'Sound on' : 'Sound off'; };
 
-// ── save
 const KEY = 'hb-first-shift-v1';
 let save = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; } })() || { done: {}, xp: 0, shirt: 0, seen: {} };
+if (!save.done) save.done = {}; if (!save.seen) save.seen = {}; if (typeof save.xp !== 'number') save.xp = 0; if (![0, 1, 2].includes(save.shirt)) save.shirt = 0;
 const store = () => { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) { /* private mode: progress lasts this visit */ } };
 const SHIRTS = [[P.red, P.red2], [P.blue, P.blueS], [P.green, P.greenD]];
 const me = () => ({ shirt: SHIRTS[save.shirt][0], shirtD: SHIRTS[save.shirt][1] });
@@ -156,14 +563,14 @@ const me = () => ({ shirt: SHIRTS[save.shirt][0], shirtD: SHIRTS[save.shirt][1] 
 // ── the handbook, quoted. Every {sec, quote} below is checked against the handbook text by tools/check-game-quotes.mjs
 const READ = (title) => 'Advanced_Handbook_Dashboard.html?q=' + encodeURIComponent(title);
 const STORIES = [
-  { id: 'front', name: 'Front Office', sub: 'Welcome and company', who: 'HR', color: P.red, interior: (t) => { room(); desk(120, 70); screenBox(150, G - 37, '#1d3550'); person(132, G, 'stand', HELPER); person(lerp(30, 96, E(t % 9, 0, 2.2)), G, t % 9 < 2.2 ? Math.floor(t * 7) % 2 : 'stand', me()); r(30, 30, 40, 26, P.st1); r(32, 32, 36, 22, P.dark); r(36, 36, 28, 2, P.red); r(36, 41, 20, 1, P.st2); r(36, 44, 24, 1, P.st2); },
+  { id: 'front', name: 'Front Office', sub: 'Welcome and company', who: 'HR', color: P.red,
     beats: [
       { who: 'HR', say: 'Welcome to Advanced. Grab a seat. Your first stop is a few basics everyone learns on day one.' },
       { q: 'How long is your introductory period?', choices: [['30 days', 0], ['90 days', 1], ['One year', 0]], sec: '3.6', title: 'New Hires and Introductory Periods', quote: 'The first 90 days of your employment is considered an introductory period.', why: 'It is when you learn the job and the company gets to see your work. It can be shortened or lengthened by management and HR.' },
       { q: 'You ran a lathe for six years at another shop. Do you still need training here?', choices: [['No, my experience covers it', 0], ['Yes: I still learn how we do it here', 1], ['Only if I ask for it', 0]], sec: '3.7', title: 'Training Program', quote: 'Even if you have had previous experience in the specified functions of your job duties, it is necessary for you to learn our specific procedures, as well as the responsibilities of the specific position.', why: 'Every shop has its own procedures. If you ever feel you need more training, ask your manager.' },
       { q: 'A visitor asks what the company plans to do next year. What do you say?', choices: [['Share what I have heard around the shop', 0], ['I do not speak for Advanced unless I am authorized to', 1], ['Post my guess online', 0]], sec: '2.2', title: 'Ethics Code', quote: 'We expect that all employees will not knowingly misrepresent ADVANCED and will not speak on behalf of ADVANCED unless specifically authorized.', why: 'Point them to someone who is authorized to answer.' },
     ] },
-  { id: 'clock', name: 'Time Clock', sub: 'Pay and hours', who: 'Shift lead', color: P.amber, interior: (t, s) => { room(); box(110, 34, 30, 40, 3, P.st3, P.st4, P.st2); r(114, 40, 22, 10, P.dark); const k = s && s.punch ? E(s.punch, 0, .25) : 0; r(118, 42, 14, 6, k > .5 ? P.green : P.st1); r(121, 56, 8, 14 - Math.round(k * 6), P.paper); person(96, G, 'stand', me()); for (let i = 0; i < 6; i++) r(156 + i * 6, 40, 4, 14, i % 2 ? P.paper : P.st4); r(150, 36, 40, 1, P.st2); },
+  { id: 'clock', name: 'Time Clock', sub: 'Pay and hours', who: 'Shift lead', color: P.amber,
     beats: [
       { who: 'Shift lead', say: 'This is the time clock. You get paid for all the hours you work, so your punches have to be right. Let us practice.' },
       { game: 'clock' },
@@ -172,14 +579,14 @@ const STORIES = [
       { q: 'You know you will be late tomorrow for a dentist visit.', choices: [['Just come in when I can', 0], ['Give my manager reasonable advance notice', 1], ['Ask a coworker to cover for me', 0]], sec: '4.1', title: 'Attendance', quote: 'If you know ahead of time that you will be absent or late, provide reasonable advance notice to your manager.', why: 'You may be asked for documentation where the law allows it.' },
       { q: 'How many days of no call and no show count as walking away from your job?', choices: [['One day', 0], ['Three consecutive days', 1], ['Five days', 0]], sec: '4.5', title: 'Job Abandonment', quote: 'If you fail to show up for work or fail to call in with an acceptable reason for the absence for a period of three consecutive days, you will be considered to have abandoned your job and voluntarily resigned from ADVANCED.', why: 'If you will be out, call in with an acceptable reason.' },
     ] },
-  { id: 'floor', name: 'Shop Floor', sub: 'Safety', who: 'Safety lead', color: P.green, interior: (t) => { room(); machine(24, true, t); machine(150, true, t + 1); person(80, G, 'stand', me()); person(112, G, 'stand', { shirt: P.amber, shirtD: P.amberD, cap: P.st1 }); },
+  { id: 'floor', name: 'Shop Floor', sub: 'Safety', who: 'Safety lead', color: P.green,
     beats: [
       { who: 'Safety lead', say: 'Welcome to the floor. Machines are running, so eyes up. Safety is everyone\'s job here. Find what is wrong in this picture.' },
       { game: 'hunt' },
       { q: 'You nick your finger on a burr. It is tiny. What now?', choices: [['Ignore it, it is nothing', 0], ['Report it to my manager right away', 1], ['Mention it at the end of the week', 0]], sec: '7.17', title: "Workers' Compensation Insurance", quote: 'If you are injured on the job while working at ADVANCED, no matter how slightly, you are to report the incident immediately to your manager.', why: 'Waiting can put a claim at risk, and an injury form is filled out for each incident.' },
       { q: 'Can you wear earbuds while running a machine?', choices: [['Both in, volume up', 0], ['One earbud, at a reasonable volume', 1], ['Only noise-cancelling ones', 0]], sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Employees are permitted to wear one earbud while operating machinery or performing work on the shop floor.', why: 'The other ear stays open for instructions and alarms.' },
     ] },
-  { id: 'break', name: 'Break Room', sub: 'Phones, social media, appearance', who: 'Coworker', color: P.blueL, interior: (t) => { room(); box(40, G - 46, 26, 46, 3, P.red, P.redT, P.red2); for (let i = 0; i < 4; i++) r(44, G - 42 + i * 8, 18, 5, i % 2 ? P.amber : P.blueL); desk(110, 80); person(124, G, 'stand', me()); person(160, G, 'stand', { shirt: P.blue, shirtD: P.blueS }); r(132, G - 26, 4, 6, P.dark); r(133, G - 25, 2, 3, Math.floor(t * 2) % 2 ? P.blueL : P.blueT); },
+  { id: 'break', name: 'Break Room', sub: 'Phones, social media, appearance', who: 'Coworker', color: P.blueL,
     beats: [
       { who: 'Coworker', say: 'Break time. This is where the phones come out. A few rules keep everybody focused and out of trouble.' },
       { q: 'When can you use your phone?', choices: [['Any time a machine is running a long cycle', 0], ['During breaks and lunch', 1], ['Never at work', 0]], sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Cell phones should only be used during designated break times or lunch periods.', why: 'During work time a phone is for emergencies only. Tell your supervisor if something urgent comes up.' },
@@ -187,7 +594,7 @@ const STORIES = [
       { q: 'A reporter calls your cell asking about the company.', choices: [['Give them a quote', 0], ['Send them to the Sr. Leadership Team or HR', 1], ['Say no comment and post about it', 0]], sec: '6.10', title: 'Social Media', quote: 'Direct all media inquiries for official ADVANCED responses to the Sr. Leadership Team or H.R.', why: 'Only people authorized to speak for Advanced talk to the media.' },
       { q: 'You love a strong cologne. Is it OK at work?', choices: [['Yes, wear as much as I like', 0], ['Yes, in moderation, out of respect for others', 1], ['Fragrance is banned', 0]], sec: '6.6', title: 'Personal Appearance', quote: 'Fragrant products, including but not limited to perfumes, colognes, and scented body lotions or hair products, should be used in moderation out of concern for others with sensitivities or allergies.', why: 'Some coworkers have sensitivities or allergies.' },
     ] },
-  { id: 'it', name: 'IT Desk', sub: 'Technology and security', who: 'IT', color: P.blue, interior: (t) => { room(); box(36, G - 60, 30, 60, 3, P.st1, P.st2, P.st0); for (let i = 0; i < 9; i++) { r(40, G - 56 + i * 6, 22, 4, P.dark); px(42 + (i * 5 + Math.floor(t * 6)) % 18, G - 55 + i * 6, i % 3 ? P.green : P.amber); } desk(120, 74); screenBox(132, G - 37, '#1d3550'); screenBox(162, G - 37, '#16301f'); person(104, G, 'stand', me()); person(184, G, 'stand', { ...HELPER, face: -1 }); },
+  { id: 'it', name: 'IT Desk', sub: 'Technology and security', who: 'IT', color: P.blue,
     beats: [
       { who: 'IT', say: 'Here is your login. Company computers, email and phones are for work, and they belong to Advanced. A few things to know.' },
       { q: 'Your work email has a password. Does that make it private?', choices: [['Yes, only I can see it', 0], ['No: company systems can be monitored', 1], ['Only after hours', 0]], sec: '6.12', title: 'Use of Company Technology', quote: 'You should not interpret the use of password protection as creating a right or expectation of privacy', why: 'Do not use company systems for anything you want kept private.' },
@@ -195,14 +602,14 @@ const STORIES = [
       { q: 'You lost your key fob on the way home.', choices: [['Wait and see if it turns up', 0], ['Report it to my manager immediately', 1], ['Borrow a coworker\'s', 0]], sec: '6.9', title: 'Security', quote: 'report any lost or stolen keys, passes, or similar devices to your manager immediately.', why: 'Lending keys or keycards to others is also against the rules.' },
       { q: 'Someone outside the company asks how our alarm system works.', choices: [['Explain it, it is not a secret', 0], ['Do not discuss it', 1], ['Only describe the cameras', 0]], sec: '6.9', title: 'Security', quote: 'Refrain from discussing specifics regarding ADVANCED security systems, alarms, passwords, etc. with those outside of ADVANCED.', why: 'Tell your manager about anything that looks like a security risk.' },
     ] },
-  { id: 'vault', name: 'The Vault', sub: 'Trade secrets', who: 'Shift lead', color: P.st3, interior: (t) => { room(); disc(128, G - 40, 30, P.st2); disc(128, G - 40, 26, P.st3); disc(128, G - 40, 8, P.st1); const a = t * 0.8; for (let k = 0; k < 4; k++) { const ang = a + k * Math.PI / 2; r(128 + Math.cos(ang) * 16 - 1, G - 40 + Math.sin(ang) * 16 - 1, 3, 3, P.st1); } person(70, G, 'stand', me()); },
+  { id: 'vault', name: 'The Vault', sub: 'Trade secrets', who: 'Shift lead', color: P.st3,
     beats: [
       { who: 'Shift lead', say: 'Customers trust us with their drawings and their business. What is in the vault stays in the vault. Sort these.' },
       { game: 'sort' },
       { q: 'A lawyer calls you asking for the company\'s position on a lawsuit.', choices: [['Tell them what I think', 0], ['Do not speak for the company; refer the call to HR', 1], ['Hang up and forget it', 0]], sec: '6.11', title: 'Third Party Disclosures', quote: 'refer any call requesting the position of ADVANCED to HR.', why: 'If you are not sure what to do with a call like that, ask HR.' },
       { q: 'You suspect someone is passing information to a competitor.', choices: [['Stay out of it', 0], ['Tell my manager or HR', 1], ['Confront them in front of the crew', 0]], sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'you are required to inform your manager or HR.', why: 'Protecting confidential information is a condition of employment for everyone.' },
     ] },
-  { id: 'hr', name: 'HR Office', sub: 'Your people', who: 'HR', color: P.amber, interior: (t) => { room(); desk(100, 80); box(196, G - 22, 10, 22, 2, P.wood, P.woodT, P.woodS); disc(201, G - 30, 7, P.green); disc(197, G - 34, 4, P.greenD); person(118, G, 'stand', HELPER); person(lerp(30, 84, E(t % 8, 0, 2)), G, t % 8 < 2 ? Math.floor(t * 7) % 2 : 'stand', me()); r(30, 24, 36, 24, P.paper); for (let i = 0; i < 5; i++) r(34, 28 + i * 4, 24, 1, P.line); },
+  { id: 'hr', name: 'HR Office', sub: 'Your people', who: 'HR', color: P.amber,
     beats: [
       { who: 'HR', say: 'Last stop. HR is here for you, not just for paperwork. Here is where to go when life happens.' },
       { q: 'You have a problem, and the problem is your own manager. Where do you go?', choices: [['Nowhere, keep quiet', 0], ['HR or upper-level management', 1], ['Post about it online', 0]], sec: '5.3', title: 'Open Door/Conflict Resolution Process', quote: 'or if you believe that person is the source of the problem, present your concerns to HR or upper-level management.', why: 'Most problems are solved by talking with your manager. When that is not possible, the open door goes up the line.' },
@@ -214,10 +621,10 @@ const STORIES = [
 // the mini-games' own quotes (checked too)
 const CLOCK_Q = { sec: '4.7', title: 'Recording Time', quote: 'Immediately before and after any other time away from work.' };
 const HUNT = [
-  { x: 84, y: 101, label: 'Both earbuds in', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'The other ear must remain uncovered to maintain awareness of surroundings, instructions, and alarms.' },
-  { x: 47, y: 66, label: 'Video on a phone', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Watching movies, YouTube, streaming content, or any form of video during work hours is not permitted under any circumstance, including while a machine is running.' },
-  { x: 128, y: 124, label: 'Spill on the floor', sec: '8.2', title: 'General Safety', quote: 'It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.' },
-  { x: 206, y: 102, label: 'Smoking at the machine', sec: '5.10', title: 'Standards of Conduct', quote: 'Smoking in non-designated areas.' },
+  { x: 107, y: 118, label: 'Both earbuds in', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'The other ear must remain uncovered to maintain awareness of surroundings, instructions, and alarms.' },
+  { x: 58, y: 101, label: 'Video on a phone', sec: '6.7', title: 'Personal Cell Phone/Mobile Device Use', quote: 'Watching movies, YouTube, streaming content, or any form of video during work hours is not permitted under any circumstance, including while a machine is running.' },
+  { x: 163, y: 130, label: 'Spill on the floor', sec: '8.2', title: 'General Safety', quote: 'It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.' },
+  { x: 234, y: 101, label: 'Smoking at the machine', sec: '5.10', title: 'Standards of Conduct', quote: 'Smoking in non-designated areas.' },
 ];
 const SORT = [
   { t: 'Customer lists', keep: 1, sec: '9.1', title: 'Confidentiality and Nondisclosure of Trade Secrets', quote: 'customer lists' },
@@ -234,48 +641,58 @@ const panel = document.getElementById('panel'), screen = document.getElementById
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const secName = (b) => (/^\d/.test(b.sec) ? '§' + b.sec + ' ' : '') + b.title;
 const quoteHTML = (b) => '<blockquote><b>From the handbook, ' + esc(secName(b)) + '</b>"' + esc(b.quote) + '"</blockquote>';
-const clearOver = () => screen.querySelectorAll('.mq,.sign,.prompt,.co,.spot').forEach((e) => e.remove());
+const clearOver = () => { screen.querySelectorAll('.mq,.sign,.prompt,.co,.spot').forEach((e) => e.remove()); Lab.els = []; };
 function marquee(title, sub) {
-  const m = document.createElement('div'); m.className = 'mq'; m.innerHTML = '<h2></h2>' + (sub ? '<small></small>' : '');
+  screen.querySelectorAll('.mq').forEach((e) => e.remove());
+  const m = document.createElement('div'); m.className = 'mq' + (reduced ? '' : ' drop'); m.innerHTML = '<h2></h2>' + (sub ? '<small></small>' : '');
   m.querySelector('h2').textContent = title; if (sub) m.querySelector('small').textContent = sub; screen.appendChild(m);
   const place = () => { m.querySelectorAll('i').forEach((b) => b.remove()); const w = m.clientWidth, h = m.clientHeight; if (!w) return; const n = Math.max(12, Math.round((w + h) / 12)), per = 2 * (w + h);
     for (let k = 0; k < n; k++) { const d = k / n * per; let x, y; if (d < w) { x = d; y = 0; } else if (d < w + h) { x = w; y = d - w; } else if (d < 2 * w + h) { x = 2 * w + h - d; y = h; } else { x = 0; y = per - d; } const b = document.createElement('i'); b.style.left = 'calc(' + x.toFixed(1) + 'px - .45cqi)'; b.style.top = 'calc(' + y.toFixed(1) + 'px - .45cqi)'; m.appendChild(b); } };
   requestAnimationFrame(place); if (document.fonts) document.fonts.ready.then(place);
   return m;
 }
-function hud() {
+// callouts on the canvas: shown while the scene's loop is inside their window, hidden while a reaction or badge plays
+const Lab = { els: [],
+  set(list) { this.els.forEach((o) => o.c.remove()); this.els = (list || []).map(([a, b, x, y, text, side]) => { const c = document.createElement('div'); c.className = 'co' + (side === 'l' ? ' l' : ''); c.style.left = (x / W * 100) + '%'; c.style.top = (y / H * 100) + '%'; c.innerHTML = '<span></span><em></em>'; c.querySelector('em').textContent = text; screen.appendChild(c); return { c, a, b, on: false }; }); },
+  tick(t, hide) { for (const o of this.els) { const on = !hide && t >= o.a && t < o.b; if (on !== o.on) { o.on = on; o.c.classList.toggle('on', on); } } } };
+function hud(gain, badge) {
   const n = Object.keys(save.done).length;
   document.getElementById('xpN').textContent = save.xp + ' XP';
   document.getElementById('xpBar').style.transform = 'scaleX(' + (n / STORIES.length) + ')';
-  document.getElementById('badges').innerHTML = STORIES.map((s) => '<span class="' + (save.done[s.id] ? 'on' : '') + '" title="' + esc(s.name) + '"></span>').join('');
+  document.getElementById('badges').innerHTML = STORIES.map((s) => '<span class="' + (save.done[s.id] ? 'on' : '') + (badge === s.id && !reduced ? ' pop' : '') + '" title="' + esc(s.name) + '"></span>').join('');
+  if (gain && !reduced) { const f = document.createElement('span'); f.className = 'xpf'; f.textContent = '+' + gain; document.querySelector('.xp').appendChild(f); setTimeout(() => f.remove(), 1000); }
 }
+const addXP = (n, badge) => { save.xp += n; store(); hud(n, badge); };
 
 // ── modes
-let mode = 'title', T = 0, story = null, beat = 0, scene = {}, keys = {};
-const world = { x: 20, face: 1, target: null, enterOnArrive: null };
-const BW = 100, GAP = 30, X0 = 70;
-const B = STORIES.map((s, i) => ({ s, x: X0 + i * (BW + GAP), w: BW, h: 56 + ((i * 17) % 3) * 10 }));
-const WORLD = X0 + STORIES.length * (BW + GAP) + 40;
-const doorX = (b) => b.x + b.w / 2;
+let mode = 'title', T = 0, story = null, beat = 0, scene = {}, keys = {}, t0 = 0;
+const world = { x: KIOSK - 10, y: WALK, face: 1, target: null, enterOnArrive: null, dist: 0, doors: {}, entering: null, exiting: null, just: null };
+const B = BLD.map((b) => Object.assign({ s: STORIES.find((x) => x.id === b.id) }, b));
 let cam = 0;
+// transitions: a quick fade (between places) or closing bars (into and out of a mini-game); instant with reduced motion
+const snap = document.createElement('canvas'); snap.width = W; snap.height = H; const sctx = snap.getContext('2d'); sctx.imageSmoothingEnabled = false;
+let curtain = null;
+function transition(kind) { if (reduced) return; sctx.clearRect(0, 0, W, H); sctx.drawImage(cv, 0, 0); curtain = { t0: T, kind, dur: kind === 'bars' ? 0.7 : 0.6 }; }
 
 function titleScreen() {
-  mode = 'title'; clearOver(); document.getElementById('touch').classList.remove('on');
-  marquee('First Shift', 'The Advanced handbook game');
+  mode = 'title'; t0 = T; clearOver(); document.getElementById('touch').classList.remove('on');
+  marquee('First Shift', 'The Advanced handbook game'); Lab.set(SC.opening.labels);
   const started = Object.keys(save.done).length || save.xp;
   panel.innerHTML = '<span class="who">Day one</span><p class="say">You are new at Advanced. Walk the street, go into each building, and learn how things work here: from the time clock to the shop floor to the vault. Seven stops, one badge each.</p>' +
     '<div class="row"><span class="link">Pick your shirt</span><div class="swatches" role="group" aria-label="Shirt colour">' + SHIRTS.map((c, i) => '<button type="button" data-sw="' + i + '" aria-pressed="' + (save.shirt === i) + '" style="background:' + c[0] + '" aria-label="Shirt ' + (i + 1) + '"></button>').join('') + '</div></div>' +
     '<div class="row"><button type="button" class="go" id="start">' + (started ? 'Continue' : 'Start your first shift') + '</button>' + (started ? '<button type="button" class="go ghost" id="reset">Start over</button>' : '') + '</div>' +
     '<p class="hint">Walk with the arrow keys or A and D. Press Enter to go into a building. On a phone or tablet, tap a building.</p>';
-  panel.querySelectorAll('[data-sw]').forEach((b) => b.onclick = () => { save.shirt = +b.dataset.sw; store(); titleScreen(); });
-  document.getElementById('start').onclick = streetMode;
+  panel.querySelectorAll('[data-sw]').forEach((b) => b.onclick = () => { save.shirt = +b.dataset.sw; store(); panel.querySelectorAll('[data-sw]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); });
+  document.getElementById('start').onclick = () => { transition('fade'); world.x = KIOSK - 10; world.face = 1; streetMode(); };
   const rs = document.getElementById('reset'); if (rs) rs.onclick = () => { if (confirm('Start over? Your badges and XP will be cleared.')) { save = { done: {}, xp: 0, shirt: save.shirt, seen: {} }; store(); hud(); titleScreen(); } };
-  document.getElementById('start').focus();
+  document.getElementById('start').focus({ preventScroll: true });
 }
-function streetMode(at) {
-  mode = 'world'; clearOver(); story = null; document.getElementById('touch').classList.add('on');
+function streetMode(at, fromId) {
+  mode = 'world'; clearOver(); story = null; scene = {}; document.getElementById('touch').classList.add('on');
   if (typeof at === 'number') world.x = at;
-  B.forEach((b) => { const s = document.createElement('div'); s.className = 'sign' + (save.done[b.s.id] ? ' done' : ''); s.textContent = b.s.name; s.dataset.id = b.s.id; screen.appendChild(s); b.el = s; });
+  world.y = WALK; world.entering = null; world.target = null; world.enterOnArrive = null;
+  if (fromId) { world.exiting = reduced ? null : { t0: T + 0.3 }; world.y = reduced ? WALK : SB + 2; world.doors[fromId] = 1; world.face = 1; }
+  B.forEach((b) => { const s = document.createElement('div'); s.className = 'sign' + (save.done[b.s.id] ? ' done' : ''); s.textContent = b.s.name; screen.appendChild(s); b.el = s; });
   const pr = document.createElement('div'); pr.className = 'prompt'; pr.style.display = 'none'; screen.appendChild(pr); world.prompt = pr;
   const n = Object.keys(save.done).length;
   panel.innerHTML = '<span class="who">The street</span><p class="say">' + (n === STORIES.length ? 'Every building done. Your shift is complete.' : 'Pick a building. ' + (STORIES.length - n) + ' of ' + STORIES.length + ' still to visit.') + '</p>' +
@@ -283,51 +700,65 @@ function streetMode(at) {
   panel.querySelectorAll('[data-b]').forEach((bt) => bt.onclick = () => walkTo(bt.dataset.b));
   const c = document.getElementById('cert'); if (c) c.onclick = certificate;
 }
-function walkTo(id) { const b = B.find((x) => x.s.id === id); if (!b) return; world.target = doorX(b) - 3; world.enterOnArrive = id; }
+function walkTo(id) { const b = B.find((x) => x.s.id === id); if (!b || world.entering) return; world.target = doorX(b) - 3; world.enterOnArrive = id; }
+// at the door: you turn, the door opens, you step in, then the room fades up
+function goIn(id) { if (world.entering) return; const b = B.find((x) => x.s.id === id); if (!b) return; if (reduced) return enter(id); world.x = doorX(b) - 3; world.target = null; world.entering = { id, t0: T }; Snd.door(); }
 function enter(id) {
   const st = STORIES.find((s) => s.id === id); if (!st) return;
+  transition('fade');
   story = st; beat = 0; mode = 'story'; scene = { t0: T }; clearOver(); document.getElementById('touch').classList.remove('on');
-  marquee(st.name, st.sub); world.enterOnArrive = null; world.target = null; step();
+  marquee(st.name, st.sub); Lab.set(SC[id].labels); world.enterOnArrive = null; world.target = null; world.entering = null; step();
 }
-function nextBeat() { beat++; if (beat >= story.beats.length) finishStory(); else step(); }
+function nextBeat() {
+  const was = story.beats[beat]; beat++;
+  if (was && was.game) leaveGame();
+  if (beat >= story.beats.length) finishStory(); else step();
+}
 function step() {
   const b = story.beats[beat];
   if (b.say) return sayBeat(b);
   if (b.q) return askBeat(b);
-  if (b.game === 'clock') return clockGame();
-  if (b.game === 'hunt') return huntGame();
-  if (b.game === 'sort') return sortGame();
+  scene.react = null;
+  transition('bars');
+  if (b.game === 'clock') { marquee('Punch the clock', story.name); Lab.set([]); return clockGame(); }
+  if (b.game === 'hunt') { marquee('Spot the hazards', story.name); Lab.set([]); return huntGame(); }
+  if (b.game === 'sort') { marquee('Protect it or talk about it', story.name); Lab.set([]); return sortGame(); }
+}
+function leaveGame() {
+  transition('bars'); screen.querySelectorAll('.co,.spot').forEach((e) => e.remove());
+  if (scene.hunt) scene.hunt = { on: false, done: true, found: scene.hunt.found };
+  scene.stage = null; marquee(story.name, story.sub); Lab.set(SC[story.id].labels);
 }
 function sayBeat(b) {
   panel.innerHTML = '<span class="who">' + esc(b.who) + '</span><p class="say" id="say"></p><div class="row"><button type="button" class="go" id="nx">Next</button></div>';
   const el = document.getElementById('say'); let i = reduced ? b.say.length : 0;
   const tick = () => { el.textContent = b.say.slice(0, i); if (i < b.say.length) { i += 2; if (i % 8 === 0) Snd.tick(); setTimeout(tick, 22); } };
   tick();
-  const nx = document.getElementById('nx'); nx.onclick = () => { if (i < b.say.length) { i = b.say.length; el.textContent = b.say; } else nextBeat(); }; nx.focus();
+  const nx = document.getElementById('nx'); nx.onclick = () => { if (i < b.say.length) { i = b.say.length; el.textContent = b.say; } else nextBeat(); }; nx.focus({ preventScroll: true });
 }
 function askBeat(b) {
   panel.innerHTML = '<h3 class="q">' + esc(b.q) + '</h3><div class="choices">' + b.choices.map((c, i) => '<button type="button" class="choice" data-c="' + i + '"><kbd>' + (i + 1) + '</kbd>' + esc(c[0]) + '</button>').join('') + '</div><p class="hint">Press 1, 2 or 3, or click an answer.</p>';
   panel.querySelectorAll('[data-c]').forEach((bt) => bt.onclick = () => answer(b, +bt.dataset.c));
-  panel.querySelector('[data-c]').focus();
+  panel.querySelector('[data-c]').focus({ preventScroll: true });
 }
 function answer(b, i) {
   const ok = !!b.choices[i][1], k = story.id + ':' + beat, first = !save.seen[k];
-  if (first) { save.seen[k] = ok ? 1 : 2; if (ok) save.xp += 10; store(); hud(); }
+  if (first) { save.seen[k] = ok ? 1 : 2; if (ok) addXP(10); else store(); }
   ok ? Snd.ok() : Snd.no();
   scene.react = { ok, t: T };
   panel.innerHTML = '<div class="res ' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Right' + (first ? ' · +10 XP' : '') : 'Not quite') + '</div>' +
     (ok ? '' : '<p class="why">The answer is: <b>' + esc(b.choices.find((c) => c[1])[0]) + '</b>.</p>') + '<p class="why">' + esc(b.why || '') + '</p>' + quoteHTML(b) +
     '<div class="row"><button type="button" class="go" id="nx">Continue</button><a class="link" href="' + READ(b.title) + '" target="_blank" rel="noopener">Read the full section</a></div>';
-  const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus();
+  const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus({ preventScroll: true });
 }
 function finishStory() {
-  const first = !save.done[story.id]; save.done[story.id] = true; if (first) save.xp += 25; store(); hud(); Snd.badge();
-  scene.badge = T;
+  const first = !save.done[story.id]; save.done[story.id] = true; if (first) addXP(25, story.id); else { store(); hud(); } Snd.badge();
+  scene.badge = T; scene.react = null; marquee('Badge earned', story.name); Lab.set([]);
   const n = Object.keys(save.done).length;
   panel.innerHTML = '<div class="res ok">Badge earned: ' + esc(story.name) + (first ? ' · +25 XP' : '') + '</div><p class="why">' + n + ' of ' + STORIES.length + ' buildings done.</p>' +
     '<div class="row"><button type="button" class="go" id="nx">Back to the street</button>' + (n === STORIES.length ? '<button type="button" class="go ghost" id="cert">See your certificate</button>' : '') + '</div>';
-  const b = B.find((x) => x.s.id === story.id);
-  document.getElementById('nx').onclick = () => streetMode(doorX(b) - 3); document.getElementById('nx').focus();
+  const b = B.find((x) => x.s.id === story.id), id = story.id;
+  document.getElementById('nx').onclick = () => { transition('fade'); world.just = { id, t: T + 0.3 }; streetMode(doorX(b) - 3, id); }; document.getElementById('nx').focus({ preventScroll: true });
   const c = document.getElementById('cert'); if (c) c.onclick = certificate;
 }
 
@@ -338,117 +769,124 @@ function clockGame() {
     '<div class="row"><button type="button" class="go" id="punch">Punch</button><span class="link" id="cs">0 of ' + EV.length + '</span></div>';
   const trk = document.getElementById('trk');
   const evs = EV.map((t, i) => { const e = document.createElement('div'); e.className = 'ev'; e.textContent = t; trk.appendChild(e); return { e, at: 2.8 + i * 2.6, done: false }; }); // the first one arrives about 3 s in, from the right edge
-  const g = { t0: performance.now(), hits: 0, over: false, evs };
-  scene.clock = g;
-  const pos = (ev, now) => 1.15 - ((now - g.t0) / 1000 - ev.at + 2.4) / 2.6 * 0.93; // fraction of the track; 0.22 is the line
+  const gm = { t0: performance.now(), hits: 0, over: false, evs };
+  scene.clock = gm; scene.stage = 'clockStage'; scene.punches = [];
+  const pos = (ev, now) => 1.15 - ((now - gm.t0) / 1000 - ev.at + 2.4) / 2.6 * 0.93; // fraction of the track; 0.22 is the line
   const tickG = (now) => {
-    if (mode !== 'story' || scene.clock !== g) return;
+    if (mode !== 'story' || scene.clock !== gm) return;
     let live = false;
     for (const ev of evs) { const p = pos(ev, now); ev.e.style.left = (p * 100) + '%'; if (!ev.done && p < 0.12) { ev.done = true; ev.e.classList.add('miss'); } if (!ev.done || p > -0.3) live = true; }
     if (live) requestAnimationFrame(tickG); else endClock();
   };
   const punch = () => {
-    if (g.over) return; scene.punch = 0.001; scene.punchT = T; const now = performance.now();
+    if (gm.over) return; const now = performance.now();
     const ev = evs.find((x) => !x.done && Math.abs(pos(x, now) - 0.22) < 0.07);
-    if (ev) { ev.done = true; ev.e.classList.add('hit'); g.hits++; Snd.ok(); } else Snd.no();
-    document.getElementById('cs').textContent = g.hits + ' of ' + EV.length;
+    if (ev) { ev.done = true; ev.e.classList.add('hit'); gm.hits++; Snd.ok(); } else Snd.no();
+    scene.punches.push({ t: T, ok: !!ev });
+    document.getElementById('cs').textContent = gm.hits + ' of ' + EV.length;
   };
   const endClock = () => {
-    if (g.over) return; g.over = true; const k = story.id + ':clock';
-    if (!save.seen[k]) { save.seen[k] = 1; save.xp += g.hits * 3; store(); hud(); }
-    panel.innerHTML = '<div class="res ' + (g.hits >= 5 ? 'ok' : 'no') + '">' + g.hits + ' of ' + EV.length + ' punches on time</div>' +
+    if (gm.over) return; gm.over = true; const k = story.id + ':clock';
+    if (!save.seen[k]) { save.seen[k] = 1; addXP(gm.hits * 3); }
+    panel.innerHTML = '<div class="res ' + (gm.hits >= 5 ? 'ok' : 'no') + '">' + gm.hits + ' of ' + EV.length + ' punches on time</div>' +
       '<p class="why">Every one of those moments gets a punch: before your shift, before and after lunch, before and after any other time away, and when you finish.</p>' + quoteHTML(CLOCK_Q) +
       '<div class="row"><button type="button" class="go" id="nx">Continue</button><button type="button" class="go ghost" id="again">Try again</button><a class="link" href="' + READ(CLOCK_Q.title) + '" target="_blank" rel="noopener">Read the full section</a></div>';
-    document.getElementById('nx').onclick = nextBeat; document.getElementById('again').onclick = clockGame; document.getElementById('nx').focus();
+    document.getElementById('nx').onclick = nextBeat; document.getElementById('again').onclick = clockGame; document.getElementById('nx').focus({ preventScroll: true });
   };
-  document.getElementById('punch').onclick = punch; g.punch = punch; document.getElementById('punch').focus();
+  document.getElementById('punch').onclick = punch; gm.punch = punch; document.getElementById('punch').focus({ preventScroll: true });
   requestAnimationFrame(tickG);
 }
-// ── mini-game: spot what is wrong on the floor
+// ── mini-game: spot what is wrong on the floor. Each find gets a red ring in the picture and gets fixed there
 function huntGame() {
-  scene.hunt = { found: {} };
+  scene.hunt = { on: true, found: {} };
   panel.innerHTML = '<h3 class="q">Spot four things that need fixing</h3><p class="why">Click or tap what is wrong in the picture. Tab moves between spots on a keyboard.</p><div id="hl"></div><p class="link" id="hc">0 of 4 found</p>';
   HUNT.forEach((h, i) => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'spot'; b.style.left = (h.x / W * 100) + '%'; b.style.top = (h.y / H * 100) + '%'; b.setAttribute('aria-label', 'Look here, spot ' + (i + 1));
     b.onclick = () => {
-      if (scene.hunt.found[i]) return; scene.hunt.found[i] = true; b.classList.add('found'); Snd.ok();
-      const c = document.createElement('div'); c.className = 'co' + (h.x > W * 0.6 ? ' l' : ''); c.style.left = (h.x / W * 100) + '%'; c.style.top = ((h.y - 14) / H * 100) + '%'; c.innerHTML = '<span></span><em></em>'; c.querySelector('em').textContent = h.label; screen.appendChild(c);
-      document.getElementById('hl').insertAdjacentHTML('beforeend', quoteHTML(h));
+      if (!scene.hunt || scene.hunt.found[i] != null) return; scene.hunt.found[i] = T; b.classList.add('found'); b.setAttribute('aria-label', h.label + ', found'); Snd.ok();
+      document.getElementById('hl').insertAdjacentHTML('beforeend', '<p class="found-name">' + esc(h.label) + '</p>' + quoteHTML(h));
       const n = Object.keys(scene.hunt.found).length; document.getElementById('hc').textContent = n + ' of 4 found';
-      if (n === 4) { const k = story.id + ':hunt'; if (!save.seen[k]) { save.seen[k] = 1; save.xp += 12; store(); hud(); }
-        document.getElementById('hc').insertAdjacentHTML('afterend', '<div class="row"><button type="button" class="go" id="nx">Continue</button></div>'); const nx = document.getElementById('nx'); nx.onclick = () => { clearOver(); marquee(story.name, story.sub); nextBeat(); }; nx.focus(); }
+      if (n === 4) { const k = story.id + ':hunt'; if (!save.seen[k]) { save.seen[k] = 1; addXP(12); }
+        document.getElementById('hc').insertAdjacentHTML('afterend', '<div class="row"><button type="button" class="go" id="nx">Continue</button></div>'); const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus({ preventScroll: true }); }
     };
     screen.appendChild(b);
   });
 }
-// ── mini-game: what stays in the vault
+// ── mini-game: what stays in the vault. Each answer sends a folder to the safe or to the table
 function sortGame() {
-  let done = 0;
+  let done = 0; scene.stage = 'sortStage'; scene.sorted = [];
   panel.innerHTML = '<h3 class="q">Protect it, or OK to talk about?</h3><div class="sort" id="srt">' + SORT.map((s, i) => '<div class="card" data-i="' + i + '"><span>' + esc(s.t) + '</span><button type="button" class="go ghost" data-a="1">Protect it</button><button type="button" class="go ghost" data-a="0">OK to talk about</button></div>').join('') + '</div>';
   panel.querySelectorAll('.card').forEach((c) => c.querySelectorAll('[data-a]').forEach((bt) => bt.onclick = () => {
     const s = SORT[+c.dataset.i], ok = +bt.dataset.a === s.keep; if (c.dataset.done) return; c.dataset.done = 1; done++;
+    scene.sorted.push({ pick: +bt.dataset.a, keep: s.keep, t: T });
     c.classList.add(ok ? 'ok' : 'no'); ok ? Snd.ok() : Snd.no(); c.querySelectorAll('button').forEach((x) => { x.disabled = true; });
     c.insertAdjacentHTML('beforeend', '<small>' + (ok ? 'Right. ' : 'Not quite. ') + (s.keep ? 'This is confidential: need to know only. ' : 'You are free to talk about this. ') + esc(secName(s)) + ': "' + esc(s.quote) + '"</small>');
-    if (ok) { const k = story.id + ':sort' + c.dataset.i; if (!save.seen[k]) { save.seen[k] = 1; save.xp += 4; store(); hud(); } }
-    if (done === SORT.length) { panel.insertAdjacentHTML('beforeend', '<div class="row"><button type="button" class="go" id="nx">Continue</button><a class="link" href="' + READ('Confidentiality and Nondisclosure of Trade Secrets') + '" target="_blank" rel="noopener">Read the full section</a></div>'); const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus(); }
+    if (ok) { const k = story.id + ':sort' + c.dataset.i; if (!save.seen[k]) { save.seen[k] = 1; addXP(4); } }
+    if (done === SORT.length) { panel.insertAdjacentHTML('beforeend', '<div class="row"><button type="button" class="go" id="nx">Continue</button><a class="link" href="' + READ('Confidentiality and Nondisclosure of Trade Secrets') + '" target="_blank" rel="noopener">Read the full section</a></div>'); const nx = document.getElementById('nx'); nx.onclick = nextBeat; nx.focus({ preventScroll: true }); }
+    else { const nxt = panel.querySelector('.card:not([data-done]) [data-a]'); if (nxt) nxt.focus({ preventScroll: true }); }
   }));
-  panel.querySelector('[data-a]').focus();
+  panel.querySelector('[data-a]').focus({ preventScroll: true });
 }
 function certificate() {
-  mode = 'cert'; clearOver(); marquee('Shift complete', 'All seven buildings'); document.getElementById('touch').classList.remove('on');
+  transition('fade'); mode = 'cert'; t0 = T; clearOver(); marquee('Shift complete', 'All seven buildings'); Lab.set(SC.finale.labels); document.getElementById('touch').classList.remove('on'); Snd.fin();
   const d = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   panel.innerHTML = '<div class="cert"><h2>First Shift: complete</h2><p>All seven buildings of the Advanced handbook game, ' + save.xp + ' XP, finished ' + esc(d) + '.</p><p style="font-size:14px">Practice only. It does not replace the Acknowledgment of Receipt and Review of the handbook, which is signed with HR.</p></div>' +
     '<div class="row"><button type="button" class="go" onclick="print()">Print</button><button type="button" class="go ghost" id="back">Back to the street</button></div>';
-  document.getElementById('back').onclick = () => streetMode(); scene.cert = T;
+  document.getElementById('back').onclick = () => { transition('fade'); streetMode(); };
 }
 
-// ── drawing
-function drawWorld(t) {
-  r(0, 0, W, H, P.sky); for (let i = 0; i < 24; i++) px((i * 53 + Math.floor(cam * 0.1)) % W, (i * 29) % 50, i % 4 ? P.st0 : P.st1);
-  for (let i = 0; i < 10; i++) { const x = ((i * 110) - cam * 0.4) % (W + 120) - 60; r(x, 60 - (i % 3) * 8, 70, 60, P.wall); r(x + 50, 40 - (i % 3) * 8, 8, 22, P.wall2); }
-  r(0, G, W, H - G, P.floor); r(0, G, W, 1, P.floor2); r(0, G + 1, W, 1, P.red2); for (let x = -((cam) % 16); x < W; x += 16) r(x, G + 12, 8, 1, P.floor2);
-  B.forEach((b, i) => {
-    const x = b.x - cam; if (x > W + 10 || x + b.w < -10) return;
-    box(x, G - b.h, b.w, b.h, 4, P.st1, P.st2, P.st0); r(x, G - b.h, b.w, 3, b.s.color);
-    for (let wy = G - b.h + 10; wy < G - 30; wy += 12) for (let wx = x + 8; wx < x + b.w - 12; wx += 16) { if (Math.abs(wx + 4 - doorX(b) + cam) < 12) continue; r(wx, wy, 8, 7, ((wx + wy + i) % 3) ? '#2a3a4c' : '#d9c27a'); }
-    const dx = doorX(b) - cam; r(dx - 8, G - 24, 16, 24, P.dark); r(dx - 8, G - 25, 16, 1, b.s.color); px(dx + 4, G - 12, P.st3);
-    if (save.done[b.s.id]) disc(dx, G - 30, 2, P.green);
-    if (b.el) { b.el.style.left = ((dx) / W * 100) + '%'; b.el.style.top = ((G - b.h - 8) / H * 100) + '%'; b.el.style.display = (dx > -20 && dx < W + 20) ? '' : 'none'; }
-  });
-  const moving = !!(keys.l || keys.r || world.target != null);
-  person(world.x - cam, G, moving ? Math.floor(t * 8) % 2 : 'stand', { ...me(), face: world.face });
+// ── the frame loop
+function updateWorld(dt) {
+  const w = world;
+  if (w.entering) { const a = T - w.entering.t0; w.back = a > 0.08; w.face = 1; w.y = lerp(WALK, SB + 2, E(a, 0.18, 0.6)); w.doors[w.entering.id] = 1; if (a >= 0.66) { const id = w.entering.id; enter(id); } return; }
+  if (w.exiting) { const a = T - w.exiting.t0; w.back = false; w.y = lerp(SB + 2, WALK, E(a, 0, 0.45)); if (a >= 0.5) { w.exiting = null; w.y = WALK; } }
+  else w.back = false;
+  let v = 0; if (keys.l) v -= 1; if (keys.r) v += 1;
+  if (v) { w.target = null; w.enterOnArrive = null; }
+  if (w.target != null && !w.exiting) { const d = w.target - w.x; if (Math.abs(d) < 1.5) { w.x = w.target; w.target = null; if (w.enterOnArrive) { const id = w.enterOnArrive; w.enterOnArrive = null; goIn(id); return; } } else v = Math.sign(d); }
+  if (v && !w.exiting) { w.face = v; const nx = clamp(w.x + v * 62 * dt, 6, WORLD - 14); w.dist += Math.abs(nx - w.x); w.x = nx; w.moving = true; } else w.moving = false;
+  B.forEach((b) => { const near = Math.abs(doorX(b) - (w.x + 3)) < 18 ? 1 : 0, cur = w.doors[b.id] || 0; w.doors[b.id] = reduced ? near : clamp(cur + Math.sign(near - cur) * dt * 5); });
 }
 function frame(now) {
-  const t = now / 1000, dt = Math.min(0.05, t - (frame.last || t)); frame.last = t; T = t;
-  if (mode === 'world' || mode === 'title') {
-    if (mode === 'world') {
-      let v = 0; if (keys.l) v -= 1; if (keys.r) v += 1;
-      if (v) world.target = null;
-      if (world.target != null) { const d = world.target - world.x; if (Math.abs(d) < 1.5) { world.x = world.target; world.target = null; if (world.enterOnArrive) { const id = world.enterOnArrive; world.enterOnArrive = null; enter(id); } } else v = Math.sign(d); }
-      if (v) { world.face = v; world.x = clamp(world.x + v * 62 * dt, 6, WORLD - 14); }
-    } else world.x = 40 + Math.sin(t * 0.4) * 30 + 30;
-    cam = clamp(world.x - W * 0.4, 0, WORLD - W);
-    if (mode === 'world' || mode === 'title') drawWorld(t);
-    if (mode === 'world' && world.prompt) { const near = B.find((b) => Math.abs(doorX(b) - (world.x + 3)) < 14); world.near = near ? near.s.id : null;
-      if (near) { world.prompt.style.display = ''; world.prompt.textContent = 'Enter: go into ' + near.s.name; world.prompt.style.left = ((doorX(near) - cam) / W * 100) + '%'; world.prompt.style.top = ((G + 6) / H * 100) + '%'; } else world.prompt.style.display = 'none'; }
-  } else if (mode === 'story' && story) {
-    const st = scene.punch != null ? { punch: scene.punchT ? T - scene.punchT : 0 } : {};
-    story.interior(t - scene.t0, st);
-    if (story.beats[beat] && story.beats[beat].game === 'hunt') drawHazards(t);
-    if (scene.react && T - scene.react.t < 1.2) { const k = (T - scene.react.t) / 1.2; disc(W - 24, 30 - k * 8, 8, scene.react.ok ? P.green : P.red); if (scene.react.ok) { r(W - 28, 30 - k * 8, 3, 2, P.paper); r(W - 25, 31 - k * 8, 6, 2, P.paper); } else r(W - 28, 29 - k * 8, 8, 2, P.paper); }
-    if (scene.badge && T - scene.badge < 3) { const k = E(T - scene.badge, 0, .5); box(W / 2 - 14, 70 - k * 20, 28, 28, 3, story.color, P.paper, P.st1); disc(W / 2, 84 - k * 20, 6, P.paper); }
-  } else if (mode === 'cert') { cam = 0; drawWorld(t); for (let i = 0; i < 30; i++) { const y = ((t * 30 + i * 37) % 140); px((i * 47) % W, y, [P.red, P.amber, P.green, P.blueL][i % 4]); } }
-  // marquee bulbs chase
+  const t = now / 1000, dt = Math.min(0.1, t - (frame.last || t)); frame.last = t; T = t;
+  try {
+    if (mode === 'title') { const L = SC.opening.L, lt = reduced ? 9.6 : (T - t0) % L; SC.opening.draw(g, lt, { me: me() }); Lab.tick(lt, !!curtain); }
+    else if (mode === 'world') drawWorld(dt);
+    else if (mode === 'story' && story) drawStory();
+    else if (mode === 'cert') { const L = SC.finale.L, lt = reduced ? 11 : (T - t0) % L; SC.finale.draw(g, lt, { me: me() }); }
+    if (curtain) { const k = (T - curtain.t0) / curtain.dur;
+      if (k >= 1) curtain = null;
+      else { const first = k < 0.5, a = first ? k / 0.5 : (1 - k) / 0.5; if (first) ctx.drawImage(snap, 0, 0);
+        if (curtain.kind === 'fade') g.r(0, 0, W, H, 'rgba(10,11,12,' + a.toFixed(3) + ')');
+        else { const h = Math.round(a * (H / 2 + 1) / 4) * 4; g.r(0, 0, W, h, P.dark); g.r(0, H - h, W, h, P.dark); if (h > 6) { g.r(0, h - 2, W, 2, P.red2); g.r(0, H - h, W, 2, P.red2); } } } }
+  } catch (e) { if (!frame.err) { frame.err = 1; console.error('First Shift scene stopped: ' + e.message); } }
   const k = Math.floor(now / 160) % 3; screen.querySelectorAll('.mq i').forEach((b, i) => b.classList.toggle('lit', !reduced && i % 3 === k));
   requestAnimationFrame(frame);
 }
-function drawHazards(t) {
-  // both earbuds (a white dot each side of the head), a phone playing video on the machine, a coolant spill, smoke by the far machine
-    r(79, G - 17, 2, 2, P.paper); r(86, G - 17, 2, 2, P.paper); r(81, G - 19, 5, 1, P.st1);
-  r(43, G - 56, 8, 12, P.dark); r(44, G - 55, 6, 9, Math.floor(t * 3) % 2 ? P.blueL : P.blueT);
-  for (let i = 0; i < 26; i++) r(112 + i, G + 4 + Math.round(Math.sin(i / 3) * 1.5), 1, 4, i % 5 ? '#4a6a7a' : '#6a8a9a');
-  person(208, G, 'stand', { shirt: P.st2, shirtD: P.st1, face: -1 }); r(204, G - 9, 4, 1, P.paper); px(203, G - 9, P.red);
-  for (let k = 0; k < 4; k++) px(203 - k + Math.round(Math.sin(t * 2 + k) * 1.5), G - 12 - k * 3 - ((t * 8) % 3), P.st3);
+function drawWorld(dt) {
+  updateWorld(dt); if (mode !== 'world') return;
+  const w = world; cam = Math.round(clamp(w.x - W * 0.4, 0, WORLD - W));
+  const walking = w.entering || w.exiting, pose = walking && !reduced ? gait((WALK - w.y) * 1.3) : w.moving ? gait(w.dist) : 'stand';
+  const just = w.just && w.just.id;
+  SC.street.draw(g, T, { cam, me: me(), doors: w.doors, done: save.done, just, justAge: w.just ? Math.max(0, T - w.just.t) : 9, kioskLit: true,
+    player: { x: w.x, y: w.y, face: w.face, pose, back: w.back } });
+  B.forEach((b) => { if (!b.el) return; const dx = doorX(b) - cam; b.el.style.left = (dx / W * 100) + '%'; b.el.style.top = ((SB - b.h - 6) / H * 100) + '%'; b.el.style.display = (dx > -20 && dx < W + 20) ? '' : 'none'; });
+  if (w.prompt) { const near = !w.entering && B.find((b) => Math.abs(doorX(b) - (w.x + 3)) < 14); w.near = near ? near.s.id : null;
+    if (near) { w.prompt.style.display = ''; w.prompt.textContent = 'Enter: go into ' + near.s.name; w.prompt.style.left = ((doorX(near) - cam) / W * 100) + '%'; w.prompt.style.top = ((WALK + 4) / H * 100) + '%'; } else w.prompt.style.display = 'none'; }
+}
+function drawStory() {
+  const age = T - scene.t0, still = reduced, id = story.id;
+  const st = { age: still ? 9 : age, still, me: me() };
+  if (scene.react) st.react = { ok: scene.react.ok, age: T - scene.react.t };
+  if (scene.hunt) { const f = {}; Object.keys(scene.hunt.found).forEach((i) => { f[i] = T - scene.hunt.found[i]; }); st.hunt = { on: scene.hunt.on, done: scene.hunt.done, found: f }; }
+  let sc = SC[id], L = sc.L;
+  if (scene.stage === 'clockStage') { sc = SC.clockStage; L = sc.L; st.punches = scene.punches.map((p) => ({ ok: p.ok, age: T - p.t })); st.hits = scene.clock ? scene.clock.hits : 0; st.clockAt = scene.clock ? (performance.now() - scene.clock.t0) / 1000 : 0; }
+  else if (scene.stage === 'sortStage') { sc = SC.sortStage; L = sc.L; st.sorted = scene.sorted.map((x) => ({ pick: x.pick, keep: x.keep, age: T - x.t })); }
+  const lt = still ? L * 0.3 : age % L;
+  sc.draw(g, lt, st);
+  const bAge = scene.badge != null ? (still ? 3 : T - scene.badge) : null;
+  if (bAge != null) drawBadge(g, id, bAge);
+  Lab.tick(lt, bAge != null || (st.react && st.react.age < 1.6) || !!scene.stage || !!curtain);
 }
 
 // ── input
@@ -456,17 +894,18 @@ const keyMap = { ArrowLeft: 'l', a: 'l', A: 'l', ArrowRight: 'r', d: 'r', D: 'r'
 addEventListener('keydown', (e) => {
   if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
   if (mode === 'world' && keyMap[e.key]) { keys[keyMap[e.key]] = true; e.preventDefault(); return; }
-  if (mode === 'world' && (e.key === 'Enter' || e.key === 'e' || e.key === 'E') && world.near && !(e.target && e.target.tagName === 'BUTTON')) { e.preventDefault(); enter(world.near); return; }
+  if (mode === 'world' && (e.key === 'Enter' || e.key === 'e' || e.key === 'E') && world.near && !(e.target && /^(BUTTON|A)$/.test(e.target.tagName))) { e.preventDefault(); goIn(world.near); return; }
   if (mode === 'story' && /^[1-3]$/.test(e.key)) { const b = panel.querySelector('[data-c="' + (+e.key - 1) + '"]'); if (b) { e.preventDefault(); b.click(); } }
   if (mode === 'story' && e.key === ' ' && scene.clock && !scene.clock.over) { e.preventDefault(); scene.clock.punch(); }
-  if (e.key === 'Escape' && mode === 'story') { const b = B.find((x) => x.s.id === story.id); streetMode(doorX(b) - 3); }
+  if (e.key === 'Escape' && mode === 'story') { const b = B.find((x) => x.s.id === story.id); transition('fade'); streetMode(doorX(b) - 3, story.id); }
 });
 addEventListener('keyup', (e) => { if (keyMap[e.key]) keys[keyMap[e.key]] = false; });
-document.getElementById('touch').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; const k = b.dataset.t; if (k === 'go') { if (world.near) enter(world.near); return; } keys[k === 'left' ? 'l' : 'r'] = true; });
+addEventListener('blur', () => { keys.l = keys.r = false; });
+document.getElementById('touch').addEventListener('pointerdown', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; const k = b.dataset.t; if (k === 'go') { if (world.near) goIn(world.near); return; } keys[k === 'left' ? 'l' : 'r'] = true; });
 addEventListener('pointerup', () => { keys.l = keys.r = false; });
 screen.addEventListener('click', (e) => {
-  if (mode !== 'world') return; const rc = cv.getBoundingClientRect(), wx = (e.clientX - rc.left) / rc.width * W + cam, wy = (e.clientY - rc.top) / rc.height * H;
-  const b = B.find((x) => wx >= x.x && wx <= x.x + x.w && wy >= G - x.h - 10 && wy <= G); if (b) walkTo(b.s.id); else { world.target = clamp(wx, 6, WORLD - 14); world.enterOnArrive = null; }
+  if (mode !== 'world' || world.entering) return; const rc = cv.getBoundingClientRect(), wx = (e.clientX - rc.left) / rc.width * W + cam, wy = (e.clientY - rc.top) / rc.height * H;
+  const b = B.find((x) => wx >= x.x && wx <= x.x + x.w && wy >= SB - x.h - 10 && wy <= SB + 22); if (b) walkTo(b.s.id); else { world.target = clamp(wx, 6, WORLD - 14); world.enterOnArrive = null; }
 });
 
 hud(); titleScreen(); requestAnimationFrame(frame);
