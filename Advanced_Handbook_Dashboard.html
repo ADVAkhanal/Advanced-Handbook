@@ -3217,7 +3217,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     g.person(120, G, 'stand', { shirt: MGR.shirt, shirtD: MGR.shirtD, hair: MGR.hair, skin: MGR.skin, face: -1, reach: t > 5 && wave(1) });
     g.person(132, G, 'stand', { shirt: P.greenD, shirtD: '#1f6a45', hair: '#222', skin: P.skin2, face: -1, cap: P.amber, reach: t > 5 && wave(0) });
     // HR steps forward with the handbook
-    var hr = g.walk(t, 96, 76, 2.6, 3.8), back = g.walk(t, 0, 18, 5.4, 6.6), hold = t > 3.8 && t < 4.6;
+    var hr = g.walk(t, 96, 80, 2.6, 3.8), back = g.walk(t, 0, 16, 5.4, 6.6), hold = t > 3.8 && t < 4.6;
     g.person(hr.x + back.x, G, hr.pose !== 'stand' ? hr.pose : back.pose, { shirt: HR.shirt, shirtD: HR.shirtD, hair: HR.hair, skin: HR.skin, face: t > 5.4 ? 1 : -1, hold: hold ? P.red : null });
     // new hire enters
     var nh = g.walk(t, 14, 64, 1.0, 3.4);
@@ -3422,7 +3422,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   /* 3.5 Job Descriptions: a worker climbs three steps (operator levels) while duty lines appear on the job description sheet the manager holds up. */
-  HB_SCENES['3.5'] = { L: 9, labels: ['Job description', 'Your role'], pts: [[125, 46], [56, 72, -1]], draw: function (g, t) {
+  HB_SCENES['3.5'] = { L: 9, labels: ['Job description', 'Your role'], pts: [[125, 46], [55, 75, -1]], draw: function (g, t) {
     g.room('#1c1f22');
     // three steps with tools
     g.box(22, 82, 26, 12, 3, P.st1, P.st2, P.st0); g.box(48, 70, 26, 24, 3, P.st1, P.st2, P.st0); g.box(74, 58, 26, 36, 3, P.st1, P.st2, P.st0);
@@ -3546,7 +3546,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   /* Religious Accommodation: an employee talks with the manager at the shift board; two schedule blocks swap places, then the employee heads out at the adjusted time. */
-  HB_SCENES['OK-Religious Accommodation'] = { L: 10, labels: ['Accommodation', 'Schedule'], pts: [[77, 85, -1], [66, 42]], draw: function (g, t) {
+  HB_SCENES['OK-Religious Accommodation'] = { L: 10, labels: ['Accommodation', 'Schedule'], pts: [[67, 50], [66, 42]], draw: function (g, t) {
     g.room('#1f1c20');
     // shift schedule board: 7 columns x 3 rows
     g.box(10, 28, 62, 34, 2, P.st1, P.st2, P.st0); g.r(12, 30, 58, 30, P.dark);
@@ -3615,7 +3615,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 4.2 Business Expenses: dinner meeting with a customer; the senior employee pays, the receipt flies onto the expense report.
-  HB_SCENES['4.2'] = { L: 10, labels: ['Receipts', 'Expenses'], pts: [[67, 71, -1], [129, 39]], draw: function (g, t) {
+  HB_SCENES['4.2'] = { L: 10, labels: ['Receipts', 'Expenses'], pts: [[72, 52], [129, 39]], draw: function (g, t) {
     var r = g.r, x, i, j;
     r(0, 0, W, G, '#2b1d1a'); r(0, 62, W, 32, '#3a2620'); r(0, 62, W, 1, '#5a3a2a');
     for (x = 0; x < W; x += 10) r(x, 63, 1, 31, '#2e1f1a');
@@ -3693,7 +3693,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 4.4 Introduction to Wage and Hour Policies: an employee brings a question to the manager, who explains the factors on the board.
-  HB_SCENES['4.4'] = { L: 9, labels: ['Your compensation', 'Your manager'], pts: [[80, 40, 1], [81, 85, -1]], draw: function (g, t) {
+  HB_SCENES['4.4'] = { L: 9, labels: ['Your compensation', 'Your manager'], pts: [[80, 40, 1], [80, 52]], draw: function (g, t) {
     var r = g.r, x, k;
     r(0, 0, W, G, '#20252f'); for (x = 6; x < W; x += 20) r(x, 0, 1, G, '#252b36');
     r(0, G, W, H - G, '#2c2733'); for (x = 0; x < W; x += 6) r(x, G + 4 + ((x / 6) % 2) * 8, 3, 1, '#352f3d'); r(0, G, W, 1, P.red2);
@@ -3837,7 +3837,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 4.9 Use of Employer Credit Cards: night gas station; company truck fuels on the card, the receipt goes to the manager.
-  HB_SCENES['4.9'] = { L: 9, labels: ['Company card', 'Receipts'], pts: [[79, 94], [130, 66]], draw: function (g, t) {
+  HB_SCENES['4.9'] = { L: 9, labels: ['Company card', 'Receipts'], pts: [[86, 64, 1], [134, 64]], draw: function (g, t) {
     var r = g.r, k, w, reach = false, hold = null;
     r(0, 0, W, 92, '#0e1118'); for (k = 0; k < 8; k++) if (Math.sin(t * 2.5 + k * 2.1) > 0) g.p((k * 41 + 7) % 160, 26 + (k * 5) % 10, P.st2);
     r(0, 92, W, 28, '#1b1d21'); r(10, 92, 140, 4, '#2a2d31');
@@ -3845,7 +3845,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     // canopy
     r(14, 30, 132, 6, P.st3); r(14, 36, 132, 2, P.red); r(14, 38, 132, 1, P.st1);
     for (k = 0; k < 4; k++) r(26 + k * 32, 39, 14, 1, Math.sin(t * 7 + k * 3) > 0.9 ? P.st3 : P.lamp);
-    r(30, 39, 4, 53, P.st2); r(126, 39, 4, 53, P.st2);
+    r(31, 39, 2, 53, P.st2); r(127, 39, 2, 53, P.st2); // slim canopy posts
     r(34, 90, 92, 2, '#2e2f2a');
     // kiosk with manager in the doorway
     g.box(136, 58, 22, 34, 2, '#3a3f46', '#4a5058', '#2a2e33'); r(140, 62, 14, 10, P.lamp); r(146, 74, 9, 18, '#2a2116');
@@ -3900,7 +3900,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // OK-Meal and Rest Periods: break room; a sandwich is eaten bite by bite while a coworker rests on the couch with a coffee.
-  HB_SCENES['OK-Meal and Rest Periods'] = { L: 10, labels: ['Meal break', 'Rest break'], pts: [[93, 63, -1], [120, 66]], draw: function (g, t) {
+  HB_SCENES['OK-Meal and Rest Periods'] = { L: 10, labels: ['Meal break', 'Rest break'], pts: [[93, 63, -1], [116, 66]], draw: function (g, t) {
     var r = g.r, k, x;
     r(0, 0, W, G, '#2e2a22'); r(0, 66, W, 28, '#3a352b');
     for (x = 0; x < W; x += 6) r(x, 66, 1, 28, '#332e25'); for (k = 72; k < G; k += 6) r(0, k, W, 1, '#332e25');
@@ -3995,7 +3995,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 8.2 General Safety: a worker spots a spill, sets a cone, and reports it to the manager, who logs it.
-  HB_SCENES['8.2'] = { L: 10, labels: ['Report hazards', 'Safety rules'], pts: [[73, 98, -1], [115, 42]], draw: function (g, t) {
+  HB_SCENES['8.2'] = { L: 10, labels: ['Report hazards', 'Safety rules'], pts: [[73, 102, -1], [115, 42]], draw: function (g, t) {
     var r = g.r, x, k, w, face = -1;
     r(0, 0, W, G, '#232a2e'); for (x = 0; x < W; x += 8) { r(x, 66, 4, 4, P.amber); r(x + 4, 66, 4, 4, P.dark); }
     r(0, G, W, H - G, '#363b3f'); r(0, G, W, 1, P.red2); r(0, 108, W, 1, P.amberD);
@@ -4086,7 +4086,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   // Batch C: Performance & Conduct, Trade Secrets, Closing (16 exclusive scenes)
   
   // 5.1 Criminal Activity/Arrests: night street outside, shop inside; worker comes in from off property and lights his slot on the shift board.
-  HB_SCENES['5.1'] = { L: 9, labels: ['On or off property', 'Ready to work'], pts: [[23, 45, 1], [135, 68]], draw: function (g, t) {
+  HB_SCENES['5.1'] = { L: 9, labels: ['On or off property', 'Ready to work'], pts: [[23, 45, 1], [138, 68]], draw: function (g, t) {
     var r = g.r, i;
     g.room('#1f2328');
     r(0, 0, 64, G, '#10151c');
@@ -4158,7 +4158,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
       r(x + 6, 46, 8, 4, i === 2 ? P.st0 : (i === 0 ? P.blue : P.st2));
       g.p(x + 10, 41, Math.floor(t * 2 + i) % 3 ? P.lamp : P.amberD);
     }
-    var w = t < 5 ? g.walk(t, -8, 49, 0.1, 1.8) : g.walk(t, 49, 93, 5.2, 6.8);
+    var w = t < 5 ? g.walk(t, -8, 51, 0.1, 1.8) : g.walk(t, 51, 95, 5.2, 6.8); // stops a clear step from each listener
     g.person(w.x, G, w.pose, { face: (t > 2 && t < 5) || t > 7 ? -1 : 1, hold: t > 8.8 ? P.green : P.amber });
     g.bubble(44, 46, 14, (t > 2.5 && t < 3.5) || (t > 7.5 && t < 8.3));
     g.bubble(26, 46, 14, t > 3.6 && t < 4.6);
@@ -4188,7 +4188,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   }};
   
   // 5.5 Pay Raises: worker runs a machine, the performance meter fills as parts stack up, then the manager brings a pay envelope.
-  HB_SCENES['5.5'] = { L: 9, labels: ['Performance', 'Pay raise'], pts: [[108, 36], [61, 70]], draw: function (g, t) {
+  HB_SCENES['5.5'] = { L: 9, labels: ['Performance', 'Pay raise'], pts: [[108, 36], [114, 64, 1]], draw: function (g, t) {
     var r = g.r, i;
     g.room('#1b2023');
     g.machine(8, t);
@@ -4207,7 +4207,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   }};
   
   // 5.6 Performance Improvement: at a whiteboard the manager draws a three-step plan the worker asked for; each step gets a check.
-  HB_SCENES['5.6'] = { L: 10, labels: ['Improvement plan', 'Your manager'], pts: [[27, 82, 1], [21, 87, 1]], draw: function (g, t) {
+  HB_SCENES['5.6'] = { L: 10, labels: ['Improvement plan', 'Your manager'], pts: [[37, 80, 1], [37, 86, 1]], draw: function (g, t) {
     var r = g.r, i;
     g.room('#1e2226');
     r(24, 26, 112, 48, P.st2); r(26, 28, 108, 44, '#c8cdd1'); r(56, 74, 48, 2, P.st1); r(60, 72, 6, 2, P.red); r(70, 72, 6, 2, P.blue);
@@ -4222,7 +4222,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     for (i = 0; i < 2; i++) { var k = clamp(p * 3 - i - 0.6, 0, 1) ; if (k > 0) r(bx[i][0] + 22, bx[i][1] + 4, Math.round(8 * k), 1, P.red2); }
     if (t > 7.5) r(96, 35, 22, 1, Math.floor(t * 4) % 2 ? P.amber : P.red);
     // the whiteboard stands on two legs; 'Improvement plan' points at the left leg, its tag on the clear wall below the board
-    r(24, 74, 3, 20, P.st1); r(133, 74, 3, 20, P.st1);
+    r(34, 74, 3, 20, P.st1); r(123, 74, 3, 20, P.st1);
     g.person(12, G, 'stand', { shirt: MGR.shirt, shirtD: MGR.shirtD, hair: MGR.hair, skin: MGR.skin, reach: t > 1.4 && t < 7 });
     g.person(142, G, 'stand', { face: -1, glasses: true });
     g.bubble(134, 50, 14, t > 0.3 && t < 1.4);
@@ -4255,7 +4255,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   }};
   
   // 5.8 Promotions: the worker's red name plate climbs the org board while he steps up from a floor machine to a raised lead station.
-  HB_SCENES['5.8'] = { L: 10, labels: ['Promotion', 'Next role'], pts: [[67, 61], [141, 56]], draw: function (g, t) {
+  HB_SCENES['5.8'] = { L: 10, labels: ['Promotion', 'Next role'], pts: [[67, 61], [147, 51, -1]], draw: function (g, t) {
     var r = g.r, i;
     g.room('#1c1f25');
     r(10, 26, 64, 56, P.st1); r(12, 28, 60, 52, P.dark);
@@ -4330,12 +4330,12 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     g.bubble(48, 50, 14, t > 4.5 && t < 8.5); // 'after you', up while 'Respect' points at it
     var b = g.walk(t, -14, 150, 4.6, 8.4);
     // the loaded coworker walks the near aisle (feet lower = in front), clear of both people standing further back
-    g.person(b.x, 113, b.pose, { hold: P.card, shirt: P.greenD, shirtD: '#1f6342' });
-    r(b.x + 7, 99, 14, 3, P.card);
+    g.person(b.x, 114, b.pose, { hold: P.card, shirt: P.greenD, shirtD: '#1f6342' });
+    r(b.x + 7, 100, 14, 3, P.card);
   }};
   
   // 5.11 Transfers: from the blue team's bay through the partition doorway to the green team's bay; the worker's cap changes and the new team waves.
-  HB_SCENES['5.11'] = { L: 10, labels: ['Transfer', 'New team'], pts: [[80, 59], [104, 84]], draw: function (g, t) {
+  HB_SCENES['5.11'] = { L: 10, labels: ['Transfer', 'New team'], pts: [[80, 59], [83, 59]], draw: function (g, t) {
     var r = g.r, i;
     g.room('#1b1f24');
     r(0, 24, 76, 70, '#1a2331'); r(84, 24, 76, 70, '#1a2a21');
@@ -4432,7 +4432,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   }};
   
   // Closing Statement: outside the shop at night the handbook on its stand closes while the windows light up and the team waves from the door.
-  HB_SCENES['CLOSE-Closing Statement'] = { L: 10, labels: ['Closing', 'Thank you'], pts: [[40, 76], [85, 76, -1]], draw: function (g, t) {
+  HB_SCENES['CLOSE-Closing Statement'] = { L: 10, labels: ['Closing', 'Thank you'], pts: [[40, 76], [83, 54, -1]], draw: function (g, t) {
     var r = g.r, i;
     r(0, 0, 160, 120, '#121722');
     for (i = 0; i < 12; i++) if ((i * 5 + Math.floor(t * 2)) % 4) g.p((i * 37 + 7) % 150 + 4, 26 + (i * 11) % 24, i % 3 ? P.st2 : P.st4);
@@ -4528,7 +4528,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 6.2 Evening company party outdoors: string lights come on, the team arrives at the table and raises a toast.
-  HB_SCENES['6.2'] = { L: 10, labels: ['Company event', 'Team'], pts: [[80, 67, -1], [32, 87, -1]], draw: function (g, t) {
+  HB_SCENES['6.2'] = { L: 10, labels: ['Company event', 'Team'], pts: [[80, 67, -1], [97, 67, 1]], draw: function (g, t) {
     var r = g.r, k, x, y;
     r(0, 0, W, H, '#121722');
     for (k = 0; k < 16; k++) g.p((k * 37 + 11) % W, 4 + (k * 23) % 34, (Math.floor(t * 2) + k) % 4 ? '#3a4456' : P.st3);
@@ -4606,7 +4606,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 6.4 A coworker offers a flyer at the workbench during work time, is waved off, and hands it over later in the break room.
-  HB_SCENES['6.4'] = { L: 10, labels: ['Solicitation', 'Work time'], pts: [[96, 70], [40, 38]], draw: function (g, t) {
+  HB_SCENES['6.4'] = { L: 10, labels: ['Solicitation', 'Work time'], pts: [[96, 67], [40, 38]], draw: function (g, t) {
     var r = g.r, k, a;
     r(0, 0, 98, H, '#1e2124'); r(98, 0, 62, H, '#2b221b');
     r(0, G, 98, H - G, '#2a2d31'); r(98, G, 62, H - G, '#33281f'); r(0, G, W, 1, '#3a3d42'); r(0, G + 1, W, 1, P.red2);
@@ -4640,7 +4640,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 6.5 Night: a worker arrives at the closed building, signs the log sheet by the door, goes in, lights come on.
-  HB_SCENES['6.5'] = { L: 10, labels: ['Off duty', 'Log-in sheet'], pts: [[140, 30], [108, 70, 1]], draw: function (g, t) {
+  HB_SCENES['6.5'] = { L: 10, labels: ['Off duty', 'Log-in sheet'], pts: [[140, 30], [108, 67, 1]], draw: function (g, t) {
     var r = g.r, k, y;
     r(0, 0, W, H, '#10141c');
     for (k = 0; k < 18; k++) g.p((k * 41 + 7) % W, 3 + (k * 17) % 30, (Math.floor(t * 1.5) + k) % 5 ? '#3a4456' : P.st3);
@@ -4737,7 +4737,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 6.8 A worker who moved brings a new-address form to the HR counter; HR swaps the card and the mail finds the new home.
-  HB_SCENES['6.8'] = { L: 9, labels: ['Address', 'HR'], pts: [[115, 68, 1], [136, 85, 1]], draw: function (g, t) {
+  HB_SCENES['6.8'] = { L: 9, labels: ['Address', 'HR'], pts: [[115, 68, 1], [124, 71, 1]], draw: function (g, t) {
     var r = g.r, k, i;
     r(0, 0, W, H, '#24201c'); for (k = 0; k < W; k += 16) r(k, 26, 1, G - 26, '#2a2520');
     r(0, G, W, H - G, '#2f2a25'); r(0, G, W, 1, '#3d362f'); r(0, G + 1, W, 1, P.red2);
@@ -4771,7 +4771,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 6.9 Night: the drawer and door get locked, lights go off, a dropped key is noticed and reported to the manager.
-  HB_SCENES['6.9'] = { L: 10, labels: ['Lock up', 'Report lost keys'], pts: [[122, 69], [119, 69]], draw: function (g, t) {
+  HB_SCENES['6.9'] = { L: 10, labels: ['Lock up', 'Report lost keys'], pts: [[122, 69], [120, 68]], draw: function (g, t) {
     var r = g.r, lit = t < 4.6, k;
     r(0, 0, W, H, lit ? '#22252b' : '#15171b'); for (k = 0; k < W; k += 20) r(k, 0, 1, G, lit ? '#272b31' : '#191b1f');
     r(0, G, W, H - G, lit ? '#2c3036' : '#1b1d21'); r(0, G, W, 1, '#33373d'); r(0, G + 1, W, 1, P.red2);
@@ -5007,7 +5007,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 7.2 Bereavement Leave: a quiet porch at dusk, a single lamp comes on and the employee sits a while with a cup of tea
-  HB_SCENES['7.2'] = { L: 10, labels: ['Bereavement', 'Time off'], pts: [[78, 46, -1], [79, 82, -1]], draw: function (g, t) {
+  HB_SCENES['7.2'] = { L: 10, labels: ['Bereavement', 'Time off'], pts: [[78, 46, -1], [69, 88, -1]], draw: function (g, t) {
     var sky = ['#10131c', '#151a26', '#1c2130', '#262832', '#33302f', '#3e3330'], i;
     for (i = 0; i < 6; i++) g.r(0, i * 16, W, 16, sky[i]);
     for (i = 0; i < 12; i++) { if (i < t * 1.6 && (Math.floor(t * 1.5) + i) % 4) g.p((i * 37 + 5) % 66, 28 + (i * 13) % 26, '#8a90a0'); }
@@ -5119,7 +5119,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 7.6 EAP: an employee slips into a warm counselling room; the door closes, a privacy light glows, and they talk
-  HB_SCENES['7.6'] = { L: 9, labels: ['EAP', 'Confidential'], pts: [[101, 71], [28, 62, 1]], draw: function (g, t) {
+  HB_SCENES['7.6'] = { L: 9, labels: ['EAP', 'Confidential'], pts: [[95, 78, -1], [28, 62, 1]], draw: function (g, t) {
     var i;
     g.r(0, 0, W, G, '#2a2019'); for (i = 3; i < W; i += 6) g.r(i, 0, 1, G, '#2e231b');
     g.r(0, G, W, H - G, '#3a2c22'); g.r(36, G + 4, 88, 14, '#6e3a32'); g.r(38, G + 5, 84, 12, '#5a2e2a');
@@ -5201,7 +5201,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 7.9 FSA: a pay slice and receipts drop into a kitchen-table jar; later reimbursement coins hop back to the wallet
-  HB_SCENES['7.9'] = { L: 9, labels: ['FSA', 'Spending account'], pts: [[86, 40], [131, 85]], draw: function (g, t) {
+  HB_SCENES['7.9'] = { L: 9, labels: ['FSA', 'Spending account'], pts: [[86, 40], [68, 40, -1]], draw: function (g, t) {
     var i;
     g.r(0, 0, W, G, '#25262e'); for (i = 0; i < W; i += 8) g.r(i, 40, 1, 24, '#2e3040'); for (i = 40; i < 64; i += 8) g.r(0, i, W, 1, '#2e3040');
     g.r(0, G, W, H - G, '#30282a'); g.r(0, G, W, 1, '#3e3436');
@@ -5209,18 +5209,19 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
     g.box(8, 64, 140, 5, 2, P.wood, P.woodT, P.woodS); g.r(12, 69, 3, G - 69, P.woodS); g.r(140, 69, 3, G - 69, P.woodS);
     g.paper(16, 50, 16, 14, P.green);
     g.r(42, 52, 12, 12, P.paper); g.r(42, 52, 12, 2, P.st3); g.r(47, 55, 2, 6, P.red); g.r(45, 57, 6, 2, P.red);
-    var lvl = Math.round(E(t, 0.3, 6.5) * 16 - E(t, 6.8, 8.6) * 12);
+    // the jar fills in the first half, so the wall left of it is clear while 'Spending account' is up
+    var lvl = Math.round(E(t, 0.3, 4.4) * 16 - E(t, 6.8, 8.6) * 12);
     g.r(70, 42, 22, 22, '#22323e'); g.r(71, 63 - lvl, 20, lvl, P.paper); for (i = 63 - lvl + 1; i < 63; i += 2) g.r(72, i, 18, 1, P.line);
     g.r(70, 42, 1, 22, P.blueL); g.r(91, 42, 1, 22, P.blueL); g.r(70, 63, 22, 1, P.blueL); g.r(69, 39, 24, 3, P.green);
     var ph = (t % 1.5) / 1.5, src = Math.floor(t / 1.5) % 2;
-    if (t < 6.5 && ph < 0.6) { var q = ph / 0.6, sx = src ? 24 : 48; g.r(Math.round(lerp(sx, 78, q)), Math.round(48 - Math.sin(q * Math.PI) * 14), 4, src ? 2 : 4, src ? P.green : P.paper); }
+    if (t < 4.4 && ph < 0.6) { var q = ph / 0.6, sx = src ? 24 : 48; g.r(Math.round(lerp(sx, 78, q)), Math.round(48 - Math.sin(q * Math.PI) * 14), 4, src ? 2 : 4, src ? P.green : P.paper); }
     g.r(110, 58, 16, 6, P.woodS); g.r(110, 58, 16, 1, P.wood); g.r(122, 60, 3, 2, P.amber);
     if (t > 6.8) { for (i = 0; i < 3; i++) { var cq = ((t - 6.8) * 1.2 + i * 0.33) % 1; g.r(Math.round(lerp(84, 116, cq)), Math.round(40 - Math.sin(cq * Math.PI) * 12 + cq * 16), 2, 2, P.amber); } }
-    g.person(134, G, 'stand', { face: -1, shirt: '#7a3a3a', shirtD: '#5a2a2a', hold: t < 6.5 && ph > 0.6 ? P.paper : null });
+    g.person(134, G, 'stand', { face: -1, shirt: '#7a3a3a', shirtD: '#5a2a2a', hold: t < 4.4 && ph > 0.6 ? P.paper : null });
   } };
   
   // 7.10 Health Insurance: an employee and their child visit the clinic; the doctor listens while the monitor beats steadily
-  HB_SCENES['7.10'] = { L: 9, labels: ['Health insurance', 'Dependents'], pts: [[97, 70], [52, 90, -1]], draw: function (g, t) {
+  HB_SCENES['7.10'] = { L: 9, labels: ['Health insurance', 'Dependents'], pts: [[92, 70], [62, 77, -1]], draw: function (g, t) {
     var i;
     g.r(0, 0, W, G, '#2a191b'); g.r(0, 66, W, G - 66, '#321e20'); g.r(0, 66, W, 1, '#4a2a2c');
     g.r(0, G, W, H - G, '#3a2a2c'); for (i = 0; i < W; i += 10) g.r(i, G, 1, H - G, '#44323a');
@@ -5365,7 +5366,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 7.16 Unemployment Compensation: a worker carrying a box crosses a gap on a temporary plank bridge toward a lit building
-  HB_SCENES['7.16'] = { L: 9, labels: ['Unemployment', 'Temporary income'], pts: [[50, 70], [50, 71]], draw: function (g, t) {
+  HB_SCENES['7.16'] = { L: 9, labels: ['Unemployment', 'Temporary income'], pts: [[45, 69], [49, 71]], draw: function (g, t) {
     var i;
     var sky = ['#0d1218', '#10161e', '#141c26', '#1a2430', '#262a34'];
     for (i = 0; i < 5; i++) g.r(0, i * 19, W, 19, sky[i]);
@@ -5386,7 +5387,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // 7.17 Workers' Compensation: a small injury at the machine is reported to the manager, the first-aid kit opens, the form is filled
-  HB_SCENES['7.17'] = { L: 10, labels: ['Report any injury', 'Your manager'], pts: [[62, 66], [109, 69]], draw: function (g, t) {
+  HB_SCENES['7.17'] = { L: 10, labels: ['Report any injury', 'Your manager'], pts: [[62, 66], [126, 46]], draw: function (g, t) {
     var i;
     g.r(0, 0, W, G, '#25231d'); for (i = 12; i < W; i += 28) g.r(i, 0, 1, G, '#2a2822');
     g.r(0, G, W, H - G, '#2f2e28'); for (i = 0; i < W; i += 8) g.r(i, G + 9, 4, 2, P.amber); g.r(0, G + 9, W, 0, P.dark);
@@ -5412,7 +5413,7 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   } };
   
   // OK-Jury Duty: the employee shows the summons to their manager, then takes the empty seat in the jury box as the gavel falls
-  HB_SCENES['OK-Jury Duty Leave'] = { L: 10, labels: ['Notify your manager', 'Jury duty'], pts: [[133, 98, -1], [29, 45]], draw: function (g, t) {
+  HB_SCENES['OK-Jury Duty Leave'] = { L: 10, labels: ['Notify your manager', 'Jury duty'], pts: [[133, 102], [98, 47, 1]], draw: function (g, t) {
     var i;
     g.r(0, 0, W, G, '#3a2a1c'); for (i = 10; i < 132; i += 20) g.r(i, 26, 1, G - 26, '#2e2116');
     g.r(0, 70, 132, G - 70, '#2e2116'); g.r(0, 70, 132, 1, '#4a3622');
