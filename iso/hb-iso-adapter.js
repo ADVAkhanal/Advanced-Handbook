@@ -23,7 +23,7 @@
   'use strict';
   if (window.HBIso) return;
 
-  var VERSION = '2';   /* cache key for the kit and batch files: v1.1 kit */
+  var VERSION = '4';   /* cache key for the kit and batch files: v1.2.1 kit (named characters, sharper faces) */
   /* batch files, one per group of policies (each registers window.HB_ISO['<section id>'] = spec) */
   var BATCHES = ['hb-iso-A.js', 'hb-iso-B.js', 'hb-iso-C.js', 'hb-iso-D.js'];
   /* ids that are known to have a spec, so the first open shows a placeholder instead of the old scene while the files load.

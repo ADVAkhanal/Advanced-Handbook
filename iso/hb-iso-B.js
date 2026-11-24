@@ -349,7 +349,7 @@
             S.lit = (t > 0.9 && t < 2.8) || t > 6.2; S.litRow = t > 1.5 && t < 4.4 ? 1 : t > 6.2 ? 2 : -1; S.done = t > 4.4 ? 2 : 1;
             world(g, fx, S);
           } }),
-        step(2, { title: 'NEVER OFF THE CLOCK', sub: 'Falsifying time entries is prohibited', cam: cam3, key: ['machine'], big: { n: 'ALL', label: 'hours worked are paid', pos: 'left' },
+        step(2, { title: 'NEVER OFF THE CLOCK', sub: 'Falsifying time entries is prohibited', cam: cam3, key: ['machine'], big: { n: 'ALL', label: 'hours worked are paid', pos: 'bottom-right' },
           cap: ['Working off the clock is falsifying time', 'Tell HR about any pay discrepancy'],
           build: function (t, g, fx) {
             var S = base(); S.done = 5; S.lit = true; S.run = t < 3.6 ? 1 : 0; S.lamp = t < 3.6 ? 'green' : 'red'; S.no = t > 1.2;
@@ -454,7 +454,7 @@
           cap: ['Submit all receipts to your manager', 'Report lost or stolen cards immediately'],
           build: function (t, g, fx) {
             var S = base(); S.lit = true;
-            S.ch = fx.walk([[33, 17], [40, 18], [46, 16]], t, 0.4, 2.2, { endDir: 0 });
+            S.ch = fx.walk([[33, 17], [40, 18], [44, 16]], t, 0.4, 2.2, { endDir: 0 });
             S.chO = { hold: t < 2.4 ? P.paper : undefined, holdSize: [4, 3], arm: t > 4.2 && t < 6.2 ? 'out' : 'down', card: t > 4.2 && t < 6.2 ? P.red : undefined };
             S.mgO = { arm: t > 2.4 && t < 3.6 ? 'out' : 'down' }; S.bins = t > 3.4 ? 3 : 1;
             S.lampOn = t > 4.4; S.lamp = 'red';
