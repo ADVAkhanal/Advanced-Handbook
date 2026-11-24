@@ -1,0 +1,185 @@
+{
+  "_about": "Fact table for handbook batch A (iso/hb-iso-A.js). For each policy: the words or number shown on a sign, caption, chip, note or big card (use), the sentence of that policy's own text it comes from (from), and whether it is the same words (exact) or a plain-language restatement (paraphrase). tools/check-iso-facts-A.mjs fails when a from is not in the policy text, when an exact use is not inside its from, when a number or form name shown is not in the text, or when a big card has no claim.",
+  "policies": {
+    "1.0": { "claims": [
+      { "use": "1979", "from": "from the early days in 1979", "kind": "exact" },
+      { "use": "the early days", "from": "from the early days in 1979", "kind": "exact" },
+      { "use": "A small machine shop, 1979", "from": "What started as a small machine shop", "kind": "paraphrase" },
+      { "use": "Operators become leaders", "from": "start as operators and grow into supervisors", "kind": "paraphrase" },
+      { "use": "Fathers and sons side by side", "from": "fathers and sons work side by side", "kind": "paraphrase" },
+      { "use": "We love seeing our people grow", "from": "we love seeing our people grow", "kind": "exact" }
+    ] },
+    "1.1": { "claims": [
+      { "use": "HR", "from": "contact HR", "kind": "exact" },
+      { "use": "for any questions", "from": "If you have questions about your employment or any provisions in this handbook, contact HR", "kind": "paraphrase" },
+      { "use": "Sign the acknowledgment", "from": "Sign the acknowledgment at the end", "kind": "exact" },
+      { "use": "You have just joined us", "from": "You have just joined a dedicated organization", "kind": "paraphrase" },
+      { "use": "Read it carefully", "from": "read this handbook carefully", "kind": "paraphrase" },
+      { "use": "It sets out the basic rules", "from": "sets out the basic rules and guidelines", "kind": "paraphrase" }
+    ] },
+    "1.2": { "claims": [
+      { "use": "AT WILL", "from": "on an \"at-will\" basis", "kind": "paraphrase" },
+      { "use": "either side, any time", "from": "may be terminated at any time", "kind": "paraphrase" },
+      { "use": "Any time, with or without notice", "from": "at any time, with or without notice", "kind": "exact" },
+      { "use": "You may leave at any time", "from": "we respect your right to leave Advanced Companies at any time", "kind": "paraphrase" },
+      { "use": "The company may end it at any time", "from": "your employment may be terminated at any time", "kind": "paraphrase" }
+    ] },
+    "2.1": { "claims": [
+      { "use": "VALUES", "from": "The Company's Core Values", "kind": "exact" },
+      { "use": "spelled by our name", "from": "comprised of the ADVANCED name used as an acronym", "kind": "paraphrase" },
+      { "use": "Our name is an acronym", "from": "the ADVANCED name used as an acronym", "kind": "paraphrase" },
+      { "use": "Accountability", "from": "Accountability", "kind": "exact" },
+      { "use": "Dedication", "from": "Dedication", "kind": "exact" },
+      { "use": "Versatility", "from": "Versatility", "kind": "exact" },
+      { "use": "Advancement", "from": "Advancement", "kind": "exact" },
+      { "use": "Nurture", "from": "Nurture", "kind": "exact" },
+      { "use": "Craftsmanship", "from": "Craftsmanship", "kind": "exact" },
+      { "use": "Excellence", "from": "Excellence", "kind": "exact" },
+      { "use": "Drive", "from": "Drive", "kind": "exact" }
+    ] },
+    "2.2": { "claims": [
+      { "use": "SECRETS", "from": "trade secrets", "kind": "exact" },
+      { "use": "need-to-know basis only", "from": "only disseminated on a need-to-know basis", "kind": "paraphrase" },
+      { "use": "Honesty, fairness, respect", "from": "honesty, fairness, respect", "kind": "exact" },
+      { "use": "Only if you are specifically authorized", "from": "unless specifically authorized", "kind": "paraphrase" },
+      { "use": "Unless you are authorized", "from": "unless specifically authorized", "kind": "paraphrase" },
+      { "use": "We do business honestly", "from": "ADVANCED will conduct business honestly and ethically", "kind": "paraphrase" }
+    ] },
+    "2.3": { "claims": [
+      { "use": "WRITTEN", "from": "typically in a written supplement to the handbook", "kind": "exact" },
+      { "use": "supplement or posting", "from": "a written supplement to the handbook or in a posting on company bulletin boards", "kind": "paraphrase" },
+      { "use": "It is not a contract", "from": "The handbook is not a contract", "kind": "paraphrase" },
+      { "use": "ADVANCED may revise, add or delete", "from": "ADVANCED reserves the right to revise, add, or delete from this handbook", "kind": "paraphrase" },
+      { "use": "Changes reach you in a timely fashion", "from": "communicate them in a timely fashion", "kind": "paraphrase" },
+      { "use": "Or it comes as a written supplement", "from": "typically in a written supplement to the handbook", "kind": "paraphrase" }
+    ] },
+    "3.1": { "claims": [
+      { "use": "MANAGER", "from": "you must disclose it to your manager", "kind": "exact" },
+      { "use": "is who you tell", "from": "you must disclose it to your manager", "kind": "paraphrase" },
+      { "use": "You must disclose it", "from": "you must disclose it to your manager", "kind": "exact" },
+      { "use": "ADVANCED takes the steps it needs", "from": "ADVANCED will take such steps as it deems necessary", "kind": "paraphrase" },
+      { "use": "You and a supplier or competitor", "from": "between you and a competitor, supplier, distributor, or contractor", "kind": "paraphrase" }
+    ] },
+    "3.2": { "claims": [
+      { "use": "THIRD", "from": "no later than the third business day", "kind": "exact" },
+      { "use": "business day deadline", "from": "no later than the third business day following the start of employment", "kind": "paraphrase" },
+      { "use": "Section 1 of federal Form I-9", "from": "Section 1 of federal Form I-9", "kind": "exact" },
+      { "use": "Complete Section 1 on day one", "from": "complete Section 1 of federal Form I-9 on the first day of paid employment", "kind": "paraphrase" },
+      { "use": "The first day of paid employment", "from": "the first day of paid employment", "kind": "exact" },
+      { "use": "No later than the third business day", "from": "no later than the third business day", "kind": "exact" },
+      { "use": "They prove identity and work authorization", "from": "proving identity and employment authorization", "kind": "paraphrase" }
+    ] },
+    "3.3": { "claims": [
+      { "use": "INFORM", "from": "inform ADVANCED of any such potential conflict", "kind": "exact" },
+      { "use": "about a possible conflict", "from": "inform ADVANCED of any such potential conflict", "kind": "paraphrase" },
+      { "use": "Supervision, safety, security, morale", "from": "supervision, safety, confidentiality, security, and morale", "kind": "paraphrase" },
+      { "use": "It is your obligation", "from": "It is your obligation to inform ADVANCED", "kind": "exact" },
+      { "use": "Relatives and friends at work", "from": "We will not employ friends or relatives", "kind": "paraphrase" }
+    ] },
+    "3.4": { "claims": [
+      { "use": "PWFA", "from": "Pregnant Workers Fairness Act (PWFA)", "kind": "exact" },
+      { "use": "the federal act", "from": "federal Pregnant Workers Fairness Act", "kind": "paraphrase" },
+      { "use": "Seating, parking, hours, safety apparel", "from": "Seating", "kind": "paraphrase" },
+      { "use": "A closer space and a seat", "from": "Closer parking", "kind": "paraphrase" },
+      { "use": "Flexible hours and safety apparel", "from": "Flexible hours", "kind": "paraphrase" },
+      { "use": "Pregnancy, childbirth, related conditions", "from": "pregnancy, childbirth, or other related medical conditions", "kind": "paraphrase" },
+      { "use": "Tell your manager", "from": "notify your manager", "kind": "paraphrase" }
+    ] },
+    "3.5": { "claims": [
+      { "use": "OUTLINE", "from": "serve as an outline only", "kind": "exact" },
+      { "use": "only, not every duty", "from": "you may be required to perform job duties that are not within your written job description", "kind": "paraphrase" },
+      { "use": "Operator, machinist, deburr technician", "from": "Deburr Technician", "kind": "paraphrase" },
+      { "use": "Duties can change with business needs", "from": "revise, add to, or delete from your job duties per business needs", "kind": "paraphrase" },
+      { "use": "Every position has a description", "from": "a job description for each position", "kind": "paraphrase" },
+      { "use": "Duties not in your written description", "from": "job duties that are not within your written job description", "kind": "paraphrase" }
+    ] },
+    "3.6": { "claims": [
+      { "use": "90", "from": "The first 90 days", "kind": "exact" },
+      { "use": "days, introductory period", "from": "The first 90 days of your employment is considered an introductory period", "kind": "paraphrase" },
+      { "use": "The first 90 days", "from": "The first 90 days", "kind": "exact" },
+      { "use": "Ninety days", "from": "The first 90 days", "kind": "paraphrase" },
+      { "use": "Management and Human Resources decide", "from": "can be shortened or lengthened as deemed appropriate by management and Human Resources", "kind": "paraphrase" }
+    ] },
+    "3.7": { "claims": [
+      { "use": "CONSULT", "from": "consult your manager", "kind": "exact" },
+      { "use": "your manager for more", "from": "If you ever feel you require additional training, consult your manager", "kind": "paraphrase" },
+      { "use": "Your department manager leads it", "from": "determined on an individual basis by the department manager", "kind": "paraphrase" },
+      { "use": "Our own procedures and your position", "from": "learn our specific procedures, as well as the responsibilities of the specific position", "kind": "paraphrase" }
+    ] },
+    "OK-Disability Accommodation": { "claims": [
+      { "use": "NO", "from": "will not discriminate or retaliate against employees for requesting an accommodation", "kind": "paraphrase" },
+      { "use": "retaliation for asking", "from": "will not discriminate or retaliate against employees for requesting an accommodation", "kind": "paraphrase" },
+      { "use": "An interactive dialogue", "from": "engage in an interactive dialogue", "kind": "exact" },
+      { "use": "Medical information stays confidential", "from": "All medical information received by the Company in connection with a request for accommodation will be treated as confidential", "kind": "paraphrase" },
+      { "use": "What is needed and why, and how it helps", "from": "The reason you need accommodation", "kind": "paraphrase" },
+      { "use": "You tell your manager", "from": "it is your responsibility to notify your managers", "kind": "paraphrase" }
+    ] },
+    "OK-EEO Statement and Non harassme": { "claims": [
+      { "use": "HR", "from": "immediately notify HR or any member of management", "kind": "exact" },
+      { "use": "or any manager", "from": "notify HR or any member of management", "kind": "paraphrase" },
+      { "use": "Tell HR or any member of management", "from": "notify HR or any member of management", "kind": "paraphrase" },
+      { "use": "HR investigates promptly and thoroughly", "from": "We will promptly and thoroughly investigate any claim", "kind": "paraphrase" },
+      { "use": "Kept confidential", "from": "we will retain the confidentiality of those who report", "kind": "paraphrase" },
+      { "use": "Free of harassment and retaliation", "from": "free of harassment, discrimination, or retaliation", "kind": "paraphrase" },
+      { "use": "Action is taken where it is needed", "from": "take appropriate action where we find a claim has merit", "kind": "paraphrase" },
+      { "use": "Equal opportunity for all of us", "from": "committed to the principles of equal employment", "kind": "paraphrase" }
+    ] },
+    "OK-Religious Accommodation": { "claims": [
+      { "use": "NEVER", "from": "At no time will the Company question the validity of a person's belief", "kind": "paraphrase" },
+      { "use": "questioned: your belief", "from": "At no time will the Company question the validity of a person's belief", "kind": "paraphrase" },
+      { "use": "Dress code, schedule or duties", "from": "the Company dress code or the individual's schedule, basic job duties", "kind": "paraphrase" },
+      { "use": "Speak with your manager", "from": "speak with your manager", "kind": "exact" },
+      { "use": "We respect diverse beliefs", "from": "recognizes the diversity of their religious beliefs", "kind": "paraphrase" },
+      { "use": "We treat everyone equally", "from": "dedicated to treating its employees equally and with respect", "kind": "paraphrase" },
+      { "use": "The company considers your request", "from": "The Company will consider the request", "kind": "paraphrase" }
+    ] },
+    "4.1": { "claims": [
+      { "use": "ADVANCE", "from": "reasonable advance notice to your manager", "kind": "exact" },
+      { "use": "notice to your manager", "from": "advance notice to your manager", "kind": "exact" },
+      { "use": "Reasonable advance notice", "from": "reasonable advance notice", "kind": "exact" },
+      { "use": "You may be asked for documentation", "from": "You may be required to provide documentation", "kind": "paraphrase" },
+      { "use": "You will be late or away", "from": "you will be absent or late", "kind": "paraphrase" }
+    ] },
+    "4.2": { "claims": [
+      { "use": "$25", "from": "does not reimburse cost over $25 for business gifts", "kind": "exact" },
+      { "use": "business gift limit", "from": "does not reimburse cost over $25 for business gifts", "kind": "paraphrase" },
+      { "use": "Use the standard expense report form", "from": "standard expense report form", "kind": "paraphrase" },
+      { "use": "The most senior person pays and reports", "from": "The most senior ADVANCED individual present is to pay for and report all expenses", "kind": "paraphrase" },
+      { "use": "A valid business purpose", "from": "a valid business purpose", "kind": "exact" },
+      { "use": "With a customer, a vendor or colleagues", "from": "customers, vendors, or other ADVANCED employees", "kind": "paraphrase" },
+      { "use": "Gifts need approval first", "from": "only under exceptional circumstances and with prior approval", "kind": "paraphrase" },
+      { "use": "Add the date, the place and who came", "from": "date, place, and the participants", "kind": "paraphrase" }
+    ] },
+    "4.3": { "claims": [
+      { "use": "30", "from": "within 30 calendar days", "kind": "exact" },
+      { "use": "calendar days, typically", "from": "Typically, the bank will begin the direct deposit of your payroll within 30 calendar days", "kind": "paraphrase" },
+      { "use": "Ask HR for an application form", "from": "ask HR for an application form", "kind": "exact" },
+      { "use": "Direct deposit is encouraged", "from": "ADVANCED encourages all employees to enroll in direct deposit", "kind": "paraphrase" },
+      { "use": "A written explanation of deductions", "from": "a written explanation of your deductions will be provided to you on paydays", "kind": "paraphrase" },
+      { "use": "The direct deposit application", "from": "ask HR for an application form", "kind": "paraphrase" }
+    ] },
+    "4.4": { "claims": [
+      { "use": "Surveys", "from": "pay scale surveys", "kind": "exact" },
+      { "use": "Effort", "from": "individual effort", "kind": "exact" },
+      { "use": "Profits", "from": "profits", "kind": "exact" },
+      { "use": "Market forces", "from": "market forces", "kind": "exact" },
+      { "use": "Time off", "from": "paid time off", "kind": "exact" },
+      { "use": "Commissions", "from": "commissions", "kind": "exact" },
+      { "use": "Overtime", "from": "overtime", "kind": "exact" },
+      { "use": "Benefits", "from": "benefits", "kind": "exact" },
+      { "use": "SPEAK", "from": "speak with your manager", "kind": "exact" },
+      { "use": "with your manager", "from": "speak with your manager", "kind": "exact" },
+      { "use": "A wide range of factors", "from": "depends on a wide range of factors", "kind": "exact" },
+      { "use": "Speak with your manager", "from": "speak with your manager", "kind": "exact" }
+    ] },
+    "4.5": { "claims": [
+      { "use": "THREE", "from": "three consecutive days", "kind": "exact" },
+      { "use": "days in a row", "from": "three consecutive days", "kind": "paraphrase" },
+      { "use": "Considered resigned", "from": "you will be considered to have abandoned your job and voluntarily resigned", "kind": "paraphrase" },
+      { "use": "After three days the job is treated as left", "from": "you will be considered to have abandoned your job and voluntarily resigned", "kind": "paraphrase" },
+      { "use": "Consecutive days with no call", "from": "fail to call in with an acceptable reason for the absence for a period of three consecutive days", "kind": "paraphrase" },
+      { "use": "Still no acceptable reason", "from": "acceptable reason for the absence", "kind": "paraphrase" },
+      { "use": "No show and no call", "from": "fail to show up for work or fail to call in", "kind": "paraphrase" }
+    ] }
+  }
+}
