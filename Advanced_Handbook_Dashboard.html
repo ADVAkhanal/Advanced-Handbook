@@ -5597,6 +5597,20 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
 })();
 </script>
 
+<!-- Policy links: ?section=4.6 (or #section=4.6) opens that policy and highlights it. The Hub and other pages link here. Additive: remove this block to take it out. -->
+<script id="policy-link-v1">
+(function () {
+  var m = /[?&]section=([^&#]+)/.exec(location.search) || /[#&]section=([^&#]+)/.exec(location.hash);
+  if (!m) return;
+  var id; try { id = decodeURIComponent(m[1]).slice(0, 80); } catch (e) { return; }
+  var tries = 0;
+  (function wait() {
+    if (window.HB && window.HB.openSection) { setTimeout(function () { window.HB.openSection(id); }, 80); return; }
+    if (++tries < 80) setTimeout(wait, 50);
+  })();
+})();
+</script>
+
 <script src="iso/hb-iso-adapter.js" defer></script>
 
 </body>
