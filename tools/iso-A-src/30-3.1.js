@@ -24,7 +24,7 @@
           S: function (t, fx) { return { t: t, me: { x: 20, y: 15, dir: 2 }, link: [[11, 16], [19, 16]], warn: true, meArm: t > 1.5 ? 'out' : 'down', supArm: t > 1.5 ? 'out' : 'down' }; } },
         { title: 'Tell your manager', sub: 'You must disclose it', dur: 8, cam: C2, key: ['desk'], cap: ['Walk to your manager', 'Disclose the conflict'],
           S: function (t, fx) { var w = fx.walk([[20, 15], [26, 19], [33, 17]], t, 0.6, 3.6, { endDir: 0 }); return { t: t, me: w, meArm: t > 3.8 ? 'out' : 'down', mgrArm: t > 4.8 ? 'out' : 'down', ok: t > 5.4 ? [40, 12] : null }; } },
-        { title: 'Your manager decides', sub: 'ADVANCED takes the steps it needs', dur: 6.5, cam: C3, big: { n: 'MANAGER', label: 'is who you tell', pos: 'left' },
+        { title: 'Your manager decides', sub: 'ADVANCED takes the steps it needs', dur: 6.5, cam: C3, big: { n: 'MANAGER', label: 'is who you tell', pos: 'bottom-left' },
           S: function (t, fx) { return { t: t, noSup: true, me: { x: 33, y: 17, dir: 0 }, meArm: 'out', mgrArm: 'out', ok: [40, 12] }; } }
       ] });
   })();

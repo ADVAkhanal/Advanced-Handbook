@@ -24,7 +24,7 @@
             var a = t < 4.2, open = a ? fx.E(t, 1.8, 2.6) * (1 - fx.E(t, 3.6, 4.2)) : fx.E(t, 5.8, 6.6) * (1 - fx.E(t, 7.8, 8.4));
             var me = a ? (t < 3.2 ? fx.walk([[11, 14], [18, 12], [22, 4]], t, 0.6, 3.0, { endDir: 3 }) : null) : (t < 7.6 ? fx.walk([[11, 14], [18, 12], [22, 4]], t, 5.2, 7.4, { endDir: 3 }) : null);
             return { t: t, open: open, flows: [], me: me, box: !a, out: open > 0.5, mgr: { x: 38, y: 14, dir: 1 }, mgrArm: !a && t > 4.6 && t < 7.4 ? 'out' : 'down' }; } },
-        { title: 'At-will', sub: 'That is how it works here', dur: 6.5, cam: C3, big: { n: 'AT WILL', label: 'either side, any time', pos: 'left' },
+        { title: 'At-will', sub: 'That is how it works here', dur: 6.5, cam: C3, big: { n: 'AT WILL', label: 'either side, any time', pos: 'left', size: 's' },
           S: function (t, fx) { return { t: t, open: 0.4, flows: [[[11, 14], [16, 9], [21, 4]], [[37, 13], [30, 9], [25, 4]]], me: { x: 11, y: 14, dir: 0 }, mgr: { x: 38, y: 14, dir: 1 } }; } }
       ] });
   })();

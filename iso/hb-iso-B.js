@@ -1081,7 +1081,7 @@
     function world(g, fx, S) {
       room(g, C); var L = g.list();
       L.prop('table', 6, 6, 0, { w: 16, d: 8, h: 9, top: 'wood' }); L.prop('crate', 8, 7, 9, { w: 6, d: 5, h: 5, tag: P.amber }); L.prop('crate', 15, 7, 9, { w: 5, d: 5, h: 4 });
-      L.prop('hbBMeter', 14, 0, 12, { w: 28, v: S.v });
+      L.prop('hbBMeter', 14, 0, 5, { w: 28, v: S.v });
       L.prop('machine', 44, 2, 0, { lamp: S.lamp, run: S.run, t: fx.t, spin: fx.t * 3 });
       L.prop('table', 34, 22, 0, { w: 12, d: 8, h: 9, top: 'steel' });
       if (S.stub) L.prop('paystub', 35, 22, 9, { rows: 4, total: S.total });

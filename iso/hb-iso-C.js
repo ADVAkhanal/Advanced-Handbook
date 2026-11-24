@@ -157,7 +157,7 @@
       L.cyl(18, 11, 9, 3, 3, 'cream', { rim: false }); L.box(18, 11, 12, 1, 1, 2, 'red', { rim: false });
       L.box(11, 8, 9, 2, 2, 1, 'paper', { rim: false }); L.box(23, 12, 9, 2, 2, 1, 'paper', { rim: false }); L.box(25, 8, 9, 1, 1, 2, 'blue', { rim: false });
       for (i = 0; i < 3; i++) balloon(L, 3 + i * 6, 26 + (i % 2) * 2, [P.red, P.amber, '#3d6fa5'][i], Math.sin(t * 2 + i) * 1.4);
-      if (S.bench) { L.prop('table', 26, 24, 0, { w: 12, d: 8, top: 'steel' }); L.box(29, 26, 9, 3, 2, 2, 'silver', { rim: false }); L.box(33, 27, 9, 2, 2, 3, 'card', { rim: false }); }
+      if (S.bench) { L.prop('desk', 26, 24, 0, { w: 12, d: 8, top: 'steel' }); L.box(29, 26, 9, 3, 2, 2, 'silver', { rim: false }); L.box(33, 27, 9, 2, 2, 3, 'card', { rim: false }); }
       if (S.desk) { L.prop('desk', 26, 20, 0, { w: 14, d: 8 }); if (S.docs) L.prop('docs', 30, 22, 9, { n: 2, stamp: S.stamp }); }
       person(L, fx, S.a, S.aO);
       if (!S.desk) { L.person(19, 4, 1, ext(BLU, { arm: S.cheer ? 'up' : 'down' })); L.person(27, 4, 1, ext(GRN, { arm: S.cheer ? 'down' : 'up' })); }
@@ -222,7 +222,7 @@
           cap: ['When you leave, it all goes back', 'In operable condition'],
           big: { n: 'RETURN', label: 'phone and passwords', pos: 'right' },
           s: function (t, fx) { var a = fx.walk([[16, 24], [10, 15]], t, 0.3, 1.8, { endDir: 3 });
-            return { counter: 1, a: a, aO: ext(ME, { arm: t > 2.2 && t < 3.4 ? 'out' : 'down', hold: t > 2.2 && t < 3.4 ? '#14171a' : undefined, holdSize: [2, 3] }), m: { x: 10, y: 2, dir: 1 }, mO: ext(MGR, { arm: t > 3.6 ? 'write' : 'down' }), phoneOn: t > 3.4, pass: t > 4, ok3: fx.E(t, 4.6, 5.2) }; } }
+            return { counter: 1, a: a, aO: ext(ME, { arm: t > 2.2 && t < 3.4 ? 'out' : 'down', hold: t > 2.2 && t < 3.4 ? '#14171a' : undefined, holdSize: [2, 3] }), m: t > 1.0 ? { x: 10, y: 2, dir: 1 } : null, mO: ext(MGR, { arm: t > 3.6 ? 'write' : 'down' }), phoneOn: t > 3.4, pass: t > 4, ok3: fx.E(t, 4.6, 5.2) }; } }
       ] });
   })();
 
@@ -424,7 +424,7 @@
           s: function (t, fx) { return { m: { x: 28, y: 2, dir: 1 }, mO: ext(PNK, { arm: t > 3 ? 'write' : 'down' }), a: still(28, 15, 3), aO: ext(ME, { arm: 'down' }), stub: Math.floor(fx.E(t, 1.0, 4.0) * 5), ask: t > 0.8 && t < 4.6 ? fx.E(t, 0.8, 1.4) : 0 }; } },
         { title: 'OLD INFO, LATE MAIL', sub: 'W-2 and other mail can be delayed', dur: 7, cam: C3, tag: 'REAL SPEED', key: [],
           cap: ['Old information can delay your mail', 'HR updates it, mail follows you'],
-          big: { n: 'W-2', label: 'mail can be late', pos: 'right' },
+          big: { n: 'W-2', label: 'mail can be late', pos: 'bottom-right', size: 's' },
           s: function (t, fx) { var late = t < 3.4;
             return { badHouse: late, m: { x: 28, y: 2, dir: 1 }, mO: PNK, mailOld: late, mailNew: !late, no: late ? fx.E(t, 1.2, 1.8) : 0, ok: !late ? fx.E(t, 4.0, 4.6) : 0 }; } }
       ] });

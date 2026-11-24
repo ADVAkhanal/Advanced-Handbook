@@ -12,7 +12,7 @@
   /* the three-step shape every policy uses: sign title and plain subtitle, captions under the picture, the layer chip, one build per step */
   function reg(id, o) {
     var spec = { id: 'hb-' + id, title: o.title, std: o.std, blurb: o.blurb, backdrop: o.backdrop, camDur: 1, steps: o.steps };
-    spec.steps.forEach(function (st, i) { st.chips = CH; st.chipAt = function () { return i; }; if (!st.tag) st.tag = 'REAL SPEED'; });
+    spec.steps.forEach(function (st, i) { st.chips = CH; st.chipAt = function () { return i; }; if (st.tag === undefined) st.tag = 'REAL SPEED'; });
     HB[id] = spec; return spec;
   }
   /* the cached floor and walls of a setting; key names the setting */
@@ -328,7 +328,7 @@
           S.me = fx.walk([[19, 22], [10, 22], [10, 9]], t, 5.2, 7.2, { endDir: 3, startDir: 3 }); if (t < 5.2) S.me = still(19, 22, 3);
           world(g, fx, S);
         } },
-      { title: 'Coming back', sub: 'Your previous or a similar position', dur: 7.5, cam: C3, key: ['hdsign'], big: { n: '1994', label: 'USERRA', pos: 'right' },
+      { title: 'Coming back', sub: 'Your previous or a similar position', dur: 7.5, cam: C3, tag: false, key: ['hdsign'], big: { n: '1994', label: 'USERRA', pos: 'right' },
         cap: ['Notify your manager of intent to return', 'Reinstated to your previous position'],
         build: function (t, g, fx) {
           var S = base(); S.ok = [1, 1, 0]; S.write = 1; S.stamp = false;

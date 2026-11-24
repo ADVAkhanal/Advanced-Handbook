@@ -195,7 +195,7 @@
             var a = t < 4.2, open = a ? fx.E(t, 1.8, 2.6) * (1 - fx.E(t, 3.6, 4.2)) : fx.E(t, 5.8, 6.6) * (1 - fx.E(t, 7.8, 8.4));
             var me = a ? (t < 3.2 ? fx.walk([[11, 14], [18, 12], [22, 4]], t, 0.6, 3.0, { endDir: 3 }) : null) : (t < 7.6 ? fx.walk([[11, 14], [18, 12], [22, 4]], t, 5.2, 7.4, { endDir: 3 }) : null);
             return { t: t, open: open, flows: [], me: me, box: !a, out: open > 0.5, mgr: { x: 38, y: 14, dir: 1 }, mgrArm: !a && t > 4.6 && t < 7.4 ? 'out' : 'down' }; } },
-        { title: 'At-will', sub: 'That is how it works here', dur: 6.5, cam: C3, big: { n: 'AT WILL', label: 'either side, any time', pos: 'left' },
+        { title: 'At-will', sub: 'That is how it works here', dur: 6.5, cam: C3, big: { n: 'AT WILL', label: 'either side, any time', pos: 'left', size: 's' },
           S: function (t, fx) { return { t: t, open: 0.4, flows: [[[11, 14], [16, 9], [21, 4]], [[37, 13], [30, 9], [25, 4]]], me: { x: 11, y: 14, dir: 0 }, mgr: { x: 38, y: 14, dir: 1 } }; } }
       ] });
   })();
@@ -319,7 +319,7 @@
           S: function (t, fx) { return { t: t, me: { x: 20, y: 15, dir: 2 }, link: [[11, 16], [19, 16]], warn: true, meArm: t > 1.5 ? 'out' : 'down', supArm: t > 1.5 ? 'out' : 'down' }; } },
         { title: 'Tell your manager', sub: 'You must disclose it', dur: 8, cam: C2, key: ['desk'], cap: ['Walk to your manager', 'Disclose the conflict'],
           S: function (t, fx) { var w = fx.walk([[20, 15], [26, 19], [33, 17]], t, 0.6, 3.6, { endDir: 0 }); return { t: t, me: w, meArm: t > 3.8 ? 'out' : 'down', mgrArm: t > 4.8 ? 'out' : 'down', ok: t > 5.4 ? [40, 12] : null }; } },
-        { title: 'Your manager decides', sub: 'ADVANCED takes the steps it needs', dur: 6.5, cam: C3, big: { n: 'MANAGER', label: 'is who you tell', pos: 'left' },
+        { title: 'Your manager decides', sub: 'ADVANCED takes the steps it needs', dur: 6.5, cam: C3, big: { n: 'MANAGER', label: 'is who you tell', pos: 'bottom-left' },
           S: function (t, fx) { return { t: t, noSup: true, me: { x: 33, y: 17, dir: 0 }, meArm: 'out', mgrArm: 'out', ok: [40, 12] }; } }
       ] });
   })();
@@ -487,17 +487,17 @@
   })();
   /* OK-Disability Accommodation: an HR meeting room, a talk across the table, then the workstation is changed */
   (function () {
-    var C1 = cam(16, 4, 0, 120, 90), C2 = cam(16, 4, 0, 150, 90), C3 = cam(30, 0, 0, 226, 88);
+    var C1 = cam(16, 4, 0, 120, 90), C2 = cam(18, 6, 0, 138, 84), C3 = cam(30, 0, 0, 226, 88);
     make({ sid: 'OK-Disability Accommodation', key: 'a40', title: 'Disability accommodation', std: 'Hiring & Orientation', blurb: 'If you need an accommodation because of a disability, tell your manager. You and the company talk it through.',
       X: 44, Y: 26, H: 26, backdrop: ['diag', '#12161a', '#1a2026'],
       floor: { style: 'grid', a: '#23282c', b: '#292f34' }, wall: { style: 'panel', tint: '#8fb4d9' },
       items: function (L, g, fx, S) {
-        /* footprints: table 12..30 x 10..18, HR behind it at 21,6, employee left at 6,14, manager right at 36,14; adjustable desk 32..44 x 20..26 */
+        /* footprints: table 12..30 x 10..18, HR behind it at 21,6, employee left at 6,14, manager right at 36,14; adjustable desk 28..40 x 20..26 */
         L.prop('table', 12, 10, 0, { w: 18, d: 8, h: 9, top: 'wood' });
         if (S.docs > 0) L.prop('docs', 16, 12, 9, { n: S.docs, head: P.blue, w: 6, d: 4 });
         if (S.docs > 1) L.prop('docs', 23, 13, 9, { n: 1, head: P.amber, w: 5, d: 4 });
         L.prop('cabinet', 38, 2, 0, {}); L.prop('lamp', 36, 3, 15, { col: 'green', on: true });
-        if (S.desk) { L.prop('desk', 32, 19, S.deskUp, { w: 12, d: 7 }); L.prop('haChair', 38, 19 + 7, 0, { col: 'blue' }); }
+        if (S.desk) { L.prop('desk', 28, 20, S.deskUp, { w: 12, d: 6 }); L.prop('haChair', 34, 20 + 6, 0, { col: 'blue' }); }
         L.person(21, 6, 1, ext(HRP, { arm: S.hrArm || 'down' }));
         L.person(S.me.x, S.me.y, S.me.dir, fx.who(S.me, ext(ME, { arm: S.meArm || 'down' })));
         if (!S.noMgr) L.person(36, 14, 1, ext(MGR, { arm: S.mgrArm || 'down' }));
@@ -508,7 +508,7 @@
         { title: 'You ask for help', sub: 'Because of a disability', dur: 7, cam: C1, key: ['table'], cap: ['You need an accommodation', 'You tell your manager'],
           S: function (t, fx) { return { t: t, docs: 0, me: fx.walk([[0, 20], [4, 17], [6, 14]], t, 0.4, 2.2, { endDir: 0 }), meArm: t > 3 ? 'out' : 'down', mgrArm: t > 4 ? 'out' : 'down' }; } },
         { title: 'You talk it through', sub: 'An interactive dialogue', dur: 8, cam: C2, key: ['table', 'desk'], cap: ['What is needed and why, and how it helps', 'Medical information stays confidential'],
-          S: function (t, fx) { var a = Math.floor(t * 1.3) % 2; return { t: t, docs: t > 1 ? (t > 2.4 ? 2 : 1) : 0, me: { x: 6, y: 14, dir: 0 }, meArm: a ? 'out' : 'down', mgrArm: a ? 'down' : 'out', hrArm: t > 4 ? 'out' : 'down', flow: [[[8, 22], [22, 22], [34, 22]]], desk: t > 5, deskUp: Math.round(fx.E(t, 5.2, 7) * 4), pop: t > 5 && t < 6.2 ? [38, 22] : null }; } },
+          S: function (t, fx) { var a = Math.floor(t * 1.3) % 2; return { t: t, docs: t > 1 ? (t > 2.4 ? 2 : 1) : 0, me: { x: 6, y: 14, dir: 0 }, meArm: a ? 'out' : 'down', mgrArm: a ? 'down' : 'out', hrArm: t > 4 ? 'out' : 'down', flow: [[[8, 23], [18, 23], [30, 23]]], desk: t > 5, deskUp: Math.round(fx.E(t, 5.2, 7) * 4), pop: t > 5 && t < 6.2 ? [38, 22] : null }; } },
         { title: 'No payback', sub: 'Asking is protected', dur: 6.5, cam: C3, big: { n: 'NO', label: 'retaliation for asking', pos: 'left' },
           S: function (t, fx) { return { t: t, docs: 2, desk: true, deskUp: 4, noMgr: true, me: { x: 38, y: 17, dir: 3 }, meArm: 'out' }; } }
       ] });
