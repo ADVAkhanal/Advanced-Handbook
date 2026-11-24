@@ -5611,6 +5611,17 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
 })();
 </script>
 
+<!-- Shop Rock 8-bit tune, opt in: a Sound button beside "Play First Shift". Off by default, nothing loads until someone turns it on, never autoplays. Remove this block to take it out. -->
+<style id="shop-sound-css">.shop-sound{color:#F4F4F5;background:transparent;border:1px solid #6b6b70;border-radius:2px;padding:6px 10px;font-family:var(--font-display);letter-spacing:1.5px;text-transform:uppercase;font-size:12px;cursor:pointer;margin-right:10px}.shop-sound[aria-pressed="true"]{border-color:#EE2D24}.shop-sound:focus-visible{outline:2px solid #EE2D24;outline-offset:2px}</style>
+<script id="shop-sound-v1">
+(function () {
+  var meta = document.querySelector('.header-meta'); if (!meta) return;
+  var s = document.createElement('script'); s.src = 'audio/shop-sound.js'; s.async = true;
+  s.onload = function () { if (window.ShopSound) window.ShopSound.mount(meta, { key: 'handbook', src: 'audio/lunch-whistle-boogie.mp3', volume: 0.3 }); };
+  document.head.appendChild(s);
+})();
+</script>
+
 <script src="iso/hb-iso-adapter.js" defer></script>
 
 </body>
