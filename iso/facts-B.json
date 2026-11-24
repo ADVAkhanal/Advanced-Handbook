@@ -1,0 +1,419 @@
+{
+ "_about": "Facts for the batch B handbook explainers: each string a viewer reads (sign title, sign subtitle, caption, note chip, card number and label) with the exact words of the handbook section that support it. Checked by tools/check-iso-facts-B.mjs against the page.",
+ "generic": [
+  "Who",
+  "What happens",
+  "What to do",
+  "REAL SPEED",
+  "FAST FORWARD"
+ ],
+ "sections": {
+  "4.6": {
+   "title": "Paycheck Deductions",
+   "lines": {
+    "What comes out of your pay, how to check it, and how an error is fixed.": "Review your paycheck for errors each pay period",
+    "YOUR PAY STUB": "Your deductions will be reflected in your wage statement",
+    "Deductions are listed on it": "Your deductions will be reflected in your wage statement",
+    "Deductions come out each pay period": "make certain deductions from your pay each pay period",
+    "Your wage statement shows them": "Your deductions will be reflected in your wage statement",
+    "CHECK EVERY PAYCHECK": "Review your paycheck for errors each pay period",
+    "Look for errors each pay period": "Review your paycheck for errors each pay period",
+    "Review your paycheck for errors": "Review your paycheck for errors",
+    "Report any discrepancy immediately": "immediately report any discrepancies",
+    "FIXED BY NEXT PAYDAY": "no later than your next regular payday",
+    "Wrong deductions are paid back in full": "You will be reimbursed in full for any isolated, inadvertent, or improper deductions",
+    "You are reimbursed in full": "You will be reimbursed in full",
+    "No retaliation for reporting": "will not retaliate against employees who report erroneous deductions",
+    "NEXT": "your next regular payday",
+    "payday at the latest": "no later than your next regular payday",
+    "Income tax": "federal and state income tax",
+    "FICA taxes": "(FICA) taxes",
+    "Court orders": "by court order for wage garnishments"
+   }
+  },
+  "4.7": {
+   "title": "Recording Time",
+   "lines": {
+    "Record all your time at the clock so you are paid for every hour worked.": "You must accurately record all of your time to ensure you are paid for all hours worked",
+    "CLOCK IN FIRST": "Immediately before starting your shift",
+    "Record time before your shift starts": "Immediately before starting your shift",
+    "Record all of your time": "record all of your time",
+    "Immediately before starting your shift": "Immediately before starting your shift",
+    "MEAL BREAK PUNCHES": "before your meal period",
+    "Out before the meal, in after it": "Immediately before resuming work, after your meal period",
+    "Record before your meal period": "Immediately after finishing work, before your meal period",
+    "Record again before you resume work": "Immediately before resuming work, after your meal period",
+    "NEVER OFF THE CLOCK": "working \"off the clock.\"",
+    "Falsifying time entries is prohibited": "Falsifying time entries is strictly prohibited",
+    "Working off the clock is falsifying time": "Falsifying time entries includes working",
+    "Tell HR about any pay discrepancy": "Notify your H.R. of any pay discrepancies",
+    "ALL": "paid for all hours worked",
+    "hours worked are paid": "paid for all hours worked"
+   }
+  },
+  "4.8": {
+   "title": "Travel Expenses",
+   "lines": {
+    "Get approval first, know what ADVANCED pays, book through the agency and report the expenses.": "must be booked through the corporate designated travel agency",
+    "APPROVAL FIRST": "prior approval from your manager",
+    "Your manager approves the trip": "prior approval from your manager",
+    "Travel needs prior approval from your manager": "prior approval from your manager",
+    "Travel is limited to business activities": "Travel is limited to business activities",
+    "WHAT ADVANCED PAYS": "ADVANCED pays the actual amounts incurred for appropriate expenses",
+    "The actual amounts for appropriate expenses": "the actual amounts incurred for appropriate expenses",
+    "Airline tickets, meals and lodging": "Airline tickets. - Meals and lodging",
+    "Car rental, bus, taxi, parking": "Car rental, bus, taxi, parking",
+    "BOOK IT, REPORT IT": "must be booked through the corporate designated travel agency",
+    "Use the travel agency, then file the form": "submit approved expenses on the standard Expense Report Form",
+    "Book air, car and hotel at the agency": "Airline travel, rental cars, and hotels must be booked through the corporate designated travel agency",
+    "Report the date, place and participants": "its business purpose, date, place, and the participants",
+    "BOOK": "must be booked through the corporate designated travel agency",
+    "via the travel agency": "must be booked through the corporate designated travel agency"
+   }
+  },
+  "4.9": {
+   "title": "Use of Employer Credit Cards",
+   "lines": {
+    "Use the company card for approved business expenses only, with the right approval and receipts.": "restricted to approved business-related expenses",
+    "BUSINESS USE ONLY": "restricted to approved business-related expenses",
+    "The company card is for approved expenses": "restricted to approved business-related expenses",
+    "Use is restricted to approved business expenses": "Use of the ADVANCED credit card is restricted to approved business-related expenses",
+    "Not for personal reasons": "may not be used for personal reasons",
+    "RECEIPTS AND LOSSES": "Submit all sales receipts",
+    "Tell your manager": "Immediately report lost or stolen ADVANCED cards to your manager",
+    "Submit all receipts to your manager": "Submit all sales receipts generated by use of the ADVANCED credit card to your manager",
+    "Report lost or stolen cards immediately": "Immediately report lost or stolen ADVANCED cards",
+    "WHEN TO ASK FIRST": "must receive prior approval",
+    "Approval depends on the purchase": "any other business purchases over $25 must receive prior approval",
+    "Vehicle purchases under $100 need no approval": "vehicle use (gas, oil, etc.) under $100 do not require prior approval",
+    "Vehicle over $100 and other over $25: ask first": "vehicle use over $100 and any other business purchases over $25 must receive prior approval",
+    "$25": "business purchases over $25",
+    "over this: ask first": "over $25 must receive prior approval"
+   }
+  },
+  "OK-Accommodations for Nursing Mot": {
+   "title": "Accommodations for Nursing Mothers",
+   "lines": {
+    "A private room, reasonable break time and a talk with your manager.": "discuss the length and frequency of these breaks with your managers",
+    "A PRIVATE ROOM": "private, secure, and sanitary room",
+    "Close to the work area, with a lock or a sign": "close proximity to the work area",
+    "A private, secure and sanitary room": "private, secure, and sanitary room",
+    "Other than a restroom": "other than a restroom",
+    "A BREAK TO EXPRESS MILK": "break time to express milk",
+    "Reasonable break time, unpaid": "reasonable unpaid break time",
+    "Reasonable unpaid break time to express milk": "reasonable unpaid break time to express milk",
+    "The room shows when it is in use": "a sign on the door to indicate when the room is in use",
+    "TALK WITH YOUR MANAGER": "discuss the length and frequency of these breaks with your managers",
+    "Plan the length and frequency": "the length and frequency of these breaks",
+    "Discuss the length and frequency of breaks": "discuss the length and frequency of these breaks",
+    "Break time runs with existing breaks if possible": "run concurrently with any break time already provided",
+    "UP TO": "up to one year following the child's birth",
+    "one year after birth": "up to one year following the child's birth"
+   }
+  },
+  "OK-Meal and Rest Periods": {
+   "title": "Meal and Rest Periods",
+   "lines": {
+    "Know your schedule, record each break and tell your manager if a break is missed.": "accurately observe and record meals and rest periods",
+    "KNOW YOUR SCHEDULE": "procedures and schedules for rest and meal breaks",
+    "Check with your managers": "Check with your Managers",
+    "Check with your managers about schedules": "Check with your Managers regarding procedures and schedules",
+    "ADVANCED follows meal and rest period rules": "complies with all federal and state regulations regarding meal and rest periods",
+    "RECORD EVERY BREAK": "accurately observe and record meals and rest periods",
+    "Observe and record meals and rest periods": "observe and record meals and rest periods",
+    "Observe and record meal and rest periods": "observe and record meals and rest periods",
+    "Record them accurately": "accurately observe and record",
+    "MISSED A BREAK?": "unable to or prohibited from taking a meal or rest period",
+    "Tell your managers": "let your managers know",
+    "Know in advance? Let your managers know": "If you know in advance that you may not be able to take your scheduled break or meal period, let your managers know",
+    "Missed a break? Notify them as soon as possible": "notify your managers as soon as possible",
+    "NOTIFY": "notify your managers",
+    "if a break is missed": "if you were unable to or prohibited from taking a meal or rest period"
+   }
+  },
+  "OK-Overtime": {
+   "title": "Overtime",
+   "lines": {
+    "40": "40 hours in a workweek",
+    "Approval in writing, what counts as hours worked, and when overtime pay starts.": "overtime pay of one and one-half times your regular rate of pay",
+    "APPROVED IN ADVANCE": "All overtime must be approved in advance",
+    "Nonexempt employees may qualify for overtime pay": "If you are nonexempt, you may qualify for overtime pay",
+    "All overtime must be approved in advance": "All overtime must be approved in advance",
+    "In writing, by your managers": "in writing, by your managers",
+    "HOURS WORKED COUNT": "do not count as time worked for computing overtime",
+    "Holidays, vacation and sick days do not": "Holidays, vacation days, and sick leave days do not count as time worked",
+    "Hours worked add up in the workweek": "any hours worked in excess of 40 hours in a workweek",
+    "Holidays, vacation and sick leave do not count": "Holidays, vacation days, and sick leave days do not count as time worked",
+    "PAST 40 HOURS": "in excess of 40 hours in a workweek",
+    "Overtime pay: one and one-half times your rate": "overtime pay of one and one-half times your regular rate of pay",
+    "Over 40 hours in a workweek is overtime": "in excess of 40 hours in a workweek",
+    "Paid one and one-half times your regular rate": "one and one-half times your regular rate of pay",
+    "hours in a workweek": "40 hours in a workweek"
+   }
+  },
+  "5.1": {
+   "title": "Criminal Activity/Arrests",
+   "lines": {
+    "Criminal activity on or off ADVANCED property can lead to discipline. Be ready to work when scheduled.": "whether on or off ADVANCED property, may result in disciplinary action",
+    "ON OR OFF PROPERTY": "whether on or off ADVANCED property",
+    "The policy covers both sides of the line": "whether on or off ADVANCED property",
+    "Criminal activity, on or off our property": "Involvement in criminal activity while employed by ADVANCED, whether on or off ADVANCED property",
+    "May lead to disciplinary action": "may result in disciplinary action",
+    "WHAT FOLLOWS": "may result in disciplinary action including suspension or termination of employment",
+    "Reported by law, then discipline": "ADVANCED will report all criminal activity in accordance with applicable law",
+    "ADVANCED reports it in accordance with the law": "ADVANCED will report all criminal activity in accordance with applicable law",
+    "Discipline can include suspension or termination": "disciplinary action including suspension or termination of employment",
+    "BE READY WHEN SCHEDULED": "ready to work, when scheduled",
+    "On the job, ready to work": "on the job, ready to work",
+    "Be on the job, ready to work when scheduled": "expected to be on the job, ready to work, when scheduled",
+    "Missing work can lead to discipline": "Inability to report to work as scheduled may lead to disciplinary action",
+    "READY": "ready to work, when scheduled",
+    "when scheduled": "when scheduled"
+   }
+  },
+  "5.2": {
+   "title": "Exit Interview",
+   "lines": {
+    "You may be asked to share why you are leaving, to help ADVANCED improve.": "You may be asked to participate in an exit interview when you leave ADVANCED",
+    "YOU MAY BE ASKED": "You may be asked to participate in an exit interview",
+    "An exit interview when you leave": "an exit interview when you leave ADVANCED",
+    "You may be asked to take part": "You may be asked to participate",
+    "An exit interview when you leave ADVANCED": "an exit interview when you leave ADVANCED",
+    "WHY WE ASK": "The purpose of the exit interview",
+    "Insight into your decision to leave": "greater insight into your decision to leave employment",
+    "Insight into why you decided to leave": "greater insight into your decision to leave employment",
+    "We look for trends and ways to improve": "identify any trends requiring attention or opportunities for improvement",
+    "PLEASE TAKE PART": "Your cooperation in the exit interview process is appreciated",
+    "Your cooperation is appreciated": "Your cooperation in the exit interview process is appreciated",
+    "It helps recruitment and retention": "effective recruitment and retention strategies",
+    "EXIT": "exit interview",
+    "interview if asked": "You may be asked to participate in an exit interview"
+   }
+  },
+  "5.3": {
+   "title": "Open Door/Conflict Resolution Process",
+   "lines": {
+    "Bring a concern to your manager first, then to HR or upper-level management.": "to the attention of your manager and, if necessary, to HR or upper-level management",
+    "START WITH YOUR MANAGER": "bring your concerns to the attention of your manager",
+    "Choose a time and place to talk": "at a time and place that will allow the person to properly listen to your concern",
+    "Bring your concern to your manager": "bring your concerns to the attention of your manager",
+    "At a time and place to listen": "at a time and place that will allow the person to properly listen",
+    "NOT ANSWERED? GO TO HR": "present your concerns to HR or upper-level management",
+    "Or if your manager is the problem": "if you believe that person is the source of the problem",
+    "Not answered, or manager is the problem": "do not believe you have received a sufficient response, or if you believe that person is the source of the problem",
+    "Take it to HR or upper-level management": "present your concerns to HR or upper-level management",
+    "TELL THEM THE FACTS": "Describe the problem",
+    "Describe the problem and what you tried": "Describe the problem, those people involved in the problem, efforts you have made to resolve the problem",
+    "Describe the problem and who is involved": "Describe the problem, those people involved in the problem",
+    "Say what you tried and suggest a solution": "efforts you have made to resolve the problem, and any suggested solution you may have",
+    "OPEN": "Open Door",
+    "door for any problem": [
+     "Open Door",
+     "bring any problems"
+    ]
+   }
+  },
+  "5.4": {
+   "title": "Outside Employment",
+   "lines": {
+    "A second job is allowed off hours, but it must not clash with your work at ADVANCED.": "you may seek additional employment during off hours",
+    "A SECOND JOB": "seek additional employment",
+    "Extra work in your off hours": "additional employment during off hours",
+    "You may seek additional employment off hours": "you may seek additional employment during off hours",
+    "It must not create a conflict of interest": "in any way create a conflict of interest",
+    "IT MUST NOT CLASH": "will not affect your attendance, job performance, productivity, work hours, or scheduling",
+    "Attendance, performance, hours and scheduling": "attendance, job performance, productivity, work hours, or scheduling",
+    "It cannot affect your attendance or performance": "will not affect your attendance, job performance",
+    "Or your work hours and scheduling": "work hours, or scheduling",
+    "REPORT A CONFLICT": "should be reported to your manager",
+    "Tell your manager": "should be reported to your manager",
+    "Report any conflict to your manager": "Any outside employment that will conflict with your duties and obligations to ADVANCED should be reported to your manager",
+    "Not following this policy can lead to discipline": "Failure to adhere to this policy may result in discipline",
+    "REPORT": "should be reported to your manager",
+    "to your manager": "should be reported to your manager"
+   }
+  },
+  "5.5": {
+   "title": "Pay Raises",
+   "lines": {
+    "Raises follow profitability, job performance and the consumer price index.": "profitability, job performance, and the consumer price index",
+    "WHAT RAISES DEPEND ON": "Depending on financial health and other ADVANCED factors",
+    "Financial health and other ADVANCED factors": "financial health and other ADVANCED factors",
+    "Efforts will be made to give pay raises": "efforts will be made to give pay raises",
+    "Profitability, job performance, price index": "profitability, job performance, and the consumer price index",
+    "RAISES FOLLOW THEM": "consistent with ADVANCED profitability, job performance, and the consumer price index",
+    "Consistent with profitability and performance": "consistent with ADVANCED profitability, job performance",
+    "Raises are consistent with those factors": "pay raises consistent with",
+    "It depends on financial health": "Depending on financial health",
+    "MERIT OR A NEW JOB": "based on merit or due to a change of job position",
+    "Individual raises are possible too": "may also make individual pay raises",
+    "Individual raises can be based on merit": "individual pay raises based on merit",
+    "Or due to a change of job position": "due to a change of job position",
+    "MERIT": "based on merit",
+    "or a position change": "due to a change of job position",
+    "Profitability": "profitability",
+    "Job performance": "job performance",
+    "Consumer price index": "the consumer price index"
+   }
+  },
+  "5.6": {
+   "title": "Performance Improvement",
+   "lines": {
+    "Regular reviews of your work, and a plan you can ask for at any time.": "request that your manager assist you in developing a performance improvement plan at any time",
+    "REVIEWS HAPPEN": "periodically review your work performance",
+    "Your work performance is reviewed": "review your work performance",
+    "Your work performance is reviewed periodically": "periodically review your work performance",
+    "Annually, biannually, monthly or as needed": "annually, biannually, monthly, etc, or as business needs dictate",
+    "WHAT IS REVIEWED": "Your initiative, effort, attitude, job knowledge, and other factors will be addressed",
+    "Initiative, effort, attitude, job knowledge": "initiative, effort, attitude, job knowledge",
+    "Initiative, effort, attitude and job knowledge": "initiative, effort, attitude, job knowledge",
+    "Strengths and areas for improvement": "including strengths and areas for improvement",
+    "ASK ANY TIME": "at any time",
+    "Request a performance improvement plan": "request that your manager assist you in developing a performance improvement plan",
+    "You may ask your manager for a plan at any time": "request that your manager assist you in developing a performance improvement plan at any time",
+    "A good review does not guarantee a raise": "a positive job performance review does not guarantee a pay raise",
+    "ANY": "at any time",
+    "time, ask for a plan": "request that your manager assist you in developing a performance improvement plan at any time"
+   }
+  },
+  "5.7": {
+   "title": "Post-Employment References",
+   "lines": {
+    "References go through HR: dates of employment and job title only, pay with written authorization.": "confirm dates of employment and job title only",
+    "REQUESTS GO TO HR": "Forward any requests for employment verification to HR",
+    "Forward any request to HR": "Forward any requests for employment verification to HR",
+    "A request for employment verification arrives": "requests for employment verification",
+    "Forward it to HR": "Forward any requests for employment verification to HR",
+    "DATES AND JOB TITLE ONLY": "confirm dates of employment and job title only",
+    "That is all ADVANCED confirms": "confirm dates of employment and job title only",
+    "ADVANCED confirms dates of employment": "confirm dates of employment",
+    "And the job title only": "job title only",
+    "PAY NEEDS A WRITTEN OK": "With written authorization, ADVANCED will confirm compensation",
+    "Compensation, with written authorization": "With written authorization, ADVANCED will confirm compensation",
+    "Compensation needs written authorization": "With written authorization, ADVANCED will confirm compensation",
+    "With it, ADVANCED will confirm compensation": "With written authorization, ADVANCED will confirm compensation",
+    "PAY": "With written authorization, ADVANCED will confirm compensation",
+    "written authorization": "With written authorization, ADVANCED will confirm compensation"
+   }
+  },
+  "5.8": {
+   "title": "Promotions",
+   "lines": {
+    "We promote from within when the most qualified candidate is available.": "promoted from within only when the most qualified candidate is available",
+    "PROMOTE FROM WITHIN": "promoting talent from within",
+    "When the most qualified candidate is available": "when the most qualified candidate is available",
+    "We promote from within whenever possible": "promoting talent from within whenever possible",
+    "WHAT COUNTS": "skills needed, education, experience, and other qualifications",
+    "Skills, education, experience and more": "skills needed, education, experience, and other qualifications",
+    "Skills, education, experience and qualifications": "skills needed, education, experience, and other qualifications",
+    "Promotions are on an equal opportunity basis": "Promotions are made on an equal opportunity basis",
+    "SHOW INITIATIVE": "take initiative in their roles",
+    "Tell your supervisor, join the training": "express their aspirations to their supervisor and to participate in training and development programs",
+    "Tell your supervisor you want to grow": "express their aspirations to their supervisor",
+    "Join training and development programs": "participate in training and development programs",
+    "EQUAL": "equal opportunity basis",
+    "opportunity basis": "equal opportunity basis"
+   }
+  },
+  "5.9": {
+   "title": "Resignation Policy",
+   "lines": {
+    "Give written notice, return ADVANCED property, and know the notice requested.": "ADVANCED requests that you provide a minimum of two weeks notice",
+    "WHEN YOU RESIGN": "resign from employment",
+    "Give your manager a written letter": "Provide a written resignation letter to your manager",
+    "Provide a written resignation letter": "Provide a written resignation letter",
+    "Give it to your manager": "letter to your manager",
+    "RETURN YOUR PROPERTY": "Return all ADVANCED property",
+    "All ADVANCED property comes back": "Return all ADVANCED property at the time of separation",
+    "Return all ADVANCED property when you leave": "Return all ADVANCED property at the time of separation",
+    "Unreturned items may come out of final pay": "Failure to return some items may result in deductions from your final paycheck",
+    "TWO WEEKS NOTICE": "minimum of two weeks notice",
+    "Four weeks for managers": "If you are a manager, you are requested to provide a minimum of four weeks notice",
+    "A minimum of two weeks notice is requested": "requests that you provide a minimum of two weeks notice",
+    "Managers are asked for four weeks": "If you are a manager, you are requested to provide a minimum of four weeks notice",
+    "TWO": "minimum of two weeks notice",
+    "weeks minimum notice": "minimum of two weeks notice"
+   }
+  },
+  "5.10": {
+   "title": "Standards of Conduct",
+   "lines": {
+    "We share the work environment, so we follow common-sense rules or face discipline.": "We all share the responsibility of improving the quality of our work environment",
+    "WE ALL SHARE IT": "We all share the responsibility",
+    "Respect, responsibility and integrity": "respect, responsibility, integrity",
+    "By working here you agree to follow our rules": "By deciding to work here, you agree to follow our rules",
+    "COMMON-SENSE INFRACTIONS": "common-sense infractions",
+    "Rules the board lists": "a list of common-sense infractions",
+    "Not following safety rules and procedures": "Refusal or failure to follow safety rules and procedures",
+    "Excessive tardiness or absences": "Excessive tardiness or absences",
+    "WHAT CAN FOLLOW": "could result in discipline, up to and including immediate termination of employment",
+    "Discipline for misconduct": "infractions that could result in discipline",
+    "Discipline for misconduct is possible": "could result in discipline",
+    "Up to and including immediate termination": "up to and including immediate termination of employment",
+    "UP TO": "up to and including immediate termination of employment",
+    "termination": "up to and including immediate termination of employment"
+   }
+  },
+  "5.11": {
+   "title": "Transfers",
+   "lines": {
+    "90": "90 days",
+    "You may be moved to another position. After 90 days a transfer may be final.": "Transfers in excess of 90 days may be considered final",
+    "MOVED TO A NEW POSITION": "transfer your employment from one position to another",
+    "Production or service needs": "as required by production or service needs",
+    "ADVANCED may transfer you with or without notice": "may transfer your employment from one position to another with or without notice",
+    "Or at your request, with management approval": "upon request by you and with management approval",
+    "THE 90 DAY MARK": "Transfers in excess of 90 days",
+    "Days pass in the new position": "Transfers in excess of 90 days",
+    "Transfers in excess of 90 days": "Transfers in excess of 90 days",
+    "May be considered final": "may be considered final",
+    "PAY FOLLOWS THE NEW JOB": "consistently with the pay scale for your new position",
+    "The pay scale of the new position": "the pay scale for your new position",
+    "Pay follows the new position pay scale": "consistently with the pay scale for your new position",
+    "It may go up or down": "may be increased or decreased",
+    "days: may be final": "in excess of 90 days may be considered final",
+    "90 days": "90 days"
+   }
+  },
+  "5.12": {
+   "title": "Workforce Reductions (Layoffs)",
+   "lines": {
+    "If business needs require it, management may decide on a reduction in force.": "management may decide to implement a reduction in force",
+    "BUSINESS NEEDS": "based upon business needs",
+    "Management weighs them": "ADVANCED management may decide",
+    "Management may decide on a reduction in force": "management may decide to implement a reduction in force",
+    "Only if necessary, based on business needs": "If necessary, based upon business needs",
+    "A TRYING TIME": "a trying experience",
+    "For everyone involved": "for all involved",
+    "It can be a trying experience for all involved": "RIFs can be a trying experience for all involved",
+    "ADVANCED will make its best effort": "ADVANCED will make its best effort",
+    "SOUND DECISIONS": "sound business decisions",
+    "Business decisions and workforce needs": "sound business decisions while acknowledging the needs of its workforce",
+    "Its best effort at sound business decisions": "best effort to make sound business decisions",
+    "While acknowledging the needs of its workforce": "while acknowledging the needs of its workforce",
+    "RIF": "reduction in force (RIF)",
+    "reduction in force": "reduction in force"
+   }
+  },
+  "OK-Disciplinary Process": {
+   "title": "Disciplinary Process",
+   "lines": {
+    "Rule violations can lead to discipline, usually in steps, and you can respond.": "Violation of ADVANCED policies or procedures may result in disciplinary action",
+    "A POLICY IS BROKEN": "Violation of ADVANCED policies or procedures",
+    "Discipline may follow a violation": "may result in disciplinary action",
+    "Violating a policy may lead to discipline": "Violation of ADVANCED policies or procedures may result in disciplinary action",
+    "Demotion, transfer, unpaid leave or termination": "demotion, transfer, leave without pay, or termination of employment",
+    "STEPS, USUALLY": "a system of progressive discipline",
+    "Progressive discipline": "progressive discipline",
+    "First a verbal warning, then written warnings": "first provide you with a verbal warning, then with one or more written warnings",
+    "Not required: no warning may come first": "we are not obligated to follow any disciplinary or grievance procedure",
+    "YOU CAN RESPOND": "allow you to respond to any disciplinary action taken",
+    "Your manager makes every effort": "Your manager will make every effort possible",
+    "Your manager will let you respond": "allow you to respond",
+    "To any disciplinary action taken": "respond to any disciplinary action taken",
+    "YOU": "allow you to respond to any disciplinary action taken",
+    "can respond to action": "allow you to respond to any disciplinary action taken"
+   }
+  }
+ }
+}

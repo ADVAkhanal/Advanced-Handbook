@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handbook explainers, batch B</title>
+<style>
+  :root { --bg: #15171a; --panel: #222629; --line: #3a3f44; --ink: #f1ece2; --mute: #c4c9ce; --red: #e03131; }
+  :root[data-theme="light"] { --bg: #f1ece2; --panel: #ffffff; --line: #b9b3a4; --ink: #16191c; --mute: #3d4349; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font: 500 16px/1.5 Raleway, system-ui, sans-serif; }
+  body { padding: 28px; }
+  h1 { margin: 0 0 4px; font: 400 40px/1 "Bebas Neue", Impact, sans-serif; letter-spacing: .03em; }
+  .sub { margin: 0 0 20px; color: var(--mute); }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  button, select { font: 700 14px Raleway, system-ui, sans-serif; border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+  button { background: var(--red); color: #fff; border: 0; }
+  button.q, select { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .layout { display: grid; grid-template-columns: minmax(200px, 280px) minmax(0, 1fr); gap: 20px; align-items: start; }
+  nav { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px; max-height: 70vh; overflow: auto; }
+  nav button { display: block; width: 100%; text-align: left; background: transparent; color: var(--ink); border: 0; border-radius: 6px; padding: 8px 10px; font-weight: 600; }
+  nav button.on { background: var(--red); color: #fff; }
+  nav button small { display: block; color: inherit; opacity: .8; font-weight: 600; font-size: 12px; }
+  .stagebox { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+  .stagebox h2 { margin: 0 0 4px; font: 400 32px/1 "Bebas Neue", Impact, sans-serif; letter-spacing: .03em; }
+  .stagebox p { margin: 0 0 12px; color: var(--mute); }
+  .host { width: 100%; max-width: 960px; background: #222629; color: #f1ece2; border-radius: 10px; padding: 12px; }
+  .host .isx-ctl .hint { color: #c4c9ce; }
+  @media (max-width: 760px) { body { padding: 16px; } .layout { grid-template-columns: minmax(0, 1fr); } nav { max-height: 240px; } h1 { font-size: 32px; } }
+</style>
+</head>
+<body>
+<h1>Handbook explainers, batch B</h1>
+<p class="sub">Twenty policy explainers, three steps each. Pick one, or play them all in TV mode. Space pauses, arrow keys step, R replays, Escape closes TV mode.</p>
+<div class="bar">
+  <button type="button" id="tv">TV mode, all twenty</button>
+  <button type="button" id="theme" class="q">Light page</button>
+</div>
+<div class="layout">
+  <nav id="list" aria-label="Policies"></nav>
+  <section class="stagebox">
+    <h2 id="name"></h2>
+    <p id="blurb"></p>
+    <div class="host" id="host"></div>
+  </section>
+</div>
+<script src="iso-kit.js"></script>
+<script src="iso-explainer.js"></script>
+<script src="hb-iso-B.js"></script>
+<script>
+(function () {
+  var ids = Object.keys(window.HB_ISO), list = document.getElementById('list'), host = document.getElementById('host'), cur = null, curBtn = null;
+  function show(id, btn) {
+    if (cur) cur.destroy();
+    var spec = window.HB_ISO[id];
+    document.getElementById('name').textContent = spec.title;
+    document.getElementById('blurb').textContent = spec.blurb;
+    cur = ISOX.mount(host, spec, { aspect: '4:3' });
+    if (curBtn) curBtn.classList.remove('on'); curBtn = btn; btn.classList.add('on');
+    try { history.replaceState(null, '', '#' + encodeURIComponent(id)); } catch (e) { /* file or sandboxed */ }
+  }
+  ids.forEach(function (id) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = window.HB_ISO[id].title;
+    var s = document.createElement('small'); s.textContent = window.HB_ISO[id].std; b.appendChild(s);
+    b.addEventListener('click', function () { show(id, b); });
+    list.appendChild(b);
+  });
+  var start = decodeURIComponent((location.hash || '').slice(1)), k = Math.max(0, ids.indexOf(start));
+  show(ids[k], list.children[k]);
+  document.getElementById('tv').addEventListener('click', function () { if (cur) cur.pause(); ISOX.tv(ids.map(function (i) { return window.HB_ISO[i]; })); });
+  document.getElementById('theme').addEventListener('click', function (e) {
+    var light = document.documentElement.getAttribute('data-theme') === 'light';
+    if (light) document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', 'light');
+    e.currentTarget.textContent = light ? 'Light page' : 'Dark page';
+  });
+})();
+</script>
+</body>
+</html>
