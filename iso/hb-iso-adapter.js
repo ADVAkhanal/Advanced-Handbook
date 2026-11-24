@@ -23,7 +23,7 @@
   'use strict';
   if (window.HBIso) return;
 
-  var VERSION = '1';
+  var VERSION = '2';   /* cache key for the kit and batch files: v1.1 kit */
   /* batch files, one per group of policies (each registers window.HB_ISO['<section id>'] = spec) */
   var BATCHES = ['hb-iso-A.js', 'hb-iso-B.js', 'hb-iso-C.js', 'hb-iso-D.js'];
   /* ids that are known to have a spec, so the first open shows a placeholder instead of the old scene while the files load.
@@ -41,21 +41,14 @@
   /* ---------------------------------------------------------------- styles */
   var css = document.createElement('style'); css.id = 'hbv-iso-css';
   css.textContent =
-    '.hbv-isow{width:100%;min-width:0}' +
-    '.hbv-st.hbv-iso{border:1px solid var(--border-strong);aspect-ratio:4/3}' +
-    '.hbv-iso .isx,.hbv-iso .isx-stage{height:100%;aspect-ratio:auto}' +
-    '.hbv-iso .isx{font-family:var(--font-body)}' +
-    '.hbv-iso .isx-mq h3{font:600 max(12px,calc(var(--u)*4.2))/1 var(--font-display);letter-spacing:.03em}' +
-    '.hbv-iso .isx-mq small{font-family:var(--font-body);font-weight:600;font-size:max(9px,calc(var(--u)*2.4))}' +
-    '.hbv-iso .isx-mq .chips u{font-size:max(8px,calc(var(--u)*1.9))}' +
-    '.hbv-iso .isx-tag{font-size:max(8.5px,calc(var(--u)*1.8))}' +
-    '.hbv-iso .isx-note{font-size:max(10.5px,calc(var(--u)*2.2))}' +
-    '.hbv-iso .isx-mq .chips u,.hbv-iso .isx-tag,.hbv-iso .isx-note,.hbv-iso .isx-cap{font-family:var(--font-body)}' +
-    '.hbv-iso .isx-mq b,.hbv-iso .isx-big b,.hbv-iso .isx-big span{font-family:var(--font-display);font-weight:600}' +
-    '.hbv-iso .isx-mq b{font-size:max(11px,calc(var(--u)*3.2))}' +
-    '.hbv-iso .isx-big b{font-size:calc(var(--u)*17);line-height:1}' +
-    '.hbv-iso .isx-big span{font-size:max(11px,calc(var(--u)*5));letter-spacing:.05em}' +
-    '.hbv-iso .isx-cap{font-size:max(11.5px,calc(var(--u)*3));line-height:1.15;white-space:normal;text-align:center;width:max-content;max-width:94%}' +
+    '.hbv-isow{width:100%;min-width:0;container-type:inline-size}' +
+    /* kit v1.1 sizes all its own text (clamp with pixel minimums, panel under a narrow picture): the page only supplies fonts, the frame and the controls */
+    '.hbv-st.hbv-iso{border:0;aspect-ratio:auto;overflow:visible;background:none;container-type:normal}' +
+    '.hbv-st.hbv-iso.hbv-wait{aspect-ratio:4/3;display:grid;place-items:center;background:#15171a;border:1px solid var(--border-strong);overflow:hidden}' +
+    '@container (max-width:559px){.hbv-st.hbv-iso.hbv-wait{aspect-ratio:auto;min-height:calc(75cqi + 100px)}}' +
+    '.hbv-iso .isx{--isx-display:var(--font-display);--isx-body:var(--font-body)}' +
+    '.hbv-iso .isx-stage{outline:1px solid var(--border-strong);outline-offset:-1px}' +
+    '.hbv-iso .isx-mq h3,.hbv-iso .isx-mq b,.hbv-iso .isx-big b,.hbv-iso .isx-big span{font-weight:600}' +
     '.hbv-isoctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}' +
     '.hbv-ib{font-family:var(--font-display);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--text-primary);border:1px solid var(--border-strong);border-radius:2px;padding:7px 12px;cursor:pointer}' +
     '.hbv-ib.pri{border-color:var(--brand-red,#EE2D24)}' +
@@ -65,7 +58,6 @@
     '.hbv-isoctl .hint{margin-left:auto;font:400 12px var(--font-body);color:var(--text-secondary)}' +
     '.hbv-tv .hbv-isow{width:100%;display:flex;justify-content:center}' +
     '.hbv-tv .hbv-isoctl{display:none}' +
-    '.hbv-iso.hbv-wait{display:grid;place-items:center}' +
     '@media (max-width:520px){.hbv-isoctl .hint{display:none}}' +
     '@media print{.hbv-isoctl{display:none!important}}';
   document.head.appendChild(css);

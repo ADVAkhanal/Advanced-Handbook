@@ -1,5 +1,7 @@
+/* global module */
 /* ============================================================================================================
-   iso-kit.js  -  Advanced PMC isometric cutaway kit (pixel style, 2:1 isometric, canvas 2D)
+   iso-kit.js  -  Advanced PMC isometric cutaway kit (pixel style, 2:1 isometric, canvas 2D)   VERSION 1.1
+   v1.1: g.setCam accepts dx, dy (a pixel shift); g.watch / g.watchMark / g.screenBox for the framework keep-out planner; lint-only edits merged from the Tool Crib copy.
 
    Dependency free, ES5 style (var / function), no emoji, no gradients, no shadows, no blur, no alpha
    blending. Every pixel is an integer rectangle filled with a flat colour. "See through" is done with
@@ -35,7 +37,7 @@
    --------------------------------------------------------------------------------------------------------
    Raster      g.r(x,y,w,h,c)  g.p(x,y,c)  g.poly(pts,c,dens)  g.line(x0,y0,x1,y1,c)  g.ell(cx,cy,rx,ry,c,dens)
                g.disc(cx,cy,R,c)  g.fill(c)  g.veil(dens,c)  (dens 0..1 = ordered dither, never alpha)
-   Camera      g.setCam({x,y,zoom,z})  g.proj(x,y,z) -> [sx,sy]  g.Z  g.ox  g.oy
+   Camera      g.setCam({x,y,zoom,z,dx,dy})  g.proj(x,y,z) -> [sx,sy]  g.Z  g.ox  g.oy
    Shapes      g.isoBox(x,y,z,w,d,h,col,opts)     opts: glass, dens, rim:false, shadow
                g.isoCyl(x,y,z,rad,h,col,opts)     vertical cylinder / disc stack, centre (x,y); opts: bands, shadow
                g.isoTile(x,y,w,d,col,z)           flat rectangle on the floor (or at height z)
@@ -149,7 +151,7 @@
     var cyDefault = o.cy || 98;
     var g = { W: W, H: H, ctx: ctx, Z: 1, ox: Math.round(W / 2), oy: cyDefault, lastBox: null, P: P, M: M, mix: mix, rnd: rnd, canCache: !!mk };
     var sprites = o.sprites || {};
-    try { ctx.imageSmoothingEnabled = false; } catch (e) { /* mock */ }
+    try { ctx.imageSmoothingEnabled = false; } catch { /* mock */ }
 
     /* ---------------- raster ---------------- */
     function r(x, y, w, h, c) {
@@ -167,11 +169,20 @@
     g.proj = function (x, y, z) {
       return [Math.round(g.ox + (x - y) * 2 * g.Z), Math.round(g.oy + (x + y - (z || 0)) * g.Z)];
     };
+    /* screen rectangle [x0,y0,x1,y1] of a world box [x0,y0,z0,x1,y1,z1] under the current camera (used by the framework's keep-out
+       planner: set g.watch = [] (and g.watchMark = function returning a running count of painted rectangles) and every isoPerson / isoProp
+       call appends { kind, name, box, m0, m1 }: the rectangles painted by that call are numbers m0 up to m1) */
+    function worldScreenBox(b) {
+      var xs = [], ys = [], i, j, k, p;
+      for (i = 0; i < 2; i++) for (j = 0; j < 2; j++) for (k = 0; k < 2; k++) { p = g.proj(i ? b[3] : b[0], j ? b[4] : b[1], k ? b[5] : b[2]); xs.push(p[0]); ys.push(p[1]); }
+      return [Math.min.apply(null, xs), Math.min.apply(null, ys), Math.max.apply(null, xs), Math.max.apply(null, ys)];
+    }
+    g.screenBox = worldScreenBox;
     g.setCam = function (c) {
       var Z = c.zoom === 2 ? 2 : 1;
       g.Z = Z;
-      g.ox = Math.round(W / 2 - (c.x - c.y) * 2 * Z);
-      g.oy = Math.round(cyDefault - (c.x + c.y) * Z + (c.z || 0) * Z);
+      g.ox = Math.round(W / 2 - (c.x - c.y) * 2 * Z) + Math.round(c.dx || 0);                    /* dx, dy: a whole pixel shift of the picture (the framework's keep-out nudge) */
+      g.oy = Math.round(cyDefault - (c.x + c.y) * Z + (c.z || 0) * Z) + Math.round(c.dy || 0);
       return g;
     };
 
@@ -661,6 +672,7 @@
       x = Math.round(x); y = Math.round(y);
       var z = op.z || 0, A = g.proj(x, y, z), ax = A[0], ay = A[1], Z = g.Z;
       g.lastBox = [x - 1, y - 1, z, x + 1, y + 1, z + 19];
+      var wm0 = g.watch && g.watchMark ? g.watchMark() : 0;
       var shirt = op.shirt || P.red, shirtD = op.shirtD || mix(shirt, '#000000', 0.32), pants = op.pants || '#2f3a4a', skin = op.skin || P.skin, hair = op.hair || P.hair;
       var front = (dir === 0 || dir === 1), f = dir === 0 ? 1 : dir === 1 ? -1 : dir === 2 ? -1 : 1;
       if (op.shadow !== false) ell(ax + Z, ay, 5 * Z, 2 * Z, P.shadow);
@@ -711,6 +723,7 @@
         q(ax, ay, -2, hy + 5, 5, 1, mix(hair, '#000000', 0.2));
       }
       if (op.hat) { q(ax, ay, -3, hy - 1, 7, 2, op.hat); q(ax, ay, -2, hy - 2, 5, 1, op.hat); q(ax, ay, -3, hy - 1, 7, 1, mix(op.hat, '#ffffff', 0.3)); }
+      if (g.watch) g.watch.push({ kind: 'person', name: 'isoPerson', box: worldScreenBox(g.lastBox), m0: wm0, m1: g.watchMark ? g.watchMark() : 0 });
     };
 
     /* ---------------- props ---------------- */
@@ -746,8 +759,10 @@
       /* world position of a point of the prop (u across the front, v depth, zz height) */
       s.at = function (u, v, zz) { return face === 'y' ? [x + u, y + v, z + zz] : [x + v, y + u, z + zz]; };
       s.top = function (u, v, ww, dd, zz, col) { if (face === 'y') g.isoTile(x + u, y + v, ww, dd, col, z + zz); else g.isoTile(x + v, y + u, dd, ww, col, z + zz); };
+      var pm0 = g.watch && g.watchMark ? g.watchMark() : 0;
       PROPS[kind].draw(s, op);
       g.lastBox = g.propBox(kind, x, y, z, op);
+      if (g.watch) g.watch.push({ kind: 'prop', name: 'isoProp:' + kind, box: worldScreenBox(g.lastBox), m0: pm0, m1: g.watchMark ? g.watchMark() : 0 });
     };
 
     return g;
@@ -772,7 +787,7 @@
     if (o.tag) s.F(Math.max(2, w - 4), h - 3, 2, 2, o.tag);
   });
 
-  defineProp('pallet', function (o) { return [o.w || 12, o.d || 10, 3]; }, function (s, o) {
+  defineProp('pallet', function (o) { return [o.w || 12, o.d || 10, 3]; }, function (s, _o) {
     var w = s.w, d = s.d;
     s.B(0, 0, 0, 2, d, 1, 'wood', { rim: false }); s.B(Math.round(w / 2) - 1, 0, 0, 2, d, 1, 'wood', { rim: false }); s.B(w - 2, 0, 0, 2, d, 1, 'wood', { rim: false });
     s.B(0, 0, 1, w, 2, 2, 'wood', { rim: false }); s.B(0, Math.round(d / 2) - 1, 1, w, 2, 2, 'wood', { rim: false }); s.B(0, d - 2, 1, w, 2, 2, 'wood', { rim: false });
@@ -802,7 +817,7 @@
     s.B(0, 0, 9, w, d, 2, o.top || 'counter', { rim: true });
   });
 
-  defineProp('cabinet', fixed(8, 8, 15), function (s, o) {
+  defineProp('cabinet', fixed(8, 8, 15), function (s, _o) {
     s.B(0, 0, 0, 8, 8, 15, 'steel', { shadow: true });
     for (var i = 0; i < 3; i++) { s.F(1, 1 + i * 5, 6, 4, { fill: mix(PI.st1, '#ffffff', 0.08), border: PI.st0 }); s.F(3, 3 + i * 5, 2, 1, PI.st4); }
   });
@@ -960,7 +975,7 @@
   });
 
   defineProp('wallclock', fixed(8, 1, 8), function (s, o) {
-    var R = 3.5, cu = 4, cz = 4, pts = [], hand = [], k;
+    var R = 3.5, cu = 4, cz = 4, pts = [], k;
     var plane = s.face === 'y' ? 'y' : 'x';
     function P3(u, zz) { return plane === 'y' ? s.g.proj(s.x + u, s.y + 1, s.z + zz) : s.g.proj(s.x + 1, s.y + u, s.z + zz); }
     for (k = 0; k < 16; k++) { var a = k / 16 * Math.PI * 2; pts.push(P3(cu + Math.cos(a) * (R + 0.5), cz + Math.sin(a) * (R + 0.5))); }
@@ -1046,7 +1061,7 @@
     }
   });
 
-  var ISO = { P: P, M: M, make: make, mix: mix, rnd: rnd, BAYER: BAYER, frontOf: frontOf, boxesIntersect: boxesIntersect, defineProp: defineProp, PROPS: PROPS, C: C, version: '1.0' };
+  var ISO = { P: P, M: M, make: make, mix: mix, rnd: rnd, BAYER: BAYER, frontOf: frontOf, boxesIntersect: boxesIntersect, defineProp: defineProp, PROPS: PROPS, C: C, version: '1.1' };
   root.ISO = ISO;
   if (typeof module !== 'undefined' && module.exports) module.exports = ISO;
 })(typeof window !== 'undefined' ? window : this);

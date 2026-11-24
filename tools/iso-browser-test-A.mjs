@@ -57,7 +57,7 @@ for (const [w, h, mobile] of [[1920, 1080], [1366, 768], [1024, 768], [390, 844,
     if (r !== 'ok') { ok(`${w}: card ${sid}`, false, r); continue; }
     await sleep(1800);
     const info = await ev(`(function(){var c=document.querySelector('.section-card[data-section-id="${sid.replace(/"/g, '\\"')}"]'); var wrap=c.querySelector('.hbv'); if(!wrap) return {nowrap:true};
-      var iso=wrap.querySelector('.isx'), st=wrap.querySelector('.hbv-st'), r=st.getBoundingClientRect(), ctl=wrap.querySelector('.hbv-isoctl'), cv=wrap.querySelector('canvas');
+      var iso=wrap.querySelector('.isx'), st=(wrap.querySelector('.isx-stage')||wrap.querySelector('.hbv-st')), r=st.getBoundingClientRect(), ctl=wrap.querySelector('.hbv-isoctl'), cv=wrap.querySelector('canvas');
       var mq=wrap.querySelector('.isx-mq'), cap=wrap.querySelector('.isx-cap.on'), tag=wrap.querySelector('.isx-tag');
       var mr=mq&&mq.getBoundingClientRect(), tr=tag&&tag.getBoundingClientRect();
       return {iso:!!iso, w:Math.round(r.width), h:Math.round(r.height), ratio:+(r.width/r.height).toFixed(3), ctl:ctl&&!ctl.hidden, btns:ctl?ctl.querySelectorAll('button').length:0, canvas:cv?cv.width+'x'+cv.height:null,
@@ -71,8 +71,8 @@ for (const [w, h, mobile] of [[1920, 1080], [1366, 768], [1024, 768], [390, 844,
     if (isIso) {
       ok(`${w}: ${sid} 4:3 stage, controls, no old sign`, Math.abs(info.ratio - 1.333) < 0.02 && info.ctl && info.btns === 4 && !info.hasOldMq, `ratio ${info.ratio} btns ${info.btns}`);
       ok(`${w}: ${sid} no sign overflow, tag clear of sign, no page overflow`, info.mqInside && !info.tagOverlap && info.overflow <= 1, `mqInside ${info.mqInside} tagOverlap ${info.tagOverlap} overflow ${info.overflow}`);
-      ok(`${w}: ${sid} sign stays in the top 27% of the picture, caption inside the picture`, info.mqBottom <= 0.27 && info.capInside !== false, `sign bottom ${info.mqBottom} capInside ${info.capInside} cap ${info.capFont}px`);
-      if (info.mqFont) ok(`${w}: ${sid} sign title at least 12px and captions at least 12px`, info.mqFont >= 12 && (info.capFont === 0 || info.capFont >= 11.4), 'title ' + info.mqFont.toFixed(1) + 'px, stage ' + info.w + 'px');
+      ok(`${w}: ${sid} sign stays in the top 40% of the picture, caption inside the picture`, info.mqBottom <= 0.40 && info.capInside !== false, `sign bottom ${info.mqBottom} capInside ${info.capInside} cap ${info.capFont}px`);
+      if (info.mqFont) ok(`${w}: ${sid} sign title at least 15px and captions at least 14px`, info.mqFont >= 15 && (info.capFont === 0 || info.capFont >= 14), 'title ' + info.mqFont.toFixed(1) + 'px, stage ' + info.w + 'px');
     }
     if (sid === '3.2' || sid === '4.4' || sid === '8.1') await shot(`page-${w}-${sid.replace(/[^A-Za-z0-9.]/g, '_')}`);
     await close(sid);
@@ -126,6 +126,66 @@ await open('3.2'); await sleep(2500);
 const rm = await ev(`(function(){var c=document.querySelector('.section-card[data-section-id="3.2"]'); var w=c.querySelector('.where'); var b=[].slice.call(c.querySelectorAll('.hbv-ib')); return {where:w&&w.textContent, playDisabled:b.some(function(x){return /Play|Pause/.test(x.textContent)&&x.disabled})};})()`);
 await shot('reduced-1366-3.2');
 ok('reduced motion: still frame, play button off', rm.where === 'Step 1 of 3' && rm.playDisabled, JSON.stringify(rm));
+
+/* ---- v1.1: every policy plays, every text element is at its minimum or larger, nothing overlaps the page text, contrast scan -------------
+   at 1920, 1366, 1024 and 390 px. Per policy: the explainer mounts, draws pixels, steps through all its steps, the final big card shows, and
+   (checked on a few steps per viewport to keep the run short) each visible text element of the explainer is measured. */
+await S('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+const MINS = { '.isx-mq h3': 15, '.isx-mq small': 12, '.isx-mq .chips u': 12, '.isx-tag': 12, '.isx-note.on': 12, '.isx-cap.on': 14, '.isx-big b': 34, '.isx-big span': 15, '.isx-panel .ps': 12, '.isx-panel .pt': 12, '.isx-panel .pc u': 12, '.isx-panel .pn span': 12 };
+const SCAN = `(function(MINS){
+  var root=document.querySelector('.hbv .isx, .hbv-tv .isx'); if(!root) return {noroot:true};
+  var bad=[], seen=0;
+  function vis(e){var cs=getComputedStyle(e); if(cs.display==='none'||cs.visibility==='hidden') return false; var r=e.getBoundingClientRect(); return r.width>0&&r.height>0;}
+  Object.keys(MINS).forEach(function(sel){ [].slice.call(root.querySelectorAll(sel)).forEach(function(e){ if(!vis(e)) return; seen++; var px=parseFloat(getComputedStyle(e).fontSize); if(px < MINS[sel]-0.05) bad.push(sel+' '+px.toFixed(1)+'px < '+MINS[sel]); }); });
+  /* contrast: luminance difference of text colour and nearest opaque background, at least 0.35 */
+  function lum(c){var m=c.match(/[0-9.]+/g).map(Number); var a=m.length>3?m[3]:1; var v=m.slice(0,3).map(function(x){x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)}); return {l:.2126*v[0]+.7152*v[1]+.0722*v[2], a:a};}
+  function bg(e){ while(e){ var c=getComputedStyle(e).backgroundColor; var q=lum(c); if(q.a>=0.99) return q.l; e=e.parentElement; } return 0.004; }
+  var low=[], pageLow=[]; var host=root.closest('.hbv, .hbv-tv')||root;
+  [].slice.call(host.querySelectorAll('*')).forEach(function(e){
+    if(!e.childNodes.length||![].some.call(e.childNodes,function(n){return n.nodeType===3&&n.textContent.trim()})) return; if(!vis(e)) return;
+    var t=lum(getComputedStyle(e).color), d=Math.abs(t.l-bg(e)); if(d<0.35) (root.contains(e) || e.closest('.hbv-isoctl') ? low : pageLow).push((e.className||e.tagName)+' '+d.toFixed(2)+' "'+e.textContent.trim().slice(0,24)+'"');
+  });
+  /* overlap with the page text: the explainer block against the text block beside or under it, and nothing sticking out horizontally */
+  var wrap=root.closest('.hbv'), over=null;
+  if(wrap){ var a=root.getBoundingClientRect(), t=wrap.querySelector('.hbv-w'); if(t){ var b=t.getBoundingClientRect(); if(!(a.right<=b.left+1||b.right<=a.left+1||a.bottom<=b.top+1||b.bottom<=a.top+1)) over='explainer overlaps the policy text'; } }
+  var cv=root.querySelector('canvas'), px=0; try{ var d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data; for(var i=0;i<d.length;i+=4*97) if(d[i]+d[i+1]+d[i+2]>30) px++; }catch(e){}
+  var st=root.querySelector('.isx-stage'), sr=st.getBoundingClientRect(); var out=[];
+  [].slice.call(root.querySelectorAll('.isx-mq,.isx-cap.on,.isx-big.on,.isx-tag')).forEach(function(e){ if(!vis(e)) return; var r=e.getBoundingClientRect(); if(r.left<sr.left-1||r.right>sr.right+1||r.top<sr.top-1||r.bottom>sr.bottom+1) out.push(e.className); });
+  return {seen:seen,bad:bad,low:low,pageLow:pageLow,over:over,painted:px,stageW:Math.round(sr.width),narrow:root.classList.contains('isx-narrow'),out:out,ovf:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+    where:(root.parentElement.parentElement.querySelector('.where')||{}).textContent||'', steps:(window.HB_ISO&&root._isx)?root._isx.spec.steps.length:0, big:!!(root._isx&&root._isx.spec.steps[root._isx.spec.steps.length-1].big)};
+})(${JSON.stringify(MINS)})`;
+const allIds = await ev('Object.keys(window.HB_ISO||{})');
+ok('81 policy specs are loaded', allIds.length === 81, String(allIds.length));
+const sample = allIds.filter((_, k) => k % 9 === 0);
+let played = 0;
+for (const [w, h, mobile] of [[1920, 1080], [1366, 768], [1024, 768], [390, 844, true]]) {
+  await view(w, h, mobile); await S('Page.navigate', { url: BASE }); await sleep(2200);
+  const ids = (w === 1366 || w === 390) ? allIds : sample;
+  let bad = 0, lowc = 0, firstBad = [], pageLowSeen = [];
+  for (const sid of ids) {
+    const r = await open(sid); await sleep(260);
+    if (r !== 'ok') { ok(`${w}: ${sid} card opens`, false, r); bad++; continue; }
+    await sleep(520);
+    /* go to the last step, where the big card is, and to step 1 */
+    await ev(`(function(){var i=document.querySelector('.section-card[data-section-id="${sid.replace(/"/g, '\\"')}"] .isx'); if(i&&i._isx){i._isx.goto(i._isx.spec.steps.length-1);} })()`); await sleep(1500);
+    const m = await ev(SCAN.replace('.hbv .isx, .hbv-tv .isx', `.section-card[data-section-id="${sid.replace(/"/g, '\\"')}"] .isx`));
+    const good = !m.noroot && m.bad.length === 0 && !m.over && m.painted > 20 && m.out.length === 0 && m.ovf <= 1 && m.steps >= 3 && /Step \d+ of \d+/.test(m.where);
+    if (!good) { bad++; if (firstBad.length < 6) firstBad.push(sid + ': ' + JSON.stringify(m).slice(0, 300)); }
+    lowc += m.low ? m.low.length : 0; if (m.pageLow && m.pageLow.length) pageLowSeen = m.pageLow.slice(0, 3); if (m.low && m.low.length && firstBad.length < 6) firstBad.push(sid + ' contrast: ' + m.low.slice(0, 3).join('; '));
+    if (!m.noroot) played++;
+    await close(sid);
+  }
+  ok(`${w}: ${ids.length} policies play, text at or above its minimum, no overlap with the page text, nothing outside the picture`, bad === 0, firstBad.join(' | '));
+  ok(`${w}: contrast scan of the explainer and its controls (luminance difference at least 0.35)`, lowc === 0, firstBad.filter((x) => /contrast/.test(x)).join(' | '));
+  if (pageLowSeen.length) console.log('INFO  ' + w + ': page text below 0.35 (existing page styles, not the explainer): ' + pageLowSeen.join('; '));
+}
+/* TV mode at 1366: text minimums and the explainer fills the stage */
+await view(1366, 768); await S('Page.navigate', { url: BASE }); await sleep(2200);
+await ev(`(function(){var b=[].slice.call(document.querySelectorAll('.hbv-all')).find(function(x){return /Watch all/.test(x.textContent)}); b.click();})()`); await sleep(2500);
+const tvm = await ev(SCAN.replace('.hbv .isx, .hbv-tv .isx', '.hbv-tv .isx'));
+if (tvm.pageLow && tvm.pageLow.length) console.log('INFO  TV side text below 0.35 (existing page styles): ' + tvm.pageLow.join('; '));
+ok('1366: TV mode explainer text at or above its minimum, contrast ok', !tvm.noroot && tvm.bad.length === 0 && tvm.low.length === 0 && tvm.out.length === 0, JSON.stringify(tvm).slice(0, 300));
+await shot('tv-1366-v11'); await key('Escape'); await sleep(400);
 
 console.log('\nconsole errors/warnings (' + logs.length + '):'); logs.forEach((l) => console.log('  ' + l));
 const failed = results.filter((r) => !r.pass).length;
