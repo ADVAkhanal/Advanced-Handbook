@@ -2,8 +2,12 @@
 /* ============================================================================================================
    iso-explainer.js  -  step-by-step isometric explainer framework (needs iso-kit.js loaded first)
 
-   VERSION 1.1  (ISOX.version)
+   VERSION 1.2  (ISOX.version)
    Changelog
+     1.2  Named characters: a person option { who: 'forrest' | 'pk' | 'randel' | 'scott' | 'kim' | 'raul' | 'steve' | 'dora' | 'pam' } draws that character
+          (pixel art, flat, no shadow) through the same isoPerson / L.person call, so the checkers still see a person. ISOX.character(name, opts)
+          returns the option object for a spec (an unknown name falls back to the generic worker); ISOX.characters lists the roster (key, name,
+          role label); ISOX.characterImage(name, 'head' | 'full') gives a data-URI PNG when characters.js is loaded (HTML pages such as the Hub).
      1.1  Text is sized with clamp(MIN px, cqi, MAX px): sign title >= 15 px, caption >= 14 px, subtitle / chips / notes / tag >= 12 px,
           big card label >= 15 px. Layout rule: on a stage narrower than ISOX.NARROW (560 px) only the sign title and the caption stay
           in the picture; the subtitle, speed tag, chips and notes move into an HTML panel directly under the picture (nothing is hidden,
@@ -78,7 +82,7 @@
   var rnd = ISO.rnd;
 
   var DEF_CAM = { x: 26, y: 14, zoom: 1 };
-  var VERSION = '1.1';
+  var VERSION = '1.2';
   var NARROW = 560;            /* a stage narrower than this (px) uses the panel layout */
   var CY = 98;                 /* canvas row of the picture centre (see iso-kit: cy) */
   var FLICKER_FREE_MS = 1200;  /* no sign flicker for this long after mount */
@@ -833,6 +837,19 @@
     return estimateZones(stage, step, o);
   }
 
+  /* ISOX.character('forrest', { arm: 'out' }) -> { who: 'forrest', arm: 'out' }; an unknown name returns the options without who (generic worker) */
+  function character(name, opts) {
+    var r = {}, k;
+    for (k in (opts || {})) r[k] = opts[k];
+    if (ISO.characters && ISO.characters.info(String(name || '').toLowerCase())) r.who = String(name).toLowerCase();
+    return r;
+  }
+  /* data-URI PNG of a character ('head' 44 px, 'head1' 22 px, 'full' 104 px); needs characters.js (ISO_CHARACTER_IMAGES), else ''. */
+  function characterImage(name, kind) {
+    var im = typeof ISO_CHARACTER_IMAGES !== 'undefined' ? ISO_CHARACTER_IMAGES : (root.ISO_CHARACTER_IMAGES || null), e = im && im[String(name || '').toLowerCase()];
+    return e ? (e[kind || 'head'] || '') : '';
+  }
+
   var ISOX = {
     define: function (spec) { ISOX.specs.push(spec); return spec; }, specs: [],
     mount: function (host, spec, o) { return new Inst(host, spec, o); },
@@ -840,7 +857,9 @@
     sizes: sizes, zones: zones, fit: fit, plan: plan, probe: probe, cellsOf: cellsOf, maskCover: maskCover, CELL: CELL, TOL: TOL, REPORT: REPORT, bigLayout: bigLayout, resolveBigPos: resolveBigPos, layoutMode: modeOf, geom: geom,
     SZ: SZ, PANEL: PANEL, NARROW: NARROW, BIG_FRAC: BIG_FRAC,
     fx: { clamp: clamp, seg: seg, ez: ez, E: E, lerp: lerp, rnd: rnd, walk: walk, who: who },
-    reduced: reduced, version: VERSION, debug: DEBUG
+    reduced: reduced, version: VERSION, debug: DEBUG,
+    characters: ISO.characters ? ISO.characters.names.map(function (n) { return ISO.characters.info(n); }) : [],
+    character: character, characterImage: characterImage
   };
   root.ISOX = ISOX;
   if (typeof module !== 'undefined' && module.exports) module.exports = ISOX;

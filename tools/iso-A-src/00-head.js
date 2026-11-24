@@ -17,13 +17,13 @@
   function glowAt(g, x, y, z, rad, col, k) { var p = g.proj(x, y, z); g.glow(p[0], p[1], rad, col, k); }
 
   /* people */
-  var ME = { shirt: P.red, hair: '#2b2018', badge: true };
-  var MGR = { shirt: P.blue, hair: '#5a3a22', skin: P.skin3, badge: true };
-  var HRP = { shirt: P.st2, hair: '#1f1a17', skin: P.skin2, badge: true, glasses: true };
-  var OPA = { shirt: P.green, hair: '#3a2c22', skin: P.skin2, vest: true, hat: P.amber };
-  var OPB = { shirt: P.amber, hair: '#1f1a17', skin: P.skin3 };
-  var OPC = { shirt: '#6c4aa0', hair: '#7a5a3a', skin: P.skin };
-  var CRM = { shirt: '#d8d1c2', hair: '#9a9a9a', skin: P.skin3 };
+  var ME = { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018', badge: true };
+  var MGR = { who: 'scott', h: 26, shirt: P.blue, hair: '#5a3a22', skin: P.skin3, badge: true };
+  var HRP = { who: 'pam', h: 26, shirt: P.st2, hair: '#1f1a17', skin: P.skin2, badge: true, glasses: true };
+  var OPA = { who: 'pk', h: 26, shirt: P.green, hair: '#3a2c22', skin: P.skin2, vest: true, hat: P.amber };
+  var OPB = { who: 'randel', h: 26, shirt: P.amber, hair: '#1f1a17', skin: P.skin3 };
+  var OPC = { who: 'steve', h: 26, shirt: '#6c4aa0', hair: '#7a5a3a', skin: P.skin };
+  var CRM = { who: 'kim', h: 26, shirt: '#d8d1c2', hair: '#9a9a9a', skin: P.skin3 };
   var LAYERS = ['Who', 'What happens', 'What to do'];
 
   /* extra props (prefix ha) used by this batch */

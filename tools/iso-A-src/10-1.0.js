@@ -13,16 +13,16 @@
         mach(L, 26, 1, S, 0); mach(L, 44, 1, S, 1);
         L.prop('haPlant', 2, 30, 0, {});
         if (S.op1) L.person(S.op1.x, S.op1.y, S.op1.dir, fx.who(S.op1, ext(S.lead ? ext(OPA, { vest: true, hat: P.amber }) : OPB, { arm: S.op1.moving ? 'down' : 'out' })));
-        if (S.m > 1) { L.person(46, 17, 3, ext(OPA, { arm: 'out' })); L.person(54, 17, 3, ext(OPC, { arm: 'out' })); }
+        if (S.m > 1) { L.person(46, 17, 3, ext(OPA, { who: 'forrest', h: 26, arm: 'out' })); L.person(54, 17, 3, ext(OPC, { arm: 'out' })); }
                 if (S.pops) S.pops.forEach(function (q) { L.add([q[0], q[1], 0, q[0] + 1, q[1] + 1, 1], function () { ring(g, q[3], q[4], 14, q[2], P.redT, 14); }); });
       },
       steps: [
         { title: 'Where we started', sub: 'A small machine shop, 1979', dur: 7, cam: C1, key: ['desk'], cap: ['The owners write to the team', 'One machine, a few people'],
-          S: function (t, fx) { return { t: t, m: 1, owners: true, letterN: 1 + (t > 3.4 ? 1 : 0) + (t > 5.4 ? 1 : 0), write: t < 5.6, op1: fx.walk([[6, 36], [18, 28], [32, 16]], t, 0.3, 3.0, { endDir: 3 }) }; } },
+          S: function (t, fx) { return { t: t, m: 1, owners: true, letterN: 1 + (t > 3.4 ? 1 : 0) + (t > 5.4 ? 1 : 0), write: t < 5.6, op1: fx.walk([[6, 36], [18, 28], [32, 19]], t, 0.3, 3.0, { endDir: 3 }) }; } },
         { title: 'The people grow', sub: 'Operators become leaders', dur: 7.5, cam: C2, key: ['machine'], cap: ['More people join the shop', 'Fathers and sons side by side'],
-          S: function (t, fx) { return { t: t, m: 1 + (t > 0.8 ? 1 : 0), letterN: 3, write: false, op1: { x: 32, y: 16, dir: 3 }, lead: t > 4.4,
+          S: function (t, fx) { return { t: t, m: 1 + (t > 0.8 ? 1 : 0), letterN: 3, write: false, op1: { x: 32, y: 19, dir: 3 }, lead: t > 4.4,
             pops: [[0, 0, t - 0.8, 53, 6], [0, 0, t - 4.4, 32, 16]].filter(function (q) { return q[2] > 0 && q[2] < 1.2; }) }; } },
         { title: 'The people are the story', sub: 'We love seeing our people grow', dur: 6.5, cam: C3, big: { n: '1979', label: 'the early days', pos: 'left' },
-          S: function (t, fx) { return { t: t, m: 2, letterN: 3, write: false, op1: { x: 32, y: 16, dir: 3 }, lead: true }; } }
+          S: function (t, fx) { return { t: t, m: 2, letterN: 3, write: false, op1: { x: 32, y: 19, dir: 3 }, lead: true }; } }
       ] });
   })();

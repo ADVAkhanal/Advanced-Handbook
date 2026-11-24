@@ -20,7 +20,7 @@
       steps: [
         { title: 'You ask for help', sub: 'Because of a disability', dur: 7, cam: C1, key: ['table'], cap: ['You need an accommodation', 'You tell your manager'],
           S: function (t, fx) { return { t: t, docs: 0, me: fx.walk([[0, 20], [4, 17], [6, 14]], t, 0.4, 2.2, { endDir: 0 }), meArm: t > 3 ? 'out' : 'down', mgrArm: t > 4 ? 'out' : 'down' }; } },
-        { title: 'You talk it through', sub: 'An interactive dialogue', dur: 8, cam: C2, key: ['table', 'desk'], cap: ['What is needed and why, and how it helps', 'Medical information stays confidential'],
+        { title: 'You talk it through', sub: 'An interactive dialogue', dur: 8, cam: C2, key: ['table'], cap: ['What is needed and why, and how it helps', 'Medical information stays confidential'],
           S: function (t, fx) { var a = Math.floor(t * 1.3) % 2; return { t: t, docs: t > 1 ? (t > 2.4 ? 2 : 1) : 0, me: { x: 6, y: 14, dir: 0 }, meArm: a ? 'out' : 'down', mgrArm: a ? 'down' : 'out', hrArm: t > 4 ? 'out' : 'down', flow: [[[8, 23], [18, 23], [30, 23]]], desk: t > 5, deskUp: Math.round(fx.E(t, 5.2, 7) * 4), pop: t > 5 && t < 6.2 ? [38, 22] : null }; } },
         { title: 'No payback', sub: 'Asking is protected', dur: 6.5, cam: C3, big: { n: 'NO', label: 'retaliation for asking', pos: 'left' },
           S: function (t, fx) { return { t: t, docs: 2, desk: true, deskUp: 4, noMgr: true, me: { x: 38, y: 17, dir: 3 }, meArm: 'out' }; } }

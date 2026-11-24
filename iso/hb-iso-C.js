@@ -40,10 +40,11 @@
     else { g.r(cx - u, cy - 3 * u, 2 * u, 4 * u, lc); g.r(cx - u, cy + 2 * u, 2 * u, 2 * u, lc); }
   }
   /* people: palettes */
-  function who(shirt, hair, skin, more) { return ext({ shirt: shirt, hair: hair || P.hair, skin: skin || P.skin }, more || {}); }
+  var CAST = { '#e03131': 'raul', '#3d6fa5': 'randel', '#3fbf7f': 'forrest', '#e0a43a': 'pk', '#7d858c': 'steve', '#f1ece2': 'pam', '#2b4f78': 'kim', '#c9758a': 'dora' };
+  function who(shirt, hair, skin, more) { return ext({ h: 26, who: CAST[String(shirt).toLowerCase()], shirt: shirt, hair: hair || P.hair, skin: skin || P.skin }, more || {}); }
   var ME = who(P.red, '#2b2018', P.skin, { badge: true });
   var BLU = who('#3d6fa5', '#d8b36a', P.skin3), GRN = who('#3fbf7f', '#3a2c22', P.skin2), AMB = who('#e0a43a', '#6b4a2a', P.skin), GRY = who('#7d858c', '#8a8a8a', P.skin3);
-  var MGR = who('#f1ece2', '#3a2c22', P.skin, { hat: '#16191c', badge: true }), VIS = who('#2b4f78', '#2b2018', P.skin2, { glasses: true });
+  var MGR = who('#f1ece2', '#3a2c22', P.skin, { who: 'scott', h: 26, hat: '#16191c', badge: true }), VIS = who('#2b4f78', '#2b2018', P.skin2, { glasses: true });
   var PNK = who('#c9758a', '#5a2f2f', P.skin3);
   /* a small flat paper or card lying at a world point */
   /* a person helper for the lists: fx.who merges the walking step in */
@@ -542,7 +543,7 @@
         { title: 'OUTSIDE CALLERS', sub: 'News, lawyers, law enforcement', dur: 7, cam: C1, tag: 'REAL SPEED', key: ['counter'],
           cap: ['Outsiders may call about a news story', 'Or about a legal matter'],
           s: function (t, fx) { return { a: { x: 15, y: 4, dir: 1 }, aO: ext(ME, { arm: 'down' }), ring: t > 4.2,
-            c1: fx.walk([[34, 19], [8, 22]], t, 0.3, 1.7, { endDir: 3 }), c1O: ext(VIS, { hold: P.paper, holdSize: [3, 3] }), c2: t > 1.3 ? fx.walk([[34, 19], [16, 22]], t, 1.4, 2.8, { endDir: 3 }) : null, c2O: ext(GRY, { hold: '#6b4a2a', holdSize: [3, 3] }), c3: t > 2.4 ? fx.walk([[34, 19], [24, 22]], t, 2.5, 3.9, { endDir: 3 }) : null, c3O: ext(who('#2b4f78', '#2b2018', P.skin2, { hat: '#2b4f78' })) }; } },
+            c1: fx.walk([[34, 19], [8, 22]], t, 0.3, 1.7, { endDir: 3 }), c1O: ext(VIS, { hold: P.paper, holdSize: [3, 3] }), c2: t > 1.3 ? fx.walk([[34, 19], [16, 22]], t, 1.4, 2.8, { endDir: 3 }) : null, c2O: ext(GRY, { hold: '#6b4a2a', holdSize: [3, 3] }), c3: t > 2.4 ? fx.walk([[34, 19], [24, 22]], t, 2.5, 3.9, { endDir: 3 }) : null, c3O: ext(who('#2b4f78', '#2b2018', P.skin2, { who: 'scott', h: 26, hat: '#2b4f78' })) }; } },
         { title: 'DO NOT SPEAK FOR US', sub: 'Do not give the company position', dur: 7, cam: C2, tag: 'REAL SPEED', key: ['counter'],
           cap: ['Do not speak for ADVANCED', 'Do not give the company position'],
           s: function (t, fx) { return { a: { x: 15, y: 4, dir: 1 }, aO: ext(ME, { arm: t > 1 ? 'up' : 'down' }), ring: t < 1, c1: still(8, 22, 3), c1O: ext(VIS, { hold: P.paper, holdSize: [3, 3] }), c2: still(16, 22, 3), c2O: ext(GRY, { hold: '#6b4a2a', holdSize: [3, 3] }), no: fx.E(t, 1.6, 2.2) }; } },
@@ -941,5 +942,48 @@
           s: function (t, fx) { return { done: 7, bar: fx.E(t, 0.8, 4.4), stub: t > 4.6 ? 3 : 0, total: t > 5.0 ? 0.5 : 0, a: still(31, 24, 3), aO: ext(ME, { arm: 'down' }), ok: fx.E(t, 5.2, 5.8) }; } }
       ] });
   })();
+
+/*FIX:BEGIN*/
+  /* Placement fixes for the named characters (they are larger than the old workers). FIX[spec key][step number] =
+     { cam: n (the picture moves down n screen px, keeps heads below the sign), who: { name: [dx, dy] } (that character moves by whole world units) }. */
+  function applyFix(H, FIX) {
+    Object.keys(FIX).forEach(function (key) {
+      var spec = H[key]; if (!spec) return;
+      Object.keys(FIX[key]).forEach(function (sn) {
+        var st = spec.steps[+sn - 1], f = FIX[key][sn]; if (!st) return;
+        if (f.cam) {
+          ['cam'].forEach(function (k) { var c = st[k] || { x: 26, y: 14, zoom: 1 }, z = c.zoom === 2 ? 2 : 1, d = f.cam / (2 * z), n = {}, q; for (q in c) n[q] = c[q]; n.x = c.x - d; n.y = c.y - d; st[k] = n; });
+        }
+        if (f.who && st.build) {
+          var b0 = st.build;
+          st.build = function (t, g, fx) {
+            var l0 = g.list;
+            g.list = function () { var L = l0.apply(g, arguments), p0 = L.person; L.person = function (x, y, d, o) { var m = o && o.who && f.who[o.who]; return p0.call(L, m ? x + m[0] : x, m ? y + m[1] : y, d, o); }; return L; };
+            try { return b0.call(st, t, g, fx); } finally { g.list = l0; }
+          };
+        }
+      });
+    });
+  }
+  var FIX = {
+    "6.2": {"2":{"cam":8,"who":{"raul":[0,-1]}}},
+    "6.3": {"3":{"cam":8}},
+    "6.4": {"1":{"who":{"kim":[0,1]}},"2":{"who":{"kim":[1,0]}},"3":{"cam":8}},
+    "6.5": {"3":{"cam":4}},
+    "6.6": {"3":{"cam":8}},
+    "6.7": {"2":{"who":{"raul":[-1,0]}}},
+    "6.8": {"1":{"cam":8}},
+    "6.10": {"3":{"cam":4}},
+    "6.11": {"1":{"cam":8},"3":{"cam":12}},
+    "6.13": {"3":{"who":{"scott":[3,0]}}},
+    "OK-Access to Personnel and Medica": {"3":{"cam":4}},
+    "7.1": {"3":{"cam":8}},
+    "7.2": {"1":{"cam":16},"3":{"cam":4}},
+    "7.3": {"2":{"cam":4},"3":{"cam":12}},
+    "7.6": {"2":{"cam":12}},
+    "7.7": {"2":{"who":{"raul":[0,1]}}}
+  };
+  if (!globalThis.HB_NOFIX) applyFix(HB, FIX);
+  /*FIX:END*/
 
 })(typeof window !== 'undefined' ? window : this);

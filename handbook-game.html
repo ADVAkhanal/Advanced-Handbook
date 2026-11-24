@@ -239,9 +239,9 @@ function buildScenes(ISO) {
   }
 
   // ── people and paths
-  const HELPER = { shirt: P.st2, hair: '#1f1a17', skin: P.skin2 };
-  const CREW = { amber: { shirt: P.amber, hat: P.st1 }, blue: { shirt: P.blue, hair: '#5a4632' }, green: { shirt: P.green, hair: '#2a2420', skin: P.skin2 },
-    steel: { shirt: P.st3, hair: '#6a5a48' }, wood: { shirt: P.card, hair: '#1f1a17', skin: P.skin3 }, navy: { shirt: P.blueS, hair: '#3a2c22', skin: P.skin2 } };
+  const HELPER = { who: 'kim', h: 26, shirt: P.st2, hair: '#1f1a17', skin: P.skin2 };
+  const CREW = { amber: { who: 'randel', h: 26, shirt: P.amber, hat: P.st1 }, blue: { who: 'pk', h: 26, shirt: P.blue, hair: '#5a4632' }, green: { who: 'forrest', h: 26, shirt: P.green, hair: '#2a2420', skin: P.skin2 },
+    steel: { who: 'steve', h: 26, shirt: P.st3, hair: '#6a5a48' }, wood: { who: 'dora', h: 26, shirt: P.card, hair: '#1f1a17', skin: P.skin3 }, navy: { who: 'pam', h: 26, shirt: P.blueS, hair: '#3a2c22', skin: P.skin2 } };
   const op = (a, b) => Object.assign({}, a, b);
   const dirOf = (dx, dy) => (Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 0 : 2) : (dy >= 0 ? 1 : 3));
   // a walker's plan: keys [[t, x, y, dirWhenStill], ...], eased between keys; the foot changes every 2 units walked, so feet never skate
@@ -321,8 +321,8 @@ function buildScenes(ISO) {
       rm.prop('fsplant', 40, 3, 0);
       const gd = reactOf(s, 1, { arm: 'write' }), take = t > 7.4 && t < 8.0;
       rm.person(27, 9, gd.dir, op(HELPER, op(gd.o, { z: gd.z, arm: take ? 'out' : gd.o.arm })));
-      const cl = route([[0, 9, 6, 2], [5.6, 9, 6, 2], [6.8, 9, 13, 3], [9.0, 9, 13, 3], [10, 9, 6, 2]], t), carry = t >= 6.8 && t < 9.5;
-      rm.person(cl.x, cl.y, cl.dir, wp(cl, op(CREW.wood, { hold: carry ? P.paper : undefined, holdSize: [4, 3], arm: !cl.moving && cl.y < 8 ? 'up' : 'down' })));
+      const cl = route([[0, 11, 8, 2], [5.6, 11, 8, 2], [6.8, 11, 13, 3], [9.0, 11, 13, 3], [10, 11, 8, 2]], t), carry = t >= 6.8 && t < 9.5;
+      rm.person(cl.x, cl.y, cl.dir, wp(cl, op(CREW.wood, { hold: carry ? P.paper : undefined, holdSize: [4, 3], arm: !cl.moving && cl.y < 10 ? 'up' : 'down' })));
       player(rm, 27, 20, 3);
       shut(rm);
     } };
@@ -435,7 +435,7 @@ function buildScenes(ISO) {
       rm.prop('monitor', 26, 12, 9, { rows: 4, screen: '#1d3550' }); rm.prop('docs', 38, 14, 9, { n: 3 });
       const dr = t > 1.0 && t < 4.6 ? E(t, 1, 1.6) * (1 - E(t, 4.0, 4.6)) : 0;
       if (dr > 0 && rm.who) rm.L.box(8, 3, 8, Math.max(1, Math.round(dr * 2)), 6, 3, 'steel', { rim: false });
-      const cw = route([[0, 11, 6, 2], [5.2, 11, 6, 2], [6.4, 12, 13, 1], [9.2, 12, 13, 1], [10, 11, 6, 2]], t), reading = t > 5.6 && t < 9.4;
+      const cw = route([[0, 13, 7, 2], [5.2, 13, 7, 2], [6.4, 13, 13, 1], [9.2, 13, 13, 1], [10, 13, 7, 2]], t), reading = t > 5.6 && t < 9.4;
       rm.person(cw.x, cw.y, cw.dir, wp(cw, op(CREW.blue, { arm: !cw.moving && cw.y < 8 ? (dr > 0 ? 'up' : 'out') : 'out', hold: reading ? P.paper : undefined, holdSize: [4, 3] })));
       const gd = reactOf(s, 1, { arm: 'write' });
       rm.person(35, 8, gd.dir, op(HELPER, op(gd.o, { z: gd.z })));

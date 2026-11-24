@@ -17,13 +17,13 @@
   function glowAt(g, x, y, z, rad, col, k) { var p = g.proj(x, y, z); g.glow(p[0], p[1], rad, col, k); }
 
   /* people */
-  var ME = { shirt: P.red, hair: '#2b2018', badge: true };
-  var MGR = { shirt: P.blue, hair: '#5a3a22', skin: P.skin3, badge: true };
-  var HRP = { shirt: P.st2, hair: '#1f1a17', skin: P.skin2, badge: true, glasses: true };
-  var OPA = { shirt: P.green, hair: '#3a2c22', skin: P.skin2, vest: true, hat: P.amber };
-  var OPB = { shirt: P.amber, hair: '#1f1a17', skin: P.skin3 };
-  var OPC = { shirt: '#6c4aa0', hair: '#7a5a3a', skin: P.skin };
-  var CRM = { shirt: '#d8d1c2', hair: '#9a9a9a', skin: P.skin3 };
+  var ME = { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018', badge: true };
+  var MGR = { who: 'scott', h: 26, shirt: P.blue, hair: '#5a3a22', skin: P.skin3, badge: true };
+  var HRP = { who: 'pam', h: 26, shirt: P.st2, hair: '#1f1a17', skin: P.skin2, badge: true, glasses: true };
+  var OPA = { who: 'pk', h: 26, shirt: P.green, hair: '#3a2c22', skin: P.skin2, vest: true, hat: P.amber };
+  var OPB = { who: 'randel', h: 26, shirt: P.amber, hair: '#1f1a17', skin: P.skin3 };
+  var OPC = { who: 'steve', h: 26, shirt: '#6c4aa0', hair: '#7a5a3a', skin: P.skin };
+  var CRM = { who: 'kim', h: 26, shirt: '#d8d1c2', hair: '#9a9a9a', skin: P.skin3 };
   var LAYERS = ['Who', 'What happens', 'What to do'];
 
   /* extra props (prefix ha) used by this batch */
@@ -129,17 +129,17 @@
         mach(L, 26, 1, S, 0); mach(L, 44, 1, S, 1);
         L.prop('haPlant', 2, 30, 0, {});
         if (S.op1) L.person(S.op1.x, S.op1.y, S.op1.dir, fx.who(S.op1, ext(S.lead ? ext(OPA, { vest: true, hat: P.amber }) : OPB, { arm: S.op1.moving ? 'down' : 'out' })));
-        if (S.m > 1) { L.person(46, 17, 3, ext(OPA, { arm: 'out' })); L.person(54, 17, 3, ext(OPC, { arm: 'out' })); }
+        if (S.m > 1) { L.person(46, 17, 3, ext(OPA, { who: 'forrest', h: 26, arm: 'out' })); L.person(54, 17, 3, ext(OPC, { arm: 'out' })); }
                 if (S.pops) S.pops.forEach(function (q) { L.add([q[0], q[1], 0, q[0] + 1, q[1] + 1, 1], function () { ring(g, q[3], q[4], 14, q[2], P.redT, 14); }); });
       },
       steps: [
         { title: 'Where we started', sub: 'A small machine shop, 1979', dur: 7, cam: C1, key: ['desk'], cap: ['The owners write to the team', 'One machine, a few people'],
-          S: function (t, fx) { return { t: t, m: 1, owners: true, letterN: 1 + (t > 3.4 ? 1 : 0) + (t > 5.4 ? 1 : 0), write: t < 5.6, op1: fx.walk([[6, 36], [18, 28], [32, 16]], t, 0.3, 3.0, { endDir: 3 }) }; } },
+          S: function (t, fx) { return { t: t, m: 1, owners: true, letterN: 1 + (t > 3.4 ? 1 : 0) + (t > 5.4 ? 1 : 0), write: t < 5.6, op1: fx.walk([[6, 36], [18, 28], [32, 19]], t, 0.3, 3.0, { endDir: 3 }) }; } },
         { title: 'The people grow', sub: 'Operators become leaders', dur: 7.5, cam: C2, key: ['machine'], cap: ['More people join the shop', 'Fathers and sons side by side'],
-          S: function (t, fx) { return { t: t, m: 1 + (t > 0.8 ? 1 : 0), letterN: 3, write: false, op1: { x: 32, y: 16, dir: 3 }, lead: t > 4.4,
+          S: function (t, fx) { return { t: t, m: 1 + (t > 0.8 ? 1 : 0), letterN: 3, write: false, op1: { x: 32, y: 19, dir: 3 }, lead: t > 4.4,
             pops: [[0, 0, t - 0.8, 53, 6], [0, 0, t - 4.4, 32, 16]].filter(function (q) { return q[2] > 0 && q[2] < 1.2; }) }; } },
         { title: 'The people are the story', sub: 'We love seeing our people grow', dur: 6.5, cam: C3, big: { n: '1979', label: 'the early days', pos: 'left' },
-          S: function (t, fx) { return { t: t, m: 2, letterN: 3, write: false, op1: { x: 32, y: 16, dir: 3 }, lead: true }; } }
+          S: function (t, fx) { return { t: t, m: 2, letterN: 3, write: false, op1: { x: 32, y: 19, dir: 3 }, lead: true }; } }
       ] });
   })();
   /* 1.1 A Welcome Policy: the front lobby, a handbook across the counter */
@@ -507,7 +507,7 @@
       steps: [
         { title: 'You ask for help', sub: 'Because of a disability', dur: 7, cam: C1, key: ['table'], cap: ['You need an accommodation', 'You tell your manager'],
           S: function (t, fx) { return { t: t, docs: 0, me: fx.walk([[0, 20], [4, 17], [6, 14]], t, 0.4, 2.2, { endDir: 0 }), meArm: t > 3 ? 'out' : 'down', mgrArm: t > 4 ? 'out' : 'down' }; } },
-        { title: 'You talk it through', sub: 'An interactive dialogue', dur: 8, cam: C2, key: ['table', 'desk'], cap: ['What is needed and why, and how it helps', 'Medical information stays confidential'],
+        { title: 'You talk it through', sub: 'An interactive dialogue', dur: 8, cam: C2, key: ['table'], cap: ['What is needed and why, and how it helps', 'Medical information stays confidential'],
           S: function (t, fx) { var a = Math.floor(t * 1.3) % 2; return { t: t, docs: t > 1 ? (t > 2.4 ? 2 : 1) : 0, me: { x: 6, y: 14, dir: 0 }, meArm: a ? 'out' : 'down', mgrArm: a ? 'down' : 'out', hrArm: t > 4 ? 'out' : 'down', flow: [[[8, 23], [18, 23], [30, 23]]], desk: t > 5, deskUp: Math.round(fx.E(t, 5.2, 7) * 4), pop: t > 5 && t < 6.2 ? [38, 22] : null }; } },
         { title: 'No payback', sub: 'Asking is protected', dur: 6.5, cam: C3, big: { n: 'NO', label: 'retaliation for asking', pos: 'left' },
           S: function (t, fx) { return { t: t, docs: 2, desk: true, deskUp: 4, noMgr: true, me: { x: 38, y: 17, dir: 3 }, meArm: 'out' }; } }
@@ -701,6 +701,50 @@
           S: function (t, fx) { return { t: t, day: 3, file: true, stamp: t > 3, hr: t > 0.6 ? { x: 44, y: 17, dir: 2 } : null, pop: t > 0.6 && t < 1.8 ? [44, 17] : null, hrArm: t > 2.2 ? 'out' : 'down', mgrArm: 'out' }; } }
       ] });
   })();
+
+/*FIX:BEGIN*/
+  /* Placement fixes for the named characters (they are larger than the old workers). FIX[spec key][step number] =
+     { cam: n (the picture moves down n screen px, keeps heads below the sign), who: { name: [dx, dy] } (that character moves by whole world units) }. */
+  function applyFix(H, FIX) {
+    Object.keys(FIX).forEach(function (key) {
+      var spec = H[key]; if (!spec) return;
+      Object.keys(FIX[key]).forEach(function (sn) {
+        var st = spec.steps[+sn - 1], f = FIX[key][sn]; if (!st) return;
+        if (f.cam) {
+          ['cam'].forEach(function (k) { var c = st[k] || { x: 26, y: 14, zoom: 1 }, z = c.zoom === 2 ? 2 : 1, d = f.cam / (2 * z), n = {}, q; for (q in c) n[q] = c[q]; n.x = c.x - d; n.y = c.y - d; st[k] = n; });
+        }
+        if (f.who && st.build) {
+          var b0 = st.build;
+          st.build = function (t, g, fx) {
+            var l0 = g.list;
+            g.list = function () { var L = l0.apply(g, arguments), p0 = L.person; L.person = function (x, y, d, o) { var m = o && o.who && f.who[o.who]; return p0.call(L, m ? x + m[0] : x, m ? y + m[1] : y, d, o); }; return L; };
+            try { return b0.call(st, t, g, fx); } finally { g.list = l0; }
+          };
+        }
+      });
+    });
+  }
+  var FIX = {
+    "1.1": {"1":{"who":{"raul":[0,1]}},"2":{"who":{"pam":[1,0]}},"3":{"who":{"pam":[1,0]}}},
+    "1.2": {"3":{"who":{"scott":[-1,0]}}},
+    "2.1": {"1":{"who":{"scott":[2,0]}}},
+    "2.2": {"1":{"cam":4},"3":{"who":{"raul":[1,0]}}},
+    "2.3": {"1":{"cam":4}},
+    "3.1": {"2":{"cam":4}},
+    "3.2": {"1":{"cam":4},"3":{"cam":4}},
+    "3.3": {"2":{"cam":4}},
+    "3.4": {"1":{"who":{"raul":[1,0]}}},
+    "3.5": {"3":{"cam":4}},
+    "3.6": {"2":{"who":{"scott":[1,1]}}},
+    "OK-EEO Statement and Non harassme": {"1":{"cam":4}},
+    "OK-Religious Accommodation": {"2":{"who":{"scott":[-1,0]}}},
+    "4.2": {"1":{"cam":4,"who":{"raul":[-2,-2]}}},
+    "4.4": {"2":{"cam":4}},
+    "1.0": {"1":{"who":{"kim":[2,2],"randel":[1,0]}}},
+    "OK-Disability Accommodation": {"2":{"cam":12},"3":{"cam":4}}
+  };
+  if (!globalThis.HB_NOFIX) applyFix(HB, FIX);
+  /*FIX:END*/
 
   if (typeof module !== 'undefined' && module.exports) module.exports = OUT;
 })(typeof window !== 'undefined' ? window : this);

@@ -15,15 +15,15 @@
 
   /* ------------------------------------------------------------------ people */
   var LOOK = {
-    red: { shirt: P.red, hair: '#2b2018' },
-    blue: { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true },
-    cream: { shirt: '#dfe3e6', shirtD: '#aab1b7', hair: '#7a5b3c', glasses: true, badge: true },
-    amber: { shirt: P.amber, shirtD: P.amberD, vest: true, hat: '#d8dde1', hair: '#3a2c22' },
-    green: { shirt: P.green, shirtD: P.greenD, hair: '#3a2c22', skin: P.skin3 },
-    steel: { shirt: '#4c5359', shirtD: '#30353a', hair: '#cfd4d8', badge: true, skin: P.skin3, glasses: true },
-    navy: { shirt: '#2b4f78', shirtD: '#1d3857', hair: '#141210', skin: P.skin2, pants: '#20262e' },
-    plum: { shirt: '#7a3b52', shirtD: '#552837', hair: '#5a3a22', skin: P.skin3, badge: true },
-    sand: { shirt: '#b29a6a', shirtD: '#7e6c45', hair: '#2b2018', skin: P.skin, vest: true }
+    red: { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018' },
+    blue: { who: 'randel', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true },
+    cream: { who: 'pam', h: 26, shirt: '#dfe3e6', shirtD: '#aab1b7', hair: '#7a5b3c', glasses: true, badge: true },
+    amber: { who: 'pk', h: 26, shirt: P.amber, shirtD: P.amberD, vest: true, hat: '#d8dde1', hair: '#3a2c22' },
+    green: { who: 'forrest', h: 26, shirt: P.green, shirtD: P.greenD, hair: '#3a2c22', skin: P.skin3 },
+    steel: { who: 'scott', h: 26, shirt: '#4c5359', shirtD: '#30353a', hair: '#cfd4d8', badge: true, skin: P.skin3, glasses: true },
+    navy: { who: 'kim', h: 26, shirt: '#2b4f78', shirtD: '#1d3857', hair: '#141210', skin: P.skin2, pants: '#20262e' },
+    plum: { who: 'dora', h: 26, shirt: '#7a3b52', shirtD: '#552837', hair: '#5a3a22', skin: P.skin3, badge: true },
+    sand: { who: 'steve', h: 26, shirt: '#b29a6a', shirtD: '#7e6c45', hair: '#2b2018', skin: P.skin, vest: true }
   };
 
   /* ------------------------------------------------------------------ props only these explainers use */
@@ -263,7 +263,7 @@
       L.prop('desk', 26, 10, 0, { w: 18, d: 11 });
       L.prop('monitor', 28, 13, 9, { rows: 3 });
       if (S.fix) L.prop('docs', 37, 11, 9, { n: 2, head: P.green });
-      L.prop('hbBPlant', 46, 25, 0); L.prop('hbBPlant', 1, 26, 0);
+      L.prop('hbBPlant', 46, 25, 0); L.prop('hbBPlant', 1, 31, 0);
       person(L, fx, S.hr, HR, S.hrO); person(L, fx, S.emp, EMP, S.empO);
       L.flush();
     }
@@ -654,7 +654,7 @@
         step(1, { title: 'WHAT FOLLOWS', sub: 'Reported by law, then discipline', cam: cam2, key: ['table'],
           cap: ['ADVANCED reports it in accordance with the law', 'Discipline can include suspension or termination'],
           build: function (t, g, fx) {
-            var S = base(); S.phone = true; S.ring = Math.floor(t * 3) % 2 === 0 && t < 3.0; S.mg = at(41, 12, 1);
+            var S = base(); S.phone = true; S.ring = Math.floor(t * 3) % 2 === 0 && t < 3.0; S.mg = at(33, 13, 1);
             S.mgO = { arm: t > 1.0 && t < 3.0 ? 'out' : 'down', hold: t > 1.0 && t < 3.0 ? P.st1 : undefined, holdSize: [2, 3] };
             world(g, fx, S); if (t > 3.4 && t < 4.8) ping(g, 45, 17, 11, t, 8);
           } }),
@@ -1204,6 +1204,44 @@
   })();
 
   /*__POLICIES__*/
+
+/*FIX:BEGIN*/
+  /* Placement fixes for the named characters (they are larger than the old workers). FIX[spec key][step number] =
+     { cam: n (the picture moves down n screen px, keeps heads below the sign), who: { name: [dx, dy] } (that character moves by whole world units) }. */
+  function applyFix(H, FIX) {
+    Object.keys(FIX).forEach(function (key) {
+      var spec = H[key]; if (!spec) return;
+      Object.keys(FIX[key]).forEach(function (sn) {
+        var st = spec.steps[+sn - 1], f = FIX[key][sn]; if (!st) return;
+        if (f.cam) {
+          ['cam'].forEach(function (k) { var c = st[k] || { x: 26, y: 14, zoom: 1 }, z = c.zoom === 2 ? 2 : 1, d = f.cam / (2 * z), n = {}, q; for (q in c) n[q] = c[q]; n.x = c.x - d; n.y = c.y - d; st[k] = n; });
+        }
+        if (f.who && st.build) {
+          var b0 = st.build;
+          st.build = function (t, g, fx) {
+            var l0 = g.list;
+            g.list = function () { var L = l0.apply(g, arguments), p0 = L.person; L.person = function (x, y, d, o) { var m = o && o.who && f.who[o.who]; return p0.call(L, m ? x + m[0] : x, m ? y + m[1] : y, d, o); }; return L; };
+            try { return b0.call(st, t, g, fx); } finally { g.list = l0; }
+          };
+        }
+      });
+    });
+  }
+  var FIX = {
+    "4.8": {"1":{"cam":12},"2":{"cam":4},"3":{"who":{"forrest":[0,1]}}},
+    "OK-Accommodations for Nursing Mot": {"2":{"cam":8}},
+    "OK-Meal and Rest Periods": {"1":{"cam":4},"3":{"who":{"forrest":[-2,0]}}},
+    "5.5": {"1":{"cam":12}},
+    "5.6": {"2":{"cam":8}},
+    "5.8": {"2":{"who":{"raul":[2,2]}},"3":{"cam":4,"who":{"raul":[1,0]}}},
+    "5.9": {"2":{"cam":12,"who":{"forrest":[1,0]}}},
+    "5.11": {"1":{"cam":8}},
+    "5.12": {"2":{"cam":4}},
+    "4.6": {"2":{"cam":8}},
+    "4.7": {"1":{"who":{"pk":[0,1]}},"2":{"who":{"pk":[0,1]}},"3":{"who":{"pam":[2,2]}}}
+  };
+  if (!globalThis.HB_NOFIX) applyFix(HB, FIX);
+  /*FIX:END*/
 
   if (typeof module !== 'undefined' && module.exports) module.exports = HB;
 })(typeof window !== 'undefined' ? window : globalThis);

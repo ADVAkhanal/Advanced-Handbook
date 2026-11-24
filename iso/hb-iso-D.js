@@ -132,7 +132,7 @@
   /* ---------------------------------------------------------------- 7.10 Health Insurance: the benefits window */
   (function () {
     var X = 26, Y = 36, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, DEP = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, CLK = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var EMP = { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018' }, DEP = { who: 'randel', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, CLK = { who: 'dora', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd710', X, Y, H, { style: 'epoxy', a: '#22302a', b: '#27362f' }, { style: 'tile', tint: P.green, line: '#2f4a3e' });
       var L = g.list(), pics = ['person', 'people', 'heart'], i;
@@ -184,7 +184,7 @@
   /* ---------------------------------------------------------------- 7.11 Holidays: the shop on a company holiday */
   (function () {
     var X = 40, Y = 30, H = 30;
-    var EMP = { shirt: P.red, hair: '#2b2018', vest: true }, FOR = { shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
+    var EMP = { who: 'pk', h: 26, shirt: P.red, hair: '#2b2018', vest: true }, FOR = { who: 'randel', h: 26, shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
     function world(g, fx, S) {
       room(g, 'd711', X, Y, H, { style: 'checker', a: '#2e2a2b', b: '#343033', zones: [[10, 8, 22, 12, '#3a2628'], [2, 24, 36, 1, P.red2]] }, { style: 'studs', tint: P.red });
       var L = g.list(), i;
@@ -236,7 +236,7 @@
   /* ---------------------------------------------------------------- 7.12 Life Insurance: the benefits administrator's desk */
   (function () {
     var X = 28, Y = 26, H = 24;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, ADM = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#8a8f94', skin: P.skin3, glasses: true };
+    var EMP = { who: 'forrest', h: 26, shirt: P.red, hair: '#2b2018' }, ADM = { who: 'dora', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#8a8f94', skin: P.skin3, glasses: true };
     function world(g, fx, S) {
       room(g, 'd712', X, Y, H, { style: 'checker', a: '#262a33', b: '#2c313b', zones: [[6, 8, 22, 14, '#202734']] }, { style: 'panel', tint: '#8f979e' });
       var L = g.list(), i, pics = ['person', 'heart'];
@@ -288,7 +288,7 @@
   /* ---------------------------------------------------------------- 7.13 Military Leave (USERRA): the gate to the HR desk */
   (function () {
     var X = 34, Y = 28, H = 26;
-    var MEM = { shirt: '#5a6b3c', shirtD: '#3f4c29', hair: '#2b2018', hat: '#4a5a30' }, HRP = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var MEM = { who: 'steve', h: 26, shirt: '#5a6b3c', shirtD: '#3f4c29', hair: '#2b2018', hat: '#4a5a30' }, HRP = { who: 'pam', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd713', X, Y, H, { style: 'grid', a: '#262b22', b: '#2c3227', zones: [[10, 5, 20, 3, '#33392a']] }, { style: 'studs', tint: '#6b7a4a' });
       var L = g.list();
@@ -346,7 +346,7 @@
   /* ---------------------------------------------------------------- 7.14 Paid Time Off (PTO): the break room accrual wall */
   (function () {
     var X = 40, Y = 26, H = 28;
-    var EMP = { shirt: P.red, hair: '#2b2018', badge: true }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
+    var EMP = { who: 'dora', h: 26, shirt: P.red, hair: '#2b2018', badge: true }, MGR = { who: 'scott', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd714', X, Y, H, { style: 'grid', a: '#2e2b24', b: '#35322a', zones: [[8, 8, 24, 14, '#3a3524']] }, { style: 'panel', tint: P.amberD });
       var L = g.list();
@@ -399,7 +399,7 @@
   /* ---------------------------------------------------------------- 7.15 Personal Leave of Absence: the manager's office */
   (function () {
     var X = 32, Y = 26, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, MGR = { shirt: '#3a8f8f', shirtD: '#27696a', hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var EMP = { who: 'pam', h: 26, shirt: P.red, hair: '#2b2018' }, MGR = { who: 'kim', h: 26, shirt: '#3a8f8f', shirtD: '#27696a', hair: '#1f1a17', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd715', X, Y, H, { style: 'checker', a: '#22302f', b: '#283837', zones: [[8, 6, 20, 15, '#1c2a33']] }, { style: 'panel', tint: '#3f9f9f' });
       var L = g.list();
@@ -452,7 +452,7 @@
   /* ---------------------------------------------------------------- 7.16 Unemployment Compensation Insurance: the pay window */
   (function () {
     var X = 28, Y = 26, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, CLK = { shirt: '#c9a42b', shirtD: '#8a6f1c', hair: '#1f1a17', skin: P.skin3, glasses: true };
+    var EMP = { who: 'randel', h: 26, shirt: P.red, hair: '#2b2018' }, CLK = { who: 'dora', h: 26, shirt: '#c9a42b', shirtD: '#8a6f1c', hair: '#1f1a17', skin: P.skin3, glasses: true };
     function stack(L, x, y, n, col) { for (var i = 0; i < n; i++) L.cyl(x, y, 11 + i * 2, 1.6, 2, col, { rim: false }); }
     function world(g, fx, S) {
       room(g, 'd716', X, Y, H, { style: 'grid', a: '#2e2c22', b: '#34321f', zones: [[14, 3, 12, 20, '#3a3620']] }, { style: 'tile', tint: '#c9a42b' });
@@ -500,7 +500,7 @@
   /* ---------------------------------------------------------------- 7.17 Workers' Compensation Insurance: the first aid corner of the shop */
   (function () {
     var X = 38, Y = 28, H = 28;
-    var EMP = { shirt: P.red, hair: '#2b2018', vest: true }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
+    var EMP = { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018', vest: true }, MGR = { who: 'kim', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
     function world(g, fx, S) {
       room(g, 'd717', X, Y, H, { style: 'epoxy', a: '#2d3033', b: '#33373a', zones: [[18, 4, 14, 20, '#243329'], [2, 25, 34, 1, '#e0a43a']] }, { style: 'studs', tint: P.red });
       var L = g.list(), pics = ['plus', 'cal', 'coin'], i;
@@ -548,7 +548,7 @@
   /* ---------------------------------------------------------------- 7.8 Family and Medical Leave (FMLA): the leave office */
   (function () {
     var X = 38, Y = 30, H = 28;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, HRP = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var EMP = { who: 'pk', h: 26, shirt: P.red, hair: '#2b2018' }, HRP = { who: 'pam', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd78', X, Y, H, { style: 'grid', a: '#2b3038', b: '#31363e', zones: [[8, 6, 26, 19, '#24364b']] }, { style: 'panel', tint: P.blue });
       var L = g.list(), i, pics = ['clock', 'doc', 'people'];
@@ -602,7 +602,7 @@
   /* ---------------------------------------------------------------- 7.9 Flexible Spending Account (FSA): the payroll counter */
   (function () {
     var X = 36, Y = 26, H = 26;
-    var EMP = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#3a2c22' }, CLK = { shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin3, glasses: true };
+    var EMP = { who: 'forrest', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#3a2c22' }, CLK = { who: 'dora', h: 26, shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin3, glasses: true };
     function world(g, fx, S) {
       room(g, 'd79', X, Y, H, { style: 'checker', a: '#322e27', b: '#38342b', zones: [[4, 18, 28, 6, '#3a2e1c']] }, { style: 'tile', tint: P.amber });
       var L = g.list();
@@ -657,7 +657,7 @@
   /* ---------------------------------------------------------------- 8.1 Drug and Alcohol Policy: the entrance and the bench (calm, steady lights) */
   (function () {
     var X = 36, Y = 26, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018', vest: true }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
+    var EMP = { who: 'steve', h: 26, shirt: P.red, hair: '#2b2018', vest: true }, MGR = { who: 'scott', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' };
     function world(g, fx, S) {
       room(g, 'd81', X, Y, H, { style: 'epoxy', a: '#222d30', b: '#273337', zones: [[2, 14, 8, 10, '#1f3a30']] }, { style: 'tile', tint: '#4a8f9f', line: '#2f4a50' });
       var L = g.list(), pics = ['clock', 'box'], i;
@@ -708,7 +708,7 @@
   /* ---------------------------------------------------------------- 8.2 General Safety: the shop floor walkway (calm, steady lights) */
   (function () {
     var X = 40, Y = 28, H = 30;
-    var EMP = { shirt: P.red, hair: '#2b2018', vest: true, hat: '#e8d88a' }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, vest: true, hat: '#d8dde1' };
+    var EMP = { who: 'dora', h: 26, shirt: P.red, hair: '#2b2018', vest: true, hat: '#e8d88a' }, MGR = { who: 'kim', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, vest: true, hat: '#d8dde1' };
     function world(g, fx, S) {
       room(g, 'd82', X, Y, H, { style: 'checker', a: '#262a22', b: '#2d3226', zones: [[2, 24, 36, 2, '#a8781f'], [2, 20, 36, 1, '#3c4430'], [14, 8, 18, 8, '#20241c']] }, { style: 'studs', tint: '#c9a42b' });
       var L = g.list(), pics = ['person', 'plus', 'check'], i;
@@ -756,7 +756,7 @@
   /* ---------------------------------------------------------------- 8.3 Workplace Violence: the lobby (calm, steady lights) */
   (function () {
     var X = 30, Y = 28, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, VIS = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, CON = { shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
+    var EMP = { who: 'pam', h: 26, shirt: P.red, hair: '#2b2018' }, VIS = { who: 'kim', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, CON = { who: 'forrest', h: 26, shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2, hat: '#d8dde1' }, MGR = { who: 'scott', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'd83', X, Y, H, { style: 'grid', a: '#2a2a2d', b: '#303034', zones: [[4, 6, 22, 18, '#25282c']] }, { style: 'tile', tint: '#8f979e', line: '#3a3d42' });
       var L = g.list();
@@ -803,8 +803,8 @@
   /* ---------------------------------------------------------------- OK-Jury Duty Leave: from the work desk to the jury box */
   (function () {
     var X = 40, Y = 28, H = 28;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
-    var JA = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#8a8f94', skin: P.skin3 }, JB = { shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2 };
+    var EMP = { who: 'randel', h: 26, shirt: P.red, hair: '#2b2018' }, MGR = { who: 'kim', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var JA = { who: 'steve', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#8a8f94', skin: P.skin3 }, JB = { who: 'pk', h: 26, shirt: P.amber, shirtD: P.amberD, hair: '#1f1a17', skin: P.skin2 };
     function world(g, fx, S) {
       room(g, 'dJury', X, Y, H, { style: 'checker', a: '#2d2620', b: '#352d25', zones: [[3, 11, 16, 12, '#3a2a1c'], [20, 2, 18, 9, '#2a2018']] }, { style: 'panel', tint: P.woodT });
       var L = g.list();
@@ -857,7 +857,7 @@
   /* ---------------------------------------------------------------- OK-Voting Leave: the polling place */
   (function () {
     var X = 34, Y = 28, H = 26;
-    var VOT = { shirt: P.red, hair: '#2b2018' }, POLL = { shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin3, glasses: true }, MGR = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#1f1a17', skin: P.skin2 };
+    var VOT = { who: 'raul', h: 26, shirt: P.red, hair: '#2b2018' }, POLL = { who: 'kim', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin3, glasses: true }, MGR = { who: 'scott', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#1f1a17', skin: P.skin2 };
     /* a voting booth: curtain open 0..1 */
     ISO.defineProp('hdbooth', [9, 7, 18], function (s, o) {
       var op = o.open === undefined ? 1 : o.open;
@@ -918,7 +918,7 @@
   /* ---------------------------------------------------------------- 9.1 Confidentiality and Nondisclosure of Trade Secrets: the records vault */
   (function () {
     var X = 34, Y = 28, H = 28;
-    var EMP = { shirt: P.red, hair: '#2b2018', badge: true }, VIS = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, MGR = { shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
+    var EMP = { who: 'pk', h: 26, shirt: P.red, hair: '#2b2018', badge: true }, VIS = { who: 'kim', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 }, MGR = { who: 'kim', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#8a8f94', skin: P.skin2, glasses: true };
     /* the vault door in a wall: open 0..1 */
     ISO.defineProp('hdvault', [16, 3, 22], function (s, o) {
       var op = o.open || 0, i;
@@ -982,7 +982,7 @@
   /* ---------------------------------------------------------------- CLOSE-Acknowledgment of Receipt and Review: the signature desk */
   (function () {
     var X = 28, Y = 26, H = 24;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, HRP = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
+    var EMP = { who: 'forrest', h: 26, shirt: P.red, hair: '#2b2018' }, HRP = { who: 'pam', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2, glasses: true };
     function world(g, fx, S) {
       room(g, 'dAck', X, Y, H, { style: 'grid', a: '#232830', b: '#292f38', zones: [[6, 6, 18, 16, '#1c2230']] }, { style: 'panel', tint: '#a8781f' });
       var L = g.list(), pics = ['box', 'doc', 'check'], i;
@@ -1030,7 +1030,7 @@
   /* ---------------------------------------------------------------- CLOSE-Closing Statement: the welcome lobby */
   (function () {
     var X = 30, Y = 26, H = 26;
-    var A = { shirt: P.red, hair: '#2b2018' }, B = { shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2 }, C = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 };
+    var A = { who: 'steve', h: 26, shirt: P.red, hair: '#2b2018' }, B = { who: 'randel', h: 26, shirt: P.blue, shirtD: P.blueS, hair: '#1f1a17', skin: P.skin2 }, C = { who: 'kim', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 };
     /* a handbook: open 0..1 */
     ISO.defineProp('hdbook', [8, 6, 4], function (s, o) {
       var op = o.open || 0;
@@ -1081,7 +1081,7 @@
   /* ---------------------------------------------------------------- OK-Workplace Smoking: the office, the client area and the restroom */
   (function () {
     var X = 36, Y = 28, H = 26;
-    var EMP = { shirt: P.red, hair: '#2b2018' }, CLI = { shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 };
+    var EMP = { who: 'dora', h: 26, shirt: P.red, hair: '#2b2018' }, CLI = { who: 'kim', h: 26, shirt: '#3f8f6a', shirtD: '#2b6a4d', hair: '#6b4a2b', skin: P.skin3 };
     PIC.vape = ['.#.#.', '#####', '..#..', '..#..', '..#..'];
     function world(g, fx, S) {
       room(g, 'dSmoke', X, Y, H, { style: 'tile', a: '#2c2623', b: '#322a26', zones: [[1, 1, 34, 8, '#26303a'], [1, 10, 34, 8, '#3a2e24'], [1, 19, 34, 8, '#24342f']] }, { style: 'panel', tint: '#c9733a' });
@@ -1120,6 +1120,45 @@
     ];
     reg('OK-Workplace Smoking', { title: 'Workplace Smoking', std: 'Handbook, Safety, Oklahoma', blurb: 'Where smoking and vaping are prohibited, and why.', backdrop: ['bands', '#1a1512', '#251c16'], steps: steps });
   })();
+
+/*FIX:BEGIN*/
+  /* Placement fixes for the named characters (they are larger than the old workers). FIX[spec key][step number] =
+     { cam: n (the picture moves down n screen px, keeps heads below the sign), who: { name: [dx, dy] } (that character moves by whole world units) }. */
+  function applyFix(H, FIX) {
+    Object.keys(FIX).forEach(function (key) {
+      var spec = H[key]; if (!spec) return;
+      Object.keys(FIX[key]).forEach(function (sn) {
+        var st = spec.steps[+sn - 1], f = FIX[key][sn]; if (!st) return;
+        if (f.cam) {
+          ['cam'].forEach(function (k) { var c = st[k] || { x: 26, y: 14, zoom: 1 }, z = c.zoom === 2 ? 2 : 1, d = f.cam / (2 * z), n = {}, q; for (q in c) n[q] = c[q]; n.x = c.x - d; n.y = c.y - d; st[k] = n; });
+        }
+        if (f.who && st.build) {
+          var b0 = st.build;
+          st.build = function (t, g, fx) {
+            var l0 = g.list;
+            g.list = function () { var L = l0.apply(g, arguments), p0 = L.person; L.person = function (x, y, d, o) { var m = o && o.who && f.who[o.who]; return p0.call(L, m ? x + m[0] : x, m ? y + m[1] : y, d, o); }; return L; };
+            try { return b0.call(st, t, g, fx); } finally { g.list = l0; }
+          };
+        }
+      });
+    });
+  }
+  var FIX = {
+    "7.13": {"2":{"cam":12}},
+    "7.14": {"3":{"who":{"dora":[0,1]}}},
+    "7.15": {"1":{"who":{"kim":[0,-2]}},"2":{"cam":8,"who":{"kim":[2,-2]}},"3":{"who":{"kim":[2,-2]}}},
+    "7.8": {"3":{"cam":16}},
+    "7.9": {"1":{"who":{"forrest":[0,1]}},"2":{"who":{"forrest":[0,1]}}},
+    "8.1": {"3":{"who":{"scott":[0,1]}}},
+    "8.3": {"1":{"who":{"scott":[-2,-5],"forrest":[-1,0]}},"3":{"who":{"scott":[1,1]}}},
+    "OK-Jury Duty Leave": {"3":{"who":{"steve":[1,1],"pk":[-1,1]}}},
+    "OK-Voting Leave": {"1":{"who":{"kim":[1,0]}},"2":{"who":{"kim":[-1,-1]}}},
+    "9.1": {"3":{"who":{"pk":[-1,0]}}},
+    "CLOSE-Acknowledgment of Re": {"1":{"who":{"pam":[-2,-2]}},"2":{"cam":4,"who":{"forrest":[2,2]}},"3":{"cam":4,"who":{"forrest":[2,2]}}},
+    "CLOSE-Closing Statement": {"3":{"who":{"randel":[-1,0]}}}
+  };
+  if (!globalThis.HB_NOFIX) applyFix(HB, FIX);
+  /*FIX:END*/
 
   if (typeof module !== 'undefined' && module.exports) module.exports = HB;
 })(typeof window !== 'undefined' ? window : this);
