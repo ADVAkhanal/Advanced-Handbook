@@ -1,0 +1,553 @@
+{
+  "_about": "Batch C facts. For each handbook section id: the words or number shown in the explainer (sign, caption, chip, note or big card) and the sentence of the section text it comes from. tools/check-iso-facts-C.mjs reads the section text from Advanced_Handbook_Dashboard.html (DATA.sections) and fails if a source is not in the text, a shown phrase is not on screen, or any number, quoted phrase or acronym on screen is not in the text.",
+  "6.1": [
+    {
+      "shown": "Used for ADVANCED work only",
+      "source": "are to be used only for creating, researching, and processing materials for ADVANCED use"
+    },
+    {
+      "shown": "It is ADVANCED property",
+      "source": "is and will be deemed ADVANCED property"
+    },
+    {
+      "shown": "Do not copy it",
+      "source": "You may not duplicate, copy, or give software to any outsiders"
+    },
+    {
+      "shown": "Do not give software to outsiders",
+      "source": "You may not duplicate, copy, or give software to any outsiders"
+    },
+    {
+      "shown": "Get your manager's approval",
+      "source": "To purchase software, obtain your manager's approval"
+    },
+    {
+      "shown": "Buy through Information Systems",
+      "source": "All software acquired by ADVANCED must be purchased through Information Systems"
+    },
+    {
+      "shown": "your manager first",
+      "source": "To purchase software, obtain your manager's approval"
+    }
+  ],
+  "6.2": [
+    {
+      "shown": "ADVANCED holds social events",
+      "source": "ADVANCED holds periodic social events for employees"
+    },
+    {
+      "shown": "Attendance is voluntary",
+      "source": "your attendance at these events is voluntary"
+    },
+    {
+      "shown": "It is not part of your work duties",
+      "source": "does not constitute part of your work-related duties"
+    },
+    {
+      "shown": "An exception must be in writing",
+      "source": "Any exceptions to this policy must be in writing and signed by a manager prior to the event"
+    },
+    {
+      "shown": "by a manager before the event",
+      "source": "must be in writing and signed by a manager prior to the event"
+    },
+    {
+      "shown": "by a manager first",
+      "source": "must be in writing and signed by a manager prior to the event"
+    }
+  ],
+  "6.3": [
+    {
+      "shown": "ADVANCED may issue a phone",
+      "source": "ADVANCED may issue certain employees a company cell phone/mobile device for work-related communications"
+    },
+    {
+      "shown": "No phone in your hand while driving",
+      "source": "you may not use any cell phone/mobile device or other communication device while driving"
+    },
+    {
+      "shown": "Use the hands-free option",
+      "source": "listening/speaking option, and you in fact utilize the hands-free device"
+    },
+    {
+      "shown": "In operable condition",
+      "source": "must be returned to ADVANCED in operable condition"
+    },
+    {
+      "shown": "phone and passwords",
+      "source": "all such equipment and passwords must be returned"
+    }
+  ],
+  "6.4": [
+    {
+      "shown": "No soliciting during working time",
+      "source": "You are prohibited from soliciting other employees during your assigned working time"
+    },
+    {
+      "shown": "Coworkers are busy with assigned work",
+      "source": "actively engaged with assigned work"
+    },
+    {
+      "shown": "OK at lunch and coffee breaks",
+      "source": "You may conduct solicitations during your lunch period, coffee breaks, or other authorized nonworking time"
+    },
+    {
+      "shown": "When coworkers are on a break too",
+      "source": "so long as you do so when the other employees are also on nonworking time"
+    },
+    {
+      "shown": "Outsiders may not hand out materials",
+      "source": "Non-employees are not permitted to distribute materials on company premises at any time"
+    },
+    {
+      "shown": "Report violations to your manager",
+      "source": "Violations of this policy should be reported to your manager"
+    }
+  ],
+  "6.5": [
+    {
+      "shown": "No personal copies or supplies",
+      "source": "This includes use of copy machines, computers, ADVANCED products, or office supplies for personal use without prior authorization"
+    },
+    {
+      "shown": "Return property in good condition",
+      "source": "returning ADVANCED property in good condition"
+    },
+    {
+      "shown": "Repair or replace what you damage",
+      "source": "repairing or replacing any property damaged"
+    },
+    {
+      "shown": "Get your manager's written consent",
+      "source": "without the written consent of your manager"
+    },
+    {
+      "shown": "Sign the log-in and log-out sheet",
+      "source": "you may be required to sign a log-in and log-out sheet"
+    },
+    {
+      "shown": "log-in and log-out",
+      "source": "you may be required to sign a log-in and log-out sheet"
+    }
+  ],
+  "6.6": [
+    {
+      "shown": "Report to work neatly groomed",
+      "source": "required to report to work neatly groomed and dressed"
+    },
+    {
+      "shown": "Uniform or safety clothing",
+      "source": "wearing uniforms or protective safety clothing and equipment, depending upon the job"
+    },
+    {
+      "shown": "It depends upon the job",
+      "source": "depending upon the job"
+    },
+    {
+      "shown": "Disability or religious beliefs",
+      "source": "employees with disabilities or religious beliefs"
+    },
+    {
+      "shown": "To request a reasonable accommodation",
+      "source": "Contact your manager to request a reasonable accommodation"
+    },
+    {
+      "shown": "Contact your manager",
+      "source": "Contact your manager to request a reasonable accommodation"
+    }
+  ],
+  "6.7": [
+    {
+      "shown": "Keep your phone in a pocket or locker",
+      "source": "phones must be kept in a pocket, locker, or other appropriate location"
+    },
+    {
+      "shown": "Use it on breaks and at lunch",
+      "source": "Cell phones should only be used during designated break times or lunch periods"
+    },
+    {
+      "shown": "Never use a phone while running a machine",
+      "source": "Phones should never be used while actively operating a machine"
+    },
+    {
+      "shown": "In an emergency, tell your supervisor",
+      "source": "Personal cell phone use during work time is allowed only in emergencies. Employees should notify their supervisor"
+    },
+    {
+      "shown": "One earbud on the shop floor",
+      "source": "Employees are permitted to wear one earbud while operating machinery or performing work on the shop floor"
+    },
+    {
+      "shown": "Hear your surroundings and alarms",
+      "source": "The other ear must remain uncovered to maintain awareness of surroundings, instructions, and alarms"
+    },
+    {
+      "shown": "earbud on the floor",
+      "source": "Employees are permitted to wear one earbud while operating machinery or performing work on the shop floor"
+    }
+  ],
+  "6.8": [
+    {
+      "shown": "Give HR your current address",
+      "source": "provide ADVANCED with your current contact information, including current mailing address and telephone number"
+    },
+    {
+      "shown": "Tell HR if your tax withholding changes",
+      "source": "You should also inform ADVANCED of any changes to your tax withholding status"
+    },
+    {
+      "shown": "Contact HR to make the change",
+      "source": "To make changes to this information, contact HR"
+    },
+    {
+      "shown": "W-2 and other mail can be delayed",
+      "source": "delayed receipt of W-2 and other mailings"
+    }
+  ],
+  "6.9": [
+    {
+      "shown": "Lock desks, lockers and doors",
+      "source": "lock all desks, lockers, and doors protecting valuable or sensitive material"
+    },
+    {
+      "shown": "Report a lost key or pass",
+      "source": "report any lost or stolen keys, passes, or similar devices to your manager immediately"
+    },
+    {
+      "shown": "Tell your manager immediately",
+      "source": "report any lost or stolen keys, passes, or similar devices to your manager immediately"
+    },
+    {
+      "shown": "Tell your manager about any risk",
+      "source": "Immediately advise your manager of any known or potential security risks"
+    },
+    {
+      "shown": "Do not share alarms or passwords outside",
+      "source": "Refrain from discussing specifics regarding ADVANCED security systems, alarms, passwords, etc. with those outside of ADVANCED"
+    }
+  ],
+  "6.10": [
+    {
+      "shown": "You are responsible for what you post",
+      "source": "you are solely responsible for what you communicate in social media"
+    },
+    {
+      "shown": "Keep company secrets private",
+      "source": "Maintain the confidentiality of trade secrets"
+    },
+    {
+      "shown": "Do not speak for ADVANCED",
+      "source": "Never represent yourself as a spokesperson for ADVANCED"
+    },
+    {
+      "shown": "Media goes to Sr. Leadership or H.R.",
+      "source": "Direct all media inquiries for official ADVANCED responses to the Sr. Leadership Team or H.R."
+    },
+    {
+      "shown": "Break times only, during work hours",
+      "source": "Do not use social media outside of break times during work hours"
+    },
+    {
+      "shown": "Unless it is work related",
+      "source": "unless it is work related as authorized by your manager"
+    },
+    {
+      "shown": "Work use needs your manager's OK",
+      "source": "unless it is work related as authorized by your manager"
+    },
+    {
+      "shown": "for social media",
+      "source": "Do not use social media outside of break times during work hours"
+    }
+  ],
+  "6.11": [
+    {
+      "shown": "Outsiders may call about a news story",
+      "source": "involved in news stories or potential or actual legal proceedings"
+    },
+    {
+      "shown": "Or about a legal matter",
+      "source": "involved in news stories or potential or actual legal proceedings"
+    },
+    {
+      "shown": "News, lawyers, law enforcement",
+      "source": "lawyers, former employees, newspapers, law enforcement agencies"
+    },
+    {
+      "shown": "Do not speak for ADVANCED",
+      "source": "you should not speak on behalf of ADVANCED"
+    },
+    {
+      "shown": "Refer the call to HR",
+      "source": "refer any call requesting the position of ADVANCED to HR"
+    },
+    {
+      "shown": "Ask HR if you are not sure",
+      "source": "are not certain what to do when such a contact is made, contact HR"
+    }
+  ],
+  "6.12": [
+    {
+      "shown": "Email",
+      "source": "Email systems and accounts"
+    },
+    {
+      "shown": "CCTV",
+      "source": "Closed-circuit television (CCTV)"
+    },
+    {
+      "shown": "Cameras and key cards too",
+      "source": "all other physical security systems and devices, including access key cards and fobs"
+    },
+    {
+      "shown": "Use company systems for business",
+      "source": "are to be used for business purposes only"
+    },
+    {
+      "shown": "All content is ADVANCED property",
+      "source": "All content maintained in ADVANCED IT resources and communications systems are the property of ADVANCED"
+    },
+    {
+      "shown": "ADVANCED may review all use",
+      "source": "ADVANCED reserves the right to monitor, intercept, and/or review all data"
+    },
+    {
+      "shown": "A password does not make it private",
+      "source": "You should not interpret the use of password protection as creating a right or expectation of privacy"
+    },
+    {
+      "shown": "expectation of privacy",
+      "source": "employees should have no expectation of privacy"
+    }
+  ],
+  "6.13": [
+    {
+      "shown": "These belong to ADVANCED",
+      "source": "ADVANCED property, including but not limited to lockers, phones, computers, tablets, desks, workplace areas, vehicles, or machinery, remains under the control of ADVANCED"
+    },
+    {
+      "shown": "They stay under company control",
+      "source": "remains under the control of ADVANCED"
+    },
+    {
+      "shown": "We assume no responsibility",
+      "source": "We assume no responsibility for the loss of, or damage to, your property"
+    },
+    {
+      "shown": "For your things in lockers and desks",
+      "source": "including that kept in lockers and desks"
+    },
+    {
+      "shown": "ADVANCED may inspect at any time",
+      "source": "is subject to inspection at any time, without notice to any employee, and without their presence"
+    },
+    {
+      "shown": "time, without notice",
+      "source": "at any time, without notice"
+    }
+  ],
+  "OK-Access to Personnel and Medica": [
+    {
+      "shown": "Personnel files and medical files",
+      "source": "ADVANCED maintains separate medical records files and personnel files for all employees"
+    },
+    {
+      "shown": "Medical records: need to know only",
+      "source": "access is on a need-to-know basis only"
+    },
+    {
+      "shown": "Managers may see personnel files",
+      "source": "Supervisors and others in management may have access to your personnel file"
+    },
+    {
+      "shown": "Give the Company reasonable notice",
+      "source": "you must give the Company reasonable notice"
+    },
+    {
+      "shown": "A representative stays with you",
+      "source": "Inspection must occur in the presence of a Company representative"
+    },
+    {
+      "shown": "answers outside requests",
+      "source": "All requests by an outside party for information contained in your personnel file will be directed to the HR"
+    }
+  ],
+  "7.1": [
+    {
+      "shown": "Eligible employees may join",
+      "source": "Eligible employees may participate in ADVANCED Simple IRA plan"
+    },
+    {
+      "shown": "After any waiting period in the plan",
+      "source": "after completing any applicable waiting period as defined in the plan"
+    },
+    {
+      "shown": "ADVANCED will notify you",
+      "source": "ADVANCED will notify you if you are eligible to participate in the Simple IRA plan"
+    },
+    {
+      "shown": "Read your Summary Plan Description",
+      "source": "Refer to your Summary Plan Description (SPD)"
+    },
+    {
+      "shown": "Contact HR about eligibility",
+      "source": "Contact HR to understand your eligibility requirements"
+    }
+  ],
+  "7.2": [
+    {
+      "shown": "After 90 days of employment",
+      "source": "who have completed 90 days of employment"
+    },
+    {
+      "shown": "You get 2 days of leave",
+      "source": "are eligible for 2 day(s) of paid/unpaid bereavement leave"
+    },
+    {
+      "shown": "Yours or your spouse's",
+      "source": "applies both to the family of the employee and the employee's spouse"
+    },
+    {
+      "shown": "Grandparents",
+      "source": "sister, brother, parents (including foster parents and stepparents), grandparents"
+    },
+    {
+      "shown": "Give notice as far ahead as possible",
+      "source": "You must provide notice of your need for bereavement leave as far in advance as possible"
+    },
+    {
+      "shown": "ADVANCED may ask for documents",
+      "source": "ADVANCED may require documentation supporting your need for bereavement leave"
+    },
+    {
+      "shown": "days of leave",
+      "source": "are eligible for 2 day(s) of paid/unpaid bereavement leave"
+    }
+  ],
+  "7.3": [
+    {
+      "shown": "COBRA",
+      "source": "The Consolidated Omnibus Budget Reconciliation Act (COBRA)"
+    },
+    {
+      "shown": "Under the ADVANCED health plan",
+      "source": "continue health insurance coverage under the ADVANCED health plan"
+    },
+    {
+      "shown": "You may lose eligibility",
+      "source": "could result in the loss of eligibility"
+    },
+    {
+      "shown": "Reduction in hours",
+      "source": "reduction in hours"
+    },
+    {
+      "shown": "Divorce or legal separation",
+      "source": "divorce or legal separation"
+    },
+    {
+      "shown": "Termination of employment",
+      "source": "termination of employment"
+    },
+    {
+      "shown": "Resignation",
+      "source": "resignation"
+    },
+    {
+      "shown": "Contact HR about your COBRA rights",
+      "source": "Contact HR to learn more about your COBRA rights"
+    }
+  ],
+  "7.4": [
+    {
+      "shown": "For regular full-time employees",
+      "source": "All regular full-time employees who have completed the plan's defined waiting period"
+    },
+    {
+      "shown": "Finish the plan's waiting period",
+      "source": "completed the plan's defined waiting period"
+    },
+    {
+      "shown": "Benefits are described in the SPD",
+      "source": "Dental plan benefits are described in detail in the Summary Plan Description (SPD)"
+    }
+  ],
+  "7.5": [
+    {
+      "shown": "For regular full-time employees",
+      "source": "All regular full-time employees who have completed 90 days of employment"
+    },
+    {
+      "shown": "Complete 90 days of employment",
+      "source": "completed 90 days of employment"
+    },
+    {
+      "shown": "Benefits are described in the SPD",
+      "source": "Vision care plan benefits are described in detail in the Summary Plan Description (SPD)"
+    }
+  ],
+  "7.6": [
+    {
+      "shown": "Help with personal concerns",
+      "source": "professional counseling services for help with personal concerns"
+    },
+    {
+      "shown": "Counseling is confidential",
+      "source": "The EAP provides confidential access to professional counseling services"
+    },
+    {
+      "shown": "What you share stays confidential",
+      "source": "Any information about your contact, participation, or any recommended treatment is confidential and will not be disclosed to ADVANCED"
+    },
+    {
+      "shown": "Joining will not hurt promotion",
+      "source": "Voluntary participation in the EAP will not jeopardize your opportunities for promotion or employment"
+    },
+    {
+      "shown": "EAP services are without charge",
+      "source": "EAP services are available to eligible participants without charge"
+    },
+    {
+      "shown": "Referral costs may be yours",
+      "source": "the cost of referrals to treatment or rehabilitation is your responsibility if it is not completely covered by insurance"
+    },
+    {
+      "shown": "Emotional",
+      "source": "health, marital, family, financial, legal, emotional, alcohol abuse, and drug use"
+    },
+    {
+      "shown": "charge for EAP",
+      "source": "EAP services are available to eligible participants without charge"
+    }
+  ],
+  "7.7": [
+    {
+      "shown": "A covered illness or injury",
+      "source": "if you cannot work because of a covered illness or injury"
+    },
+    {
+      "shown": "That is not work related",
+      "source": "when they miss work due to non-work-related disabilities"
+    },
+    {
+      "shown": "Short-term pays a weekly benefit",
+      "source": "Short-term disability insurance generally pays a weekly benefit"
+    },
+    {
+      "shown": "It replaces part of your income",
+      "source": "The benefit replaces a portion of your weekly income"
+    },
+    {
+      "shown": "Long-term pays a monthly benefit",
+      "source": "Long-term disability insurance generally pays a monthly benefit"
+    },
+    {
+      "shown": "Check your plan documents",
+      "source": "Check your plan documents for details about benefit payments and duration"
+    },
+    {
+      "shown": "term pays monthly",
+      "source": "Long-term disability insurance generally pays a monthly benefit"
+    }
+  ]
+}

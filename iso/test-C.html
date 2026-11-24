@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Batch C explainers test page</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #222629; --ink2: #1a1d20; --steel: #3a3f44; --mid: #9aa0a4; --silver: #c4c9ce; --paper: #e9eaeb; --red: #e03131 }
+* { box-sizing: border-box }
+html, body { margin: 0; background: var(--ink2); color: var(--paper); font-family: Raleway, system-ui, sans-serif }
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 32px; border-bottom: 1px solid var(--steel) }
+h1 { margin: 0; font: 400 clamp(36px, 5vw, 64px)/.9 'Bebas Neue', Impact, sans-serif; letter-spacing: .01em }
+h1 span { color: var(--red) }
+header p { margin: 6px 0 0; color: var(--silver); font-size: 15px; line-height: 1.5; max-width: 640px }
+button { font: 700 14px Raleway, system-ui, sans-serif; color: #fff; background: var(--red); border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px }
+nav { max-width: 1400px; margin: 0 auto; padding: 16px 32px 0; display: flex; flex-wrap: wrap; gap: 6px }
+nav a { color: var(--silver); text-decoration: none; font: 700 13px Raleway, system-ui, sans-serif; padding: 6px 10px; border: 1px solid var(--steel); border-radius: 6px }
+nav a:hover { color: #fff; border-color: var(--silver) }
+main { max-width: 1400px; margin: 0 auto; padding: 20px 32px 56px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 20px }
+article { background: var(--ink); border: 1px solid var(--steel); border-radius: 10px; padding: 16px; scroll-margin-top: 12px }
+article h2 { margin: 0 0 4px; font: 400 28px/1 'Bebas Neue', Impact, sans-serif; letter-spacing: .02em }
+article .id { font: 700 12px Raleway, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--silver); margin-bottom: 10px }
+article .host { min-height: 260px }
+.isx-ctl .hint { color: var(--silver) !important }
+article p { margin: 12px 0 0; color: var(--silver); font-size: 14.5px; line-height: 1.5 }
+.sheet { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; max-width: 1500px; margin: 0 auto; padding: 16px }
+.sheet .cell .isx-ctl { display: none }
+.sheet .cell { min-width: 0 }
+.sheet h2 { grid-column: 1 / -1; margin: 6px 0 0; font: 400 28px/1 'Bebas Neue', Impact, sans-serif }
+@media (max-width: 520px) { header, nav, main { padding-left: 16px; padding-right: 16px } }
+</style></head>
+<body>
+<header>
+  <div><h1>Batch C <span>explainers</span></h1><p>Policies 6.1 to 6.13, access to personnel and medical records files, and 7.1 to 7.7, each as a 3 step isometric cutaway. Test page only: add <b>?sheet=6.1</b> for a still contact sheet, <b>?only=6.1</b> for one policy.</p></div>
+  <button type="button" id="tvBtn">Play all on a TV</button>
+</header>
+<nav id="nav" aria-label="Policies"></nav>
+<main id="grid"></main>
+<script src="iso-kit.js"></script><script src="iso-explainer.js"></script><script src="hb-iso-C.js"></script>
+<script>
+(function () {
+  var IDS = ['6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8', '6.9', '6.10', '6.11', '6.12', '6.13', 'OK-Access to Personnel and Medica', '7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7'];
+  var q = new URLSearchParams(location.search), grid = document.getElementById('grid'), nav = document.getElementById('nav');
+  var safe = function (id) { return 'p-' + id.replace(/[^A-Za-z0-9]/g, '_'); };
+  var MOM = q.get('m') === '5' ? [0.15, 0.35, 0.55, 0.75, 0.9] : [0.2, 0.55, 0.9];
+
+  if (q.get('sheet')) {
+    /* contact sheet: every step at 5 moments, drawn with the real framework and real fonts */
+    document.body.querySelector('header').style.display = 'none'; nav.style.display = 'none'; grid.style.display = 'none';
+    var spec = HB_ISO[q.get('sheet')], wrap = document.createElement('div'); wrap.className = 'sheet'; wrap.style.gridTemplateColumns = 'repeat(' + MOM.length + ', minmax(0, 1fr))'; document.body.appendChild(wrap);
+    spec.steps.forEach(function (st, i) {
+      var h = document.createElement('h2'); h.textContent = spec.title + ', step ' + (i + 1); wrap.appendChild(h);
+      MOM.forEach(function (m) {
+        var cell = document.createElement('div'); cell.className = 'cell'; wrap.appendChild(cell);
+        var inst = ISOX.mount(cell, spec, { controls: false, autoplay: false });
+        inst.pause(); inst.T = inst.tl.starts[i] + st.dur * m; inst.forced = true; inst.drawNow();
+      });
+    });
+    return;
+  }
+
+  var ids = q.get('only') ? [q.get('only')] : IDS;
+  ids.forEach(function (id) {
+    var spec = HB_ISO[id]; if (!spec) return;
+    var a = document.createElement('article'); a.id = safe(id);
+    a.innerHTML = '<h2></h2><div class="id"></div><div class="host"></div><p></p>';
+    a.querySelector('h2').textContent = spec.title; a.querySelector('.id').textContent = 'Section ' + id.replace(/^OK-/, '');
+    a.querySelector('p').textContent = spec.blurb; grid.appendChild(a);
+    var n = document.createElement('a'); n.href = '#' + safe(id); n.textContent = id.replace(/^OK-.*/, 'Records'); nav.appendChild(n);
+    /* mount only when the card comes near the screen; the framework then rests it off screen */
+    var host = a.querySelector('.host'), done = false;
+    function mount() { if (done) return; done = true; host.style.minHeight = ''; ISOX.mount(host, spec, { aspect: '4:3' }); }
+    if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '300px' }); io.observe(a); } else mount();
+  });
+  document.getElementById('tvBtn').addEventListener('click', function () { ISOX.tv(IDS.map(function (id) { return HB_ISO[id]; }), { aspect: '4:3' }); });
+})();
+</script>
+</body></html>
