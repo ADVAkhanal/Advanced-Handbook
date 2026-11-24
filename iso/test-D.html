@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Handbook isometric explainers, batch D</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --ink: #222629; --ink2: #1a1d20; --steel: #3a3f44; --mid: #9aa0a4; --silver: #c4c9ce; --paper: #e9eaeb; --red: #e03131 }
+* { box-sizing: border-box }
+html, body { margin: 0; background: var(--ink2); color: var(--paper); font-family: Raleway, system-ui, sans-serif }
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 32px; border-bottom: 1px solid var(--steel) }
+h1 { margin: 0; font: 400 clamp(40px, 6vw, 72px)/.9 'Bebas Neue', Impact, sans-serif; letter-spacing: .01em }
+h1 span { text-decoration: underline; text-decoration-color: var(--red); text-decoration-thickness: 4px; text-underline-offset: 6px }
+header p { margin: 0; max-width: 520px; color: var(--silver); font-size: 15px; line-height: 1.5 }
+button { font: 700 14px Raleway, system-ui, sans-serif; color: #fff; background: var(--red); border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer }
+button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px }
+main { max-width: 1400px; margin: 0 auto; padding: 24px 32px 56px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 20px }
+.card { container-type: inline-size; background: var(--ink); border: 1px solid var(--steel); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+.card h2 { margin: 0; font: 400 28px/.95 'Bebas Neue', Impact, sans-serif; letter-spacing: .02em }
+.card h2 b { color: var(--silver); font-weight: 400; margin-right: 8px }
+.card .std { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--silver) }
+.card .isx .hint { color: var(--silver) }
+.slot { min-height: calc(75cqi + 56px) }
+@media (max-width: 480px) { header { padding: 16px } main { padding: 16px 16px 40px } }
+</style></head>
+<body>
+<header>
+  <div><h1>Handbook <span>explainers</span>, batch D</h1></div>
+  <p>Nineteen policies, each in its own place: who, what happens, what to do. They load as you scroll to them. Space pauses, arrow keys step, R replays.</p>
+  <button type="button" id="tv">Play on a TV</button>
+</header>
+<main id="grid"></main>
+<script src="iso-kit.js"></script>
+<script src="iso-explainer.js"></script>
+<script src="hb-iso-D.js"></script>
+<script>
+(function () {
+  var IDS = ['7.8', '7.9', '7.10', '7.11', '7.12', '7.13', '7.14', '7.15', '7.16', '7.17', 'OK-Jury Duty Leave', 'OK-Voting Leave', '8.1', '8.2', '8.3', 'OK-Workplace Smoking', '9.1', 'CLOSE-Closing Statement', 'CLOSE-Acknowledgment of Re'];
+  var grid = document.getElementById('grid'), only = (location.search.match(/[?&]only=([^&]+)/) || [])[1];
+  var specs = [];
+  IDS.forEach(function (id) {
+    if (only && decodeURIComponent(only) !== id) return;
+    var spec = window.HB_ISO[id]; if (!spec) return; specs.push(spec);
+    var card = document.createElement('article'); card.className = 'card';
+    var h = document.createElement('h2'), b = document.createElement('b'); b.textContent = id.replace(/^(OK|CLOSE)-.*$/, function (m, p) { return p; }); h.appendChild(b); h.appendChild(document.createTextNode(spec.title));
+    var slot = document.createElement('div'); slot.className = 'slot';
+    var std = document.createElement('div'); std.className = 'std'; std.textContent = spec.std;
+    card.appendChild(h); card.appendChild(slot); card.appendChild(std); grid.appendChild(card);
+    var done = false;
+    function mount() { if (done) return; done = true; window.ISOX.mount(slot, spec, { aspect: '4:3' }); }
+    if (typeof IntersectionObserver === 'function') new IntersectionObserver(function (es, io) { if (es[0].isIntersecting) { mount(); io.disconnect(); } }, { rootMargin: '240px' }).observe(slot);
+    else mount();
+  });
+  document.getElementById('tv').addEventListener('click', function () { window.ISOX.tv(specs, {}); });
+})();
+</script>
+</body></html>

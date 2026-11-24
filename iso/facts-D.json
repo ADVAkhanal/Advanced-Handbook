@@ -1,0 +1,1772 @@
+{
+ "note": "Generated from the claim table; checked by tools/check-iso-facts-D.mjs against the policy text in the handbook page. quote = words copied from the policy, source = the sentence it sits in, uses = what the picture shows (location s<step>.<title|sub|cap0|cap1|note0|big>, big is \"N | label\").",
+ "sections": {
+  "7.8": {
+   "title": "Family and Medical Leave (FMLA)",
+   "claims": [
+    {
+     "quote": "have worked for advanced for at least 12 months",
+     "source": "- Have worked for ADVANCED for at least 12 months, although it need not be consecutive.",
+     "uses": [
+      {
+       "at": "s1.cap0",
+       "text": "12 months at ADVANCED"
+      }
+     ]
+    },
+    {
+     "quote": "worked at least 1,250 hours in the last 12 months",
+     "source": "- Worked at least 1,250 hours in the last 12 months.",
+     "uses": [
+      {
+       "at": "s1.cap1",
+       "text": "1,250 hours in the last 12 months"
+      }
+     ]
+    },
+    {
+     "quote": "you may take up to 12 weeks of unpaid fmla leave in a 12-month period",
+     "source": "You may take up to 12 weeks of unpaid FMLA leave in a 12-month period for any of the following reasons:",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Up to 12 weeks of unpaid leave"
+      },
+      {
+       "at": "s3.big",
+       "text": "12 | weeks unpaid"
+      }
+     ]
+    },
+    {
+     "quote": "unpaid, job-protected leave",
+     "source": "In accordance with the Family and Medical Leave Act of 1993 (FMLA), ADVANCED provides up to 12 or 26 weeks of unpaid, job-protected leave in a 12-month period to covered employees in certain circumstances.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Unpaid and job-protected"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "The job is protected"
+      }
+     ]
+    },
+    {
+     "quote": "you must give at least 30 days' notice",
+     "source": "If the need for leave is foreseeable because of an expected birth/adoption or planned medical treatment, you must give at least 30 days' notice.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "At least 30 days' notice"
+      }
+     ]
+    },
+    {
+     "quote": "you may obtain medical certification forms from hr",
+     "source": "You may obtain Medical Certification forms from HR.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "Medical certification forms from HR"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who qualifies"
+    },
+    {
+     "at": "s1.sub",
+     "text": "Time worked, hours, worksite size"
+    },
+    {
+     "at": "s2.title",
+     "text": "The leave"
+    },
+    {
+     "at": "s3.title",
+     "text": "Give notice"
+    },
+    {
+     "at": "s3.sub",
+     "text": "Tell ADVANCED early"
+    }
+   ]
+  },
+  "7.9": {
+   "title": "Flexible Spending Account (FSA)",
+   "claims": [
+    {
+     "quote": "advanced provides flexible spending account (fsa) benefits for eligible employees after the plan's defined waiting period",
+     "source": "ADVANCED provides flexible spending account (FSA) benefits for eligible employees after the plan's defined waiting period.",
+     "uses": [
+      {
+       "at": "s1.title",
+       "text": "Eligible employees"
+      },
+      {
+       "at": "s1.sub",
+       "text": "After the plan's waiting period"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "For eligible employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "After the plan's defined waiting period"
+      }
+     ]
+    },
+    {
+     "quote": "which will be divided and deducted from your pay each pay period",
+     "source": "If eligible, you may elect an annual amount to contribute, which will be divided and deducted from your pay each pay period and may be used to pay for eligible expenses.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Deducted from your pay each pay period"
+      }
+     ]
+    },
+    {
+     "quote": "on a pre-tax basis",
+     "source": "A healthcare FSA provides eligible employees the opportunity to pay for medical expenses, on a pre-tax basis, that are not reimbursed by an insurance plan.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Pre-tax, each pay period"
+      }
+     ]
+    },
+    {
+     "quote": "both the amount you contribute and the amount you are reimbursed from your healthcare fsa are income tax free",
+     "source": "Both the amount you contribute and the amount you are reimbursed from your healthcare FSA are income tax free.",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "Amounts in and out are income tax free"
+      }
+     ]
+    },
+    {
+     "quote": "you may elect an annual amount to contribute",
+     "source": "If eligible, you may elect an annual amount to contribute, which will be divided and deducted from your pay each pay period and may be used to pay for eligible expenses.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "You may elect an annual amount"
+      }
+     ]
+    },
+    {
+     "quote": "annual elections are limited by established plan maximums",
+     "source": "Annual elections are limited by established plan maximums and are subject to applicable IRS forfeiture and rollover provisions.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Limited by established plan maximums"
+      }
+     ]
+    },
+    {
+     "quote": "contact hr for a copy of the plan summary",
+     "source": "Contact HR for a copy of the plan summary and for questions about this benefit.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "Contact HR for the plan summary"
+      }
+     ]
+    },
+    {
+     "quote": "fsas provide tax-free reimbursement to employees",
+     "source": "FSAs provide tax-free reimbursement to employees for healthcare and/or dependent care expenses that are not reimbursed by any other insurance or reimbursement program.",
+     "uses": [
+      {
+       "at": "s3.big",
+       "text": "FSA | tax-free"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s2.title",
+     "text": "Paid from your pay"
+    },
+    {
+     "at": "s3.title",
+     "text": "Pick your amount"
+    }
+   ]
+  },
+  "7.10": {
+   "title": "Health Insurance",
+   "claims": [
+    {
+     "quote": "advanced offers group health insurance benefits to all eligible employees and their eligible dependents after the plan's defined waiting period",
+     "source": "ADVANCED offers group health insurance benefits to all eligible employees and their eligible dependents after the plan's defined waiting period.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "After the plan's waiting period"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Eligible employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "And their eligible dependents"
+      }
+     ]
+    },
+    {
+     "quote": "described in detail in the summary plan description (spd), which may be obtained from hr",
+     "source": "Health insurance benefits are described in detail in the Summary Plan Description (SPD), which may be obtained from HR.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "The details are in the SPD"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "The Summary Plan Description has details"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "It may be obtained from HR"
+      },
+      {
+       "at": "s3.big",
+       "text": "SPD | from HR"
+      }
+     ]
+    },
+    {
+     "quote": "if you or a dependent become ineligible for benefits due to a change in work hours or through a life event",
+     "source": "If you or a dependent become ineligible for benefits due to a change in work hours or through a life event, or you leave employment with ADVANCED, you may have the right to continue your health benefits under federal or state law.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "A change in work hours or a life event"
+      }
+     ]
+    },
+    {
+     "quote": "you may have the right to continue your health benefits",
+     "source": "If you or a dependent become ineligible for benefits due to a change in work hours or through a life event, or you leave employment with ADVANCED, you may have the right to continue your health benefits under federal or state law.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "You may have the right to continue"
+      }
+     ]
+    },
+    {
+     "quote": "advanced will provide you with information about your rights",
+     "source": "In such an event, ADVANCED will provide you with information about your rights to continue your benefits coverage.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "ADVANCED will provide information"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Employee and family"
+    },
+    {
+     "at": "s2.title",
+     "text": "The plan binder"
+    },
+    {
+     "at": "s3.title",
+     "text": "If coverage ends"
+    }
+   ]
+  },
+  "7.11": {
+   "title": "Holidays",
+   "claims": [
+    {
+     "quote": "must be a full-time employee and have completed 90 days of continuous employment",
+     "source": "To be eligible for holiday pay an employee must be a full-time employee and have completed 90 days of continuous employment.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Full-time, 90 days of employment"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Full-time employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "90 days of continuous employment"
+      }
+     ]
+    },
+    {
+     "quote": "advanced observes seven (7) company holidays",
+     "source": "ADVANCED observes seven (7) company holidays.",
+     "uses": [
+      {
+       "at": "s2.title",
+       "text": "The seven days"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "7 company holidays"
+      },
+      {
+       "at": "s3.big",
+       "text": "7 | holidays"
+      }
+     ]
+    },
+    {
+     "quote": "holiday time off is in addition to pto",
+     "source": "Holiday time off is in addition to PTO.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Time off in addition to PTO"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "In addition to PTO"
+      }
+     ]
+    },
+    {
+     "quote": "the employee must also work their full scheduled shift before and after the holiday, unless prior arrangements have been made with management",
+     "source": "The employee must also work their full scheduled shift before and after the holiday, unless prior arrangements have been made with management.",
+     "uses": [
+      {
+       "at": "s3.title",
+       "text": "Work your full shift"
+      },
+      {
+       "at": "s3.sub",
+       "text": "Before and after the holiday"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Work your full shift before and after"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Unless prior arrangements were made"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who gets paid"
+    }
+   ]
+  },
+  "7.12": {
+   "title": "Life Insurance",
+   "claims": [
+    {
+     "quote": "advanced provides life insurance to all eligible employees after the plan's defined waiting period",
+     "source": "ADVANCED provides life insurance to all eligible employees after the plan's defined waiting period.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "After the plan's waiting period"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Life insurance for eligible employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "After the plan's defined waiting period"
+      }
+     ]
+    },
+    {
+     "quote": "you will be required to notify the benefits administrator of your intended beneficiary",
+     "source": "You will be required to notify the benefits administrator of your intended beneficiary.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Your intended beneficiary"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Notify the benefits administrator"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Of your intended beneficiary"
+      }
+     ]
+    },
+    {
+     "quote": "refer to the summary plan description (spd) for details about the benefit",
+     "source": "Refer to the Summary Plan Description (SPD) for details about the benefit.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Refer to the SPD"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Refer to the Summary Plan Description"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "For details about the benefit"
+      },
+      {
+       "at": "s3.big",
+       "text": "SPD | for details"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Employee covered"
+    },
+    {
+     "at": "s2.title",
+     "text": "Name a beneficiary"
+    },
+    {
+     "at": "s3.title",
+     "text": "Read the plan details"
+    }
+   ]
+  },
+  "7.13": {
+   "title": "Military Leave (USERRA)",
+   "claims": [
+    {
+     "quote": "unpaid military leave of absence will be granted to members of the uniformed services",
+     "source": "Unpaid military leave of absence will be granted to members of the uniformed services in accordance with the Uniformed Services Employment and Reemployment Rights Act of 1994 (USERRA; with amendments) and all applicable state law.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Members of the uniformed services"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Members of the uniformed services"
+      },
+      {
+       "at": "s2.sub",
+       "text": "Unpaid leave is granted"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Unpaid military leave is granted"
+      }
+     ]
+    },
+    {
+     "quote": "in accordance with the uniformed services employment and reemployment rights act of 1994 (userra; with amendments) and all applicable state law",
+     "source": "Unpaid military leave of absence will be granted to members of the uniformed services in accordance with the Uniformed Services Employment and Reemployment Rights Act of 1994 (USERRA; with amendments) and all applicable state law.",
+     "uses": [
+      {
+       "at": "s1.cap1",
+       "text": "Under USERRA and state law"
+      },
+      {
+       "at": "s3.big",
+       "text": "1994 | USERRA"
+      }
+     ]
+    },
+    {
+     "quote": "you must submit documentation of the need for leave to hr",
+     "source": "You must submit documentation of the need for leave to HR.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Submit documentation to HR"
+      }
+     ]
+    },
+    {
+     "quote": "you must notify your manager of your intent to return",
+     "source": "You must notify your MANAGER of your intent to return to employment based on the requirements of the law.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Notify your manager of intent to return"
+      }
+     ]
+    },
+    {
+     "quote": "you will be reinstated to your previous position or a similar position",
+     "source": "When returning from military leave of absence, you will be reinstated to your previous position or a similar position, in accordance with state and federal law.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Your previous or a similar position"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Reinstated to your previous position"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who it covers"
+    },
+    {
+     "at": "s2.title",
+     "text": "Send paperwork to HR"
+    },
+    {
+     "at": "s3.title",
+     "text": "Coming back"
+    }
+   ]
+  },
+  "7.14": {
+   "title": "Paid Time Off (PTO)",
+   "claims": [
+    {
+     "quote": "to be eligible for pto, an employee must be a full-time employee and normally work 30+ hours per week",
+     "source": "To be eligible for PTO, an employee must be a full-time employee and normally work 30+ hours per week.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Full-time, 30+ hours a week"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Full-time and working 30+ hours a week"
+      }
+     ]
+    },
+    {
+     "quote": "pto accruals will begin after 6 months of continuous employment",
+     "source": "PTO accruals will begin after 6 months of continuous employment.",
+     "uses": [
+      {
+       "at": "s1.cap1",
+       "text": "Accrual begins after 6 months"
+      }
+     ]
+    },
+    {
+     "quote": "6 months through completion of 1 year | 0.0115 | 3 days / 24 hours per year",
+     "source": "| 6 months through completion of 1 year | 0.0115 | 3 days / 24 hours per year |",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "6 months to 1 year: 3 days a year"
+      },
+      {
+       "at": "s2.note0",
+       "text": "3 days"
+      }
+     ]
+    },
+    {
+     "quote": "1 year through completion of 3 years | 0.0570 | 10 days / 80 hours per year",
+     "source": "| 1 year through completion of 3 years | 0.0570 | 10 days / 80 hours per year |",
+     "uses": [
+      {
+       "at": "s2.note1",
+       "text": "10 days"
+      }
+     ]
+    },
+    {
+     "quote": "3 years through completion of 5 years | 0.0865 | 15 days / 120 hours per year",
+     "source": "| 3 years through completion of 5 years | 0.0865 | 15 days / 120 hours per year |",
+     "uses": [
+      {
+       "at": "s2.note2",
+       "text": "15 days"
+      }
+     ]
+    },
+    {
+     "quote": "5+ years | 0.1039 | 18 days / 144 hours per year",
+     "source": "| 5+ years | 0.1039 | 18 days / 144 hours per year |",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "5+ years: 18 days a year"
+      },
+      {
+       "at": "s2.note3",
+       "text": "18 days"
+      }
+     ]
+    },
+    {
+     "quote": "pto usage must be approved in advance by a supervisor",
+     "source": "- PTO usage must be approved in advance by a supervisor unless due to a documented emergency.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "PTO must be approved in advance"
+      }
+     ]
+    },
+    {
+     "quote": "must be approved in advance by the employee's immediate manager",
+     "source": "All time missed from work that is scheduled as part of PTO must be approved in advance by the employee's immediate manager (for Advanced Companies observed holidays there is no advance notice required).",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Approved in advance by your manager"
+      }
+     ]
+    },
+    {
+     "quote": "employees should try to provide at least three (3) weeks' notice when requesting a full week or more of pto time",
+     "source": "Employees should try to provide at least three (3) weeks’ notice when requesting a full week or more of PTO time.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "Provide 3 weeks notice for a full week"
+      }
+     ]
+    },
+    {
+     "quote": "earn their full annual pto within 39 weeks",
+     "source": "The following schedule ensures that employees earn their full annual PTO within 39 weeks (not 52 weeks):",
+     "uses": [
+      {
+       "at": "s3.big",
+       "text": "39 | weeks to earn"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who earns PTO"
+    },
+    {
+     "at": "s2.title",
+     "text": "More years, more PTO"
+    },
+    {
+     "at": "s2.sub",
+     "text": "Accrual grows with service"
+    },
+    {
+     "at": "s3.title",
+     "text": "Ask first"
+    }
+   ]
+  },
+  "7.15": {
+   "title": "Personal Leave of Absence",
+   "claims": [
+    {
+     "quote": "all regular/full-time/part-time employees employed for at least 6 months are eligible to apply for an unpaid personal leave of absence",
+     "source": "All regular/full-time/part-time employees employed for at least 6 months are eligible to apply for an unpaid personal leave of absence.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Unpaid leave after 6 months"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Regular, full-time, part-time employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Employed at least 6 months"
+      }
+     ]
+    },
+    {
+     "quote": "requests for unpaid personal leave must be submitted to hr in writing",
+     "source": "Requests for unpaid personal leave must be submitted to HR in writing at least 30 days in advance where practical.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Requests are submitted to HR in writing"
+      }
+     ]
+    },
+    {
+     "quote": "the request should include the reason for the leave as well as the dates you expect to begin and end the leave",
+     "source": "The request should include the reason for the leave as well as the dates you expect to begin and end the leave.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Reason for the leave and the dates"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Include the reason and the dates"
+      }
+     ]
+    },
+    {
+     "quote": "you must request an extension of the leave in writing at least 1week in advance of the return date",
+     "source": "If you are unable to return, you must request an extension of the leave in writing at least 1week in advance of the return date.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Extension requests in writing"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Extension: 1 week in advance"
+      }
+     ]
+    },
+    {
+     "quote": "you are required to return from unpaid personal leave on the originally scheduled return date",
+     "source": "You are required to return from unpaid personal leave on the originally scheduled return date.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Return on the originally scheduled date"
+      }
+     ]
+    },
+    {
+     "quote": "at least 30 days in advance where practical",
+     "source": "Requests for unpaid personal leave must be submitted to HR in writing at least 30 days in advance where practical.",
+     "uses": [
+      {
+       "at": "s3.big",
+       "text": "30 | days in advance"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who can ask"
+    },
+    {
+     "at": "s2.title",
+     "text": "Put it in writing"
+    },
+    {
+     "at": "s3.title",
+     "text": "Come back on time"
+    }
+   ]
+  },
+  "7.16": {
+   "title": "Unemployment Compensation Insurance",
+   "claims": [
+    {
+     "quote": "provides temporary income for employees who have lost their job under certain circumstances",
+     "source": "Unemployment compensation insurance is paid for by ADVANCED and provides temporary income for employees who have lost their job under certain circumstances.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Employees who lost their job"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Employees who have lost their job"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Under certain circumstances"
+      },
+      {
+       "at": "s2.sub",
+       "text": "Temporary income"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "It provides temporary income"
+      }
+     ]
+    },
+    {
+     "quote": "is paid for by advanced",
+     "source": "Unemployment compensation insurance is paid for by ADVANCED and provides temporary income for employees who have lost their job under certain circumstances.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Paid for by ADVANCED"
+      },
+      {
+       "at": "s3.big",
+       "text": "PAID | for by ADVANCED"
+      }
+     ]
+    },
+    {
+     "quote": "will, in part, be determined by the reasons for your separation from advanced",
+     "source": "Your eligibility for unemployment compensation will, in part, be determined by the reasons for your separation from ADVANCED.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "The reasons for your separation"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Eligibility is determined in part"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "By the reasons for your separation"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who it helps"
+    },
+    {
+     "at": "s2.title",
+     "text": "ADVANCED pays"
+    },
+    {
+     "at": "s3.title",
+     "text": "Why you left matters"
+    }
+   ]
+  },
+  "7.17": {
+   "title": "Workers' Compensation Insurance",
+   "claims": [
+    {
+     "quote": "workers' compensation is a no-fault system designed to provide benefits to all employees for work-related injuries",
+     "source": "Workers' compensation is a no-fault system designed to provide benefits to all employees for work-related injuries.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Work-related injuries, no-fault"
+      }
+     ]
+    },
+    {
+     "quote": "coverage of medical treatment and expenses, occupational disability leave, and rehabilitation services, as well as payment for lost wages",
+     "source": "The workers' compensation system provides coverage of medical treatment and expenses, occupational disability leave, and rehabilitation services, as well as payment for lost wages due to work related injuries.",
+     "uses": [
+      {
+       "at": "s1.cap0",
+       "text": "Medical treatment, leave, lost wages"
+      }
+     ]
+    },
+    {
+     "quote": "workers' compensation insurance coverage is paid for by employers",
+     "source": "Workers' compensation insurance coverage is paid for by employers and governed by state law.",
+     "uses": [
+      {
+       "at": "s1.cap1",
+       "text": "Paid for by employers"
+      }
+     ]
+    },
+    {
+     "quote": "no matter how slightly, you are to report the incident immediately to your manager",
+     "source": "If you are injured on the job while working at ADVANCED, no matter how slightly, you are to report the incident immediately to your manager.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "No matter how slightly"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Report it immediately to your manager"
+      }
+     ]
+    },
+    {
+     "quote": "failure to report an injury within a reasonable period of time could jeopardize your claim for benefits",
+     "source": "Consistent with applicable state law, failure to report an injury within a reasonable period of time could jeopardize your claim for benefits.",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "Failure to report jeopardizes your claim"
+      }
+     ]
+    },
+    {
+     "quote": "notify hr immediately of your claim",
+     "source": "To receive workers' compensation benefits, notify HR immediately of your claim.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Notify HR of your claim"
+      },
+      {
+       "at": "s3.big",
+       "text": "HR | immediately"
+      }
+     ]
+    },
+    {
+     "quote": "you must fill out an accident report",
+     "source": "If your injury is the result of an on-the-job accident, you must fill out an accident report.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Accident report and medical release"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Fill out an accident report"
+      }
+     ]
+    },
+    {
+     "quote": "you will be required to submit a medical release before you can return to work",
+     "source": "You will be required to submit a medical release before you can return to work.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Accident report and medical release"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who is covered"
+    },
+    {
+     "at": "s2.title",
+     "text": "Tell your manager"
+    },
+    {
+     "at": "s3.title",
+     "text": "Then tell HR"
+    }
+   ]
+  },
+  "8.1": {
+   "title": "Drug and Alcohol Policy",
+   "claims": [
+    {
+     "quote": "when they are on duty or conducting advanced business or on advanced premises (whether or not they are working)",
+     "source": "ADVANCED expressly prohibits EMPLOYEES from engaging in the following activities when they are on duty or conducting ADVANCED business or on ADVANCED premises (whether or not they are working):",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Working or not, on company premises"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "On duty or conducting ADVANCED business"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "On ADVANCED premises, working or not"
+      }
+     ]
+    },
+    {
+     "quote": "the use, abuse, or being under the influence of alcohol, illegal drugs, or other impairing substances",
+     "source": "- The use, abuse, or being under the influence of alcohol, illegal drugs, or other impairing substances.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Alcohol, illegal drugs, impairing substances"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Use, or being under the influence"
+      }
+     ]
+    },
+    {
+     "quote": "the possession, sale, purchase, transfer, or transit of any illegal or unauthorized drug",
+     "source": "- The possession, sale, purchase, transfer, or transit of any illegal or unauthorized drug, including prescription medication that is not prescribed to the individual, or drug-related paraphernalia.",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "Possession, sale, purchase, transfer"
+      }
+     ]
+    },
+    {
+     "quote": "employees are expected to report to work fit for duty, unimpaired",
+     "source": "Employees are expected to report to work fit for duty, unimpaired, and capable of safely performing their job functions.",
+     "uses": [
+      {
+       "at": "s3.title",
+       "text": "Fit for duty"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Report to work fit for duty"
+      },
+      {
+       "at": "s3.big",
+       "text": "FIT | for duty"
+      }
+     ]
+    },
+    {
+     "quote": "inform your manager if you believe the medication may impair your job performance",
+     "source": "If you take over-the-counter medication or other medication that can legally be prescribed under both federal and state law to treat a disability, inform your manager if you believe the medication may impair your job performance, safety, or the safety of others or if you believe you need a reasonable accommodation before reporting to work while under the influence of that medication.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Inform your manager of medication"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "If it may impair, inform your manager"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "On duty or on site"
+    },
+    {
+     "at": "s2.title",
+     "text": "What is not allowed"
+    }
+   ]
+  },
+  "8.2": {
+   "title": "General Safety",
+   "claims": [
+    {
+     "quote": "it is the responsibility of all advanced employees to maintain a healthy and safe work environment",
+     "source": "It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "A healthy and safe work environment"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "The responsibility of all employees"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Maintain a healthy, safe environment"
+      }
+     ]
+    },
+    {
+     "quote": "report any health or safety hazards",
+     "source": "It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Report any health or safety hazards"
+      }
+     ]
+    },
+    {
+     "quote": "follow the advanced health and safety rules",
+     "source": "It is the responsibility of all ADVANCED EMPLOYEES to maintain a healthy and safe work environment, report any health or safety hazards, and follow the ADVANCED health and safety rules.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Hazards and the safety rules"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Follow the health and safety rules"
+      }
+     ]
+    },
+    {
+     "quote": "all occupational illnesses or injuries be reported to your manager as soon as reasonably possible",
+     "source": "ADVANCED also requires that all occupational illnesses or injuries be reported to your MANAGER as soon as reasonably possible and that an occupational illness or injury form be completed on each reported incident.",
+     "uses": [
+      {
+       "at": "s3.title",
+       "text": "Report injuries"
+      },
+      {
+       "at": "s3.sub",
+       "text": "As soon as reasonably possible"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Report illness or injury to your MANAGER"
+      },
+      {
+       "at": "s3.big",
+       "text": "FORM | for each incident"
+      }
+     ]
+    },
+    {
+     "quote": "an occupational illness or injury form be completed on each reported incident",
+     "source": "ADVANCED also requires that all occupational illnesses or injuries be reported to your MANAGER as soon as reasonably possible and that an occupational illness or injury form be completed on each reported incident.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "Complete an illness or injury form"
+      },
+      {
+       "at": "s3.big",
+       "text": "FORM | for each incident"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Everyone's job"
+    },
+    {
+     "at": "s2.title",
+     "text": "Spot it, report it"
+    }
+   ]
+  },
+  "8.3": {
+   "title": "Workplace Violence",
+   "claims": [
+    {
+     "quote": "we maintain a strict zero tolerance policy toward any form of workplace violence",
+     "source": "At Advanced, we maintain a strict zero tolerance policy toward any form of workplace violence.",
+     "uses": [
+      {
+       "at": "s1.title",
+       "text": "Zero tolerance"
+      },
+      {
+       "at": "s3.big",
+       "text": "ZERO | tolerance"
+      }
+     ]
+    },
+    {
+     "quote": "this applies to all individuals on company property or conducting company business",
+     "source": "This applies to all individuals on company property or conducting company business.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "All individuals on company property"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "On company property or business"
+      }
+     ]
+    },
+    {
+     "quote": "the safety and security of our employees, contractors, vendors, and visitors",
+     "source": "The safety and security of our employees, contractors, vendors, and visitors is our top priority.",
+     "uses": [
+      {
+       "at": "s1.cap0",
+       "text": "Employees, contractors and visitors"
+      }
+     ]
+    },
+    {
+     "quote": "any acts or threats of violence",
+     "source": "Any acts or threats of violence—including intimidation, harassment, physical altercations, or possession of weapons—are strictly prohibited, regardless of intent or provocation.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Acts or threats of violence"
+      }
+     ]
+    },
+    {
+     "quote": "intimidation, harassment, physical altercations, or possession of weapons",
+     "source": "Any acts or threats of violence—including intimidation, harassment, physical altercations, or possession of weapons—are strictly prohibited, regardless of intent or provocation.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Intimidation and harassment"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Physical altercations and weapons"
+      }
+     ]
+    },
+    {
+     "quote": "all reports will be investigated immediately and kept confidential",
+     "source": "All reports will be investigated immediately and kept confidential, except where there is a legitimate need to know.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Reports are investigated immediately"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Investigated immediately; confidential"
+      }
+     ]
+    },
+    {
+     "quote": "retaliation for good-faith reporting will not be tolerated",
+     "source": "All incidents must be reported promptly, and retaliation for good-faith reporting will not be tolerated.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "No retaliation for good-faith reports"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s2.title",
+     "text": "What is not allowed"
+    },
+    {
+     "at": "s3.title",
+     "text": "Tell your manager"
+    }
+   ]
+  },
+  "OK-Jury Duty Leave": {
+   "title": "Jury Duty Leave",
+   "claims": [
+    {
+     "quote": "if you are summoned for jury duty, notify your managers as soon as possible",
+     "source": "If you are summoned for jury duty, notify your managers as soon as possible to make scheduling arrangements.",
+     "uses": [
+      {
+       "at": "s1.title",
+       "text": "Summoned for jury duty"
+      },
+      {
+       "at": "s1.sub",
+       "text": "Notify your managers"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "You are summoned for jury duty"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Notify managers as soon as possible"
+      }
+     ]
+    },
+    {
+     "quote": "if you are classified as exempt, you will not incur any deduction in pay for a partial week's absence due to jury duty",
+     "source": "If you are classified as exempt, you will not incur any deduction in pay for a partial week's absence due to jury duty.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "Exempt: no pay deduction"
+      }
+     ]
+    },
+    {
+     "quote": "if you are classified as nonexempt, you will not be compensated for time spent on jury duty",
+     "source": "If you are classified as nonexempt, you will not be compensated for time spent on jury duty.",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "Nonexempt: not compensated"
+      }
+     ]
+    },
+    {
+     "quote": "you may opt to use [pto/vacation] in place of unpaid leave",
+     "source": "You may opt to use [PTO/vacation] in place of unpaid leave.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Use PTO in place of unpaid leave"
+      },
+      {
+       "at": "s3.big",
+       "text": "PTO | for unpaid leave"
+      }
+     ]
+    },
+    {
+     "quote": "the company reserves the right to require employees to provide proof of jury duty service",
+     "source": "The Company reserves the right to require employees to provide proof of jury duty service to the extent authorized by law.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "PTO and proof of service"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "May require proof of service"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s2.title",
+     "text": "How pay works"
+    },
+    {
+     "at": "s2.sub",
+     "text": "Exempt and nonexempt differ"
+    },
+    {
+     "at": "s3.title",
+     "text": "Cover the time"
+    }
+   ]
+  },
+  "OK-Voting Leave": {
+   "title": "Voting Leave",
+   "claims": [
+    {
+     "quote": "if you are a registered voter and have less than three hours outside of your working hours to vote while the polls are open",
+     "source": "If you are a registered voter and have less than three hours outside of your working hours to vote while the polls are open, ADVANCED will provide you with two hours off, without loss of pay, to vote during your work hours on the day of election or a day in which in-person absentee voting is allowed.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "While the polls are open"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "You are a registered voter"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Less than 3 hours outside work to vote"
+      }
+     ]
+    },
+    {
+     "quote": "advanced will provide you with two hours off, without loss of pay, to vote during your work hours",
+     "source": "If you are a registered voter and have less than three hours outside of your working hours to vote while the polls are open, ADVANCED will provide you with two hours off, without loss of pay, to vote during your work hours on the day of election or a day in which in-person absentee voting is allowed.",
+     "uses": [
+      {
+       "at": "s2.title",
+       "text": "Two hours off"
+      },
+      {
+       "at": "s2.sub",
+       "text": "Without loss of pay"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "2 hours off to vote"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "During your work hours"
+      },
+      {
+       "at": "s3.big",
+       "text": "2 | hours off"
+      }
+     ]
+    },
+    {
+     "quote": "you must provide oral or written notice of the need for time off to vote at least three days prior to the election",
+     "source": "You must provide oral or written notice of the need for time off to vote at least three days prior to the election or the day of in-person absentee voting so that time off can be scheduled to minimize disruption to normal work schedules.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Oral or written notice"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Notice at least 3 days prior"
+      }
+     ]
+    },
+    {
+     "quote": "you must submit proof of voting to your managers upon return to work",
+     "source": "You must submit proof of voting to your Managers upon return to work in order to be paid for the missed work time.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "Submit proof of voting"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Who gets time"
+    },
+    {
+     "at": "s3.title",
+     "text": "Notice and proof"
+    }
+   ]
+  },
+  "OK-Workplace Smoking": {
+   "title": "Workplace Smoking",
+   "claims": [
+    {
+     "quote": "smoking, and vaping in the office, client areas, and restrooms is prohibited",
+     "source": "Smoking, and vaping in the office, client areas, and restrooms is prohibited.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Office, client areas, restrooms"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "In the office"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "In client areas and restrooms"
+      },
+      {
+       "at": "s2.title",
+       "text": "Smoking and vaping"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Smoking is prohibited"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Vaping is prohibited too"
+      },
+      {
+       "at": "s3.big",
+       "text": "NO | smoking, vaping"
+      }
+     ]
+    },
+    {
+     "quote": "advanced is concerned about the effect that smoking and secondhand smoke inhalation can have on its employees and clients",
+     "source": "ADVANCED is concerned about the effect that smoking and secondhand smoke inhalation can have on its employees and clients.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "The effect on employees and clients"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "Concern for employees and clients"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Smoking and secondhand smoke inhalation"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "Where it applies"
+    },
+    {
+     "at": "s2.sub",
+     "text": "Both are prohibited"
+    },
+    {
+     "at": "s3.title",
+     "text": "Why it matters"
+    }
+   ]
+  },
+  "9.1": {
+   "title": "Confidentiality and Nondisclosure of Trade Secrets",
+   "claims": [
+    {
+     "quote": "protect the confidentiality of advanced trade secrets, proprietary information, and confidential commercially sensitive information",
+     "source": "As a condition of employment, ADVANCED employees are required to protect the confidentiality of ADVANCED trade secrets, proprietary information, and confidential commercially sensitive information (i.e. financial or sales records/reports, marketing or business strategies/plans, product development, customer lists, patents, trademarks, etc.) related to ADVANCED.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "Trade secrets and confidential information"
+      }
+     ]
+    },
+    {
+     "quote": "(i.e. financial or sales records/reports, marketing or business strategies/plans, product development, customer lists, patents, trademarks, etc.)",
+     "source": "As a condition of employment, ADVANCED employees are required to protect the confidentiality of ADVANCED trade secrets, proprietary information, and confidential commercially sensitive information (i.e. financial or sales records/reports, marketing or business strategies/plans, product development, customer lists, patents, trademarks, etc.) related to ADVANCED.",
+     "uses": [
+      {
+       "at": "s1.cap0",
+       "text": "Financial or sales records"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "Customer lists, patents, trademarks"
+      }
+     ]
+    },
+    {
+     "quote": "access to this information should be limited to a \"need to know\" basis",
+     "source": "Access to this information should be limited to a \"need to know\" basis and should not be used for personal benefit, disclosed, or released without prior authorization from management.",
+     "uses": [
+      {
+       "at": "s2.title",
+       "text": "Need to know"
+      },
+      {
+       "at": "s2.sub",
+       "text": "Access is limited"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Access is limited to need to know"
+      }
+     ]
+    },
+    {
+     "quote": "should not be used for personal benefit",
+     "source": "Access to this information should be limited to a \"need to know\" basis and should not be used for personal benefit, disclosed, or released without prior authorization from management.",
+     "uses": [
+      {
+       "at": "s2.cap1",
+       "text": "Not for personal benefit"
+      }
+     ]
+    },
+    {
+     "quote": "if you have information that leads you to suspect that employees are sharing such information in violation of this policy",
+     "source": "If you have information that leads you to suspect that employees are sharing such information in violation of this policy and/or competitors are obtaining such information, you are required to inform your manager or HR.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Suspect that employees are sharing it"
+      }
+     ]
+    },
+    {
+     "quote": "you are required to inform your manager or hr",
+     "source": "If you have information that leads you to suspect that employees are sharing such information in violation of this policy and/or competitors are obtaining such information, you are required to inform your manager or HR.",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Inform your manager or HR"
+      },
+      {
+       "at": "s3.big",
+       "text": "HR | or your manager"
+      }
+     ]
+    },
+    {
+     "quote": "violation of this policy may result in disciplinary action up to and including termination",
+     "source": "Violation of this policy may result in disciplinary action up to and including termination, and may subject the violator to civil liability.",
+     "uses": [
+      {
+       "at": "s3.cap1",
+       "text": "May result in disciplinary action"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "What is protected"
+    },
+    {
+     "at": "s3.title",
+     "text": "If you suspect a leak"
+    }
+   ]
+  },
+  "CLOSE-Closing Statement": {
+   "title": "Closing Statement",
+   "claims": [
+    {
+     "quote": "thank you for reading our handbook",
+     "source": "Thank you for reading our handbook.",
+     "uses": [
+      {
+       "at": "s1.title",
+       "text": "Thank you"
+      },
+      {
+       "at": "s1.sub",
+       "text": "For reading our handbook"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "Thank you for reading our handbook"
+      },
+      {
+       "at": "s3.big",
+       "text": "THANK | you"
+      }
+     ]
+    },
+    {
+     "quote": "it has provided you with an understanding of our mission, history, and structure as well as our current policies and guidelines",
+     "source": "We hope it has provided you with an understanding of our mission, history, and structure as well as our current policies and guidelines.",
+     "uses": [
+      {
+       "at": "s1.cap1",
+       "text": "We hope it provided an understanding"
+      },
+      {
+       "at": "s2.sub",
+       "text": "Mission, history, structure, policies"
+      },
+      {
+       "at": "s2.cap0",
+       "text": "Our mission, history and structure"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Current policies and guidelines"
+      }
+     ]
+    },
+    {
+     "quote": "we look forward to working with you to create a s a safe, productive, and pleasant workplace",
+     "source": "We look forward to working with you to create a s a safe, productive, and pleasant workplace.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Safe, productive and pleasant"
+      },
+      {
+       "at": "s3.cap0",
+       "text": "We look forward to working with you"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "A safe, productive, pleasant workplace"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s2.title",
+     "text": "What it gave you"
+    },
+    {
+     "at": "s3.title",
+     "text": "Working together"
+    }
+   ]
+  },
+  "CLOSE-Acknowledgment of Re": {
+   "title": "Acknowledgment of Receipt and Review",
+   "claims": [
+    {
+     "quote": "i have received a copy of the advanced employee handbook (handbook) and that i have read it, understand it, and agree to comply with it",
+     "source": "By signing below, I acknowledge that I have received a copy of the ADVANCED Employee Handbook (handbook) and that I have read it, understand it, and agree to comply with it.",
+     "uses": [
+      {
+       "at": "s1.sub",
+       "text": "You received and read the handbook"
+      },
+      {
+       "at": "s1.cap0",
+       "text": "You received a copy of the handbook"
+      },
+      {
+       "at": "s1.cap1",
+       "text": "You have read it and understand it"
+      }
+     ]
+    },
+    {
+     "quote": "is intended in any way to create a contract of employment",
+     "source": "I understand that neither this handbook nor any other communication by a management representative or other, whether oral or written, is intended in any way to create a contract of employment.",
+     "uses": [
+      {
+       "at": "s2.cap0",
+       "text": "It is not a contract of employment"
+      }
+     ]
+    },
+    {
+     "quote": "changes can only be made if approved in writing by the ceo of advanced",
+     "source": "Changes can only be made if approved in writing by the CEO of ADVANCED.",
+     "uses": [
+      {
+       "at": "s2.sub",
+       "text": "Only the CEO can approve changes"
+      },
+      {
+       "at": "s2.cap1",
+       "text": "Changes only if approved in writing"
+      }
+     ]
+    },
+    {
+     "quote": "print name",
+     "source": "Print Name",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Print name. Contact HR with questions"
+      }
+     ]
+    },
+    {
+     "quote": "signature date",
+     "source": "Signature Date",
+     "uses": [
+      {
+       "at": "s3.cap0",
+       "text": "Sign, date and print your name"
+      }
+     ]
+    },
+    {
+     "quote": "if i have any questions about the content or interpretation of this handbook, i will contact hr",
+     "source": "If I have any questions about the content or interpretation of this handbook, I will contact HR.",
+     "uses": [
+      {
+       "at": "s3.sub",
+       "text": "Print name. Contact HR with questions"
+      },
+      {
+       "at": "s3.cap1",
+       "text": "Questions? Contact HR"
+      }
+     ]
+    },
+    {
+     "quote": "by signing below",
+     "source": "By signing below, I acknowledge that I have received a copy of the ADVANCED Employee Handbook (handbook) and that I have read it, understand it, and agree to comply with it.",
+     "uses": [
+      {
+       "at": "s3.big",
+       "text": "SIGN | and date"
+      }
+     ]
+    }
+   ],
+   "generic": [
+    {
+     "at": "s1.title",
+     "text": "What you confirm"
+    },
+    {
+     "at": "s2.title",
+     "text": "What it does not do"
+    },
+    {
+     "at": "s3.title",
+     "text": "Sign and date"
+    }
+   ]
+  }
+ }
+}
