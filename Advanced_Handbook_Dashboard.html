@@ -5478,7 +5478,8 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   // HB-SCENES:END
   // ── a video: canvas + marquee + callouts for one section
   var live = [];
-  function video(sec) {
+  function video(sec, inTv) { var iv = window.HBIso && window.HBIso.video(sec, inTv, video2d); return iv || video2d(sec); }
+  function video2d(sec) {
     var own = HB_SCENES[sec.id], plan = own ? { labels: own.labels } : planFor(sec), arch = own ? { draw: own.draw, pts: own.pts } : (A[plan.arch] || A.letter);
     var el = document.createElement('div'); el.className = 'hbv-st'; el.setAttribute('role', 'img'); el.setAttribute('aria-label', 'Animated illustration: ' + sec.title);
     var cv = document.createElement('canvas'); cv.width = W; cv.height = H; el.appendChild(cv);
@@ -5554,16 +5555,16 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
         el.querySelector('.n').textContent = numOf(sec.id); el.querySelector('h2').textContent = sec.title; el.querySelector('p').textContent = opening(sec);
         el.querySelector('.c').textContent = 'Policy ' + (idx + 1) + ' of ' + ids.length + ' · ' + sec.category; txt.forEach(function (x) { x.classList.remove('out'); });
       }, reduced ? 0 : 240);
-      var l = el.querySelector('.l'); if (cur) cur.el.remove(); cur = video(sec); cur.t0 = performance.now(); l.appendChild(cur.el);
+      var l = el.querySelector('.l'); if (cur) { cur.el.remove(); if (cur.dispose) cur.dispose(); } cur = video(sec, true); cur.t0 = performance.now(); l.appendChild(cur.el);
       if (!reduced && cur.el.animate) cur.el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease-out' });
       stepsEl.querySelectorAll('i').forEach(function (x, k) { x.classList.toggle('on', k <= idx); });
     }
     function close() { if (!on) return; on = false; document.removeEventListener('keydown', key, true); el.remove(); if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); if (prevFocus && prevFocus.focus) prevFocus.focus(); }
     function key(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } else if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); } else if (e.key === ' ') { e.preventDefault(); toggle(); } else return; e.stopPropagation(); }
-    function toggle() { paused = !paused; el.querySelector('[data-k="pause"]').textContent = paused ? 'Play' : 'Pause'; if (!paused) t0 = performance.now(); }
+    function toggle() { paused = !paused; if (cur && cur.setPaused) cur.setPaused(paused); el.querySelector('[data-k="pause"]').textContent = paused ? 'Play' : 'Pause'; if (!paused) t0 = performance.now(); }
     el.addEventListener('click', function (e) { var b = e.target.closest('button[data-k]'); if (!b) return; var k = b.dataset.k; if (k === 'close') close(); else if (k === 'next') show(idx + 1); else if (k === 'prev') show(idx - 1); else if (k === 'pause') toggle(); });
     document.addEventListener('keydown', key, true);
-    function tick(now) { if (!on) return; if (!paused && !reduced && (now - t0) / 1000 > HOLD) show(idx + 1); requestAnimationFrame(tick); }
+    function tick(now) { if (!on) return; if (!paused && !reduced && (cur && cur.finished ? cur.finished() : (now - t0) / 1000 > HOLD)) show(idx + 1); requestAnimationFrame(tick); }
     show(idx); requestAnimationFrame(tick); el.querySelector('[data-k="next"]').focus();
   }
 
@@ -5595,6 +5596,8 @@ window.HANDBOOK_DATA = {"logo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQAB
   }
 })();
 </script>
+
+<script src="iso/hb-iso-adapter.js" defer></script>
 
 </body>
 </html>
