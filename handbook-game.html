@@ -52,7 +52,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--paper);outline-offs
 .cap{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);font:700 2.7cqi/1 Raleway,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;background:var(--paper);color:var(--ink);border:.3cqi solid var(--ink);padding:.9cqi 1.7cqi;white-space:nowrap;max-width:94%;display:none;pointer-events:none}
 .cap.on{display:block}
 @container (max-width:560px){.cap{font-size:4.2cqi;padding:1.2cqi 2cqi}.mq small{display:none}.mq h2{font-size:5.6cqi}.mq b{font-size:4.6cqi;line-height:6.4cqi;width:6.4cqi;height:6.4cqi}.mq.num{padding-left:10cqi}}
-.spot{position:absolute;width:12%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:transparent;border:2px dashed transparent;color:transparent}
+.spot{position:absolute;width:10%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:transparent;border:2px dashed transparent;color:transparent}
 .spot:focus-visible{border-color:var(--paper)}
 .spot.found{cursor:default;pointer-events:none}
 /* the panel under the screen: dialogue, choices, results */
@@ -267,9 +267,11 @@ function buildScenes(ISO) {
   const detail = (L, g, x, y, fn) => L.add([x - 1, y - 1, 0, x + 1, y + 1, 19.5], () => { const a = g.proj(Math.round(x), Math.round(y), 0); fn(a[0], a[1]); });
 
   // ── a room: backdrop, floor and walls built layer by layer on entering, then the list of props and people
-  const RX = 60, RY = 32, RH = 26, CAM = { x: 24, y: 10, zoom: 1 };
+  const RX = 48, RY = 24, RH = 18, LY = 19;
+  // zoom 2 camera for a room X by Y: the cutaway fills the stage, the back corner sits at y 56 and the front corner runs off the bottom
+  const camFor = (X, Y) => { const mid = (X - Y) / 2; return { x: (21 + mid) / 2, y: (21 - mid) / 2, zoom: 2 }; };
   function begin(g, s, d) {
-    const cam = d.cam || CAM, X = d.X || RX, Y = d.Y || RY, Hh = d.H || RH;
+    const X = d.X || RX, Y = d.Y || RY, Hh = d.H || RH, cam = d.cam || camFor(X, Y);
     g.setCam(cam); g.backdrop(d.bd[0], d.bd[1], d.bd[2]);
     const bt = s.still ? 99 : Math.max(0, s.age - 0.3), full = bt >= 1.1;
     if (full) g.layer('rm-' + d.id, [-6, -6, -10, X + 6, Y + 6, Hh + 4], (k) => { k.isoFloor(X, Y, d.floor); k.isoWallCut(X, Y, Hh, d.wall); if (d.deco) d.deco(k); });
@@ -287,17 +289,17 @@ function buildScenes(ISO) {
   }
   // the door in the left wall: opens as you arrive, shuts behind you
   function doorOpen(rm) { return rm.s.still ? 0 : E(rm.bt, 1.85, 2.2) - E(rm.bt, 3.5, 4.0); }
-  function drawDoor(rm, color) {
-    if (!rm.full) return; const g = rm.g, o = doorOpen(rm);
-    g.isoPanel('x', 0, 22, 0, 10, 18, P.st1); g.isoPanel('x', 0, 23, 0, 8, 17, o > 0 ? '#5a5038' : P.dark);
-    const lw = Math.round(8 * (1 - o)); if (lw > 0) { g.isoPanel('x', 0, 23, 0, lw, 17, P.st2); g.isoPanel('x', 0, 23 + lw - 2, 8, 1, 1, P.st4); }
-    g.isoPanel('x', 0, 22, 18, 10, 1, color || P.red);
+  function drawDoor(rm, color, extra) {
+    if (!rm.full) return; const g = rm.g, o = clamp(doorOpen(rm) + (extra || 0));
+    g.isoPanel('x', 0, 14, 0, 10, 18, P.st1); g.isoPanel('x', 0, 15, 0, 8, 17, o > 0 ? '#5a5038' : P.dark);
+    const lw = Math.round(8 * (1 - o)); if (lw > 0) { g.isoPanel('x', 0, 15, 0, lw, 17, P.st2); g.isoPanel('x', 0, 15 + lw - 2, 8, 1, 1, P.st4); }
+    g.isoPanel('x', 0, 14, 17, 10, 1, color || P.red);
   }
   // you walk in through the door and stop at (dx, dy) facing dir
   function player(rm, dx, dy, dir, extra) {
     const s = rm.s; let r;
     if (s.still) r = { x: dx, y: dy, dir, moving: false, step: undefined };
-    else r = route([[2.0, 1, 26, 0], [3.5, dx, 26, 0], [4.1, dx, dy, dir]], rm.bt);
+    else r = route([[2.0, 1, LY, 0], [3.5, dx, LY, 0], [4.1, dx, dy, dir]], rm.bt);
     if (!s.still && rm.bt < 2.0) return;
     rm.L.person(r.x, r.y, r.dir, wp(r, op(s.me, extra || {})));
   }
@@ -307,171 +309,146 @@ function buildScenes(ISO) {
   const caps = (a, b) => [[0.12, 0.48, a], [0.5, 0.94, b]];
 
   // ═════════ 1. Front Office
-  const DEF_FRONT = { id: 'front', bd: ['diag', '#3a2c22', '#46372a'], floor: { style: 'checker', a: '#54463a', b: '#5d4e41', zones: [[0, 24, 46, 6, '#7a2424']] }, wall: { style: 'panel', tint: '#e03131' },
-    deco: (k) => { k.isoPanel('y', 0, 56, 6, 2, 8, P.st1); k.isoPanel('x', 0, 4, 10, 10, 1, P.st2); } };
+  const DEF_FRONT = { id: 'front', bd: ['diag', '#3a2c22', '#46372a'], floor: { style: 'checker', a: '#54463a', b: '#5d4e41', zones: [[0, 17, 40, 5, '#7a2424']] }, wall: { style: 'panel', tint: '#e03131' } };
   SCENES.front = { L: 10, caps: caps('The front desk', 'Paperwork goes in the cabinet'), key: ['counter'],
     draw(g, t, s) {
-      const rm = begin(g, s, DEF_FRONT), L = rm.L, ph = t / 10;
+      const rm = begin(g, s, DEF_FRONT), ph = t / 10;
       drawDoor(rm, P.red);
-      rm.prop('cabinet', 0, 4, 0, { face: 'x' }); rm.prop('cabinet', 0, 12, 0, { face: 'x' });
-      rm.prop('table', 12, 1, 0, { w: 18, d: 8, top: 'wood' }); rm.prop('printer', 14, 2, 9, { lit: true, out: E(t, 2, 4) * (t < 6 ? 1 : 0) }); rm.prop('docs', 24, 3, 9, { n: 3 });
-      rm.prop('board', 8, 0, 10, { w: 16, h: 14, rows: 5, lit: Math.floor(t / 2) % 5 });
-      rm.prop('fswindow', 44, 0, 6, { ph, sky: '#355f8a' }); rm.prop('fsclock', 28, 0, 8, { R: 4, hour: 3 + ph, min: ph * 60 * 12 % 60 });
-      rm.prop('counter', 30, 12, 0, { w: 26, d: 8, top: 'wood' }); rm.prop('monitor', 34, 14, 11, { rows: 3, screen: '#1d3550' }); rm.prop('docs', 46, 14, 11, { n: 2, head: P.red });
-      rm.prop('fsplant', 52, 2, 0);
-      // the guide types behind the counter; the clerk carries paper between the printer table and the cabinets; a visitor reads
+      rm.prop('cabinet', 0, 2, 0, { face: 'x' });
+      rm.prop('table', 12, 0, 0, { w: 18, d: 6, top: 'wood' }); rm.prop('printer', 13, 0, 9, { lit: true, out: E(t, 2, 4) * (t < 6 ? 1 : 0) }); rm.prop('docs', 23, 0, 9, { n: 3 });
+      rm.prop('fswindow', 30, 0, 2, { ph, sky: '#355f8a' });
+      rm.prop('counter', 14, 11, 0, { w: 26, d: 6, top: 'wood' }); rm.prop('monitor', 18, 12, 11, { rows: 3, screen: '#1d3550' }); rm.prop('docs', 30, 12, 11, { n: 2, head: P.red });
+      rm.prop('fsplant', 40, 3, 0);
       const gd = reactOf(s, 1, { arm: 'write' }), take = t > 7.4 && t < 8.0;
-      rm.person(42, 8, gd.dir, op(HELPER, op(gd.o, { z: gd.z, arm: take ? 'out' : gd.o.arm })));
-      const cl = route([[0, 20, 11, 3], [2, 20, 11, 3], [3.6, 10, 11, 2], [4.8, 10, 11, 2], [6.2, 20, 11, 3], [10, 20, 11, 3]], t), carry = t >= 2 && t < 4.8;
-      rm.person(cl.x, cl.y, cl.dir, wp(cl, op(CREW.wood, { hold: carry ? P.paper : undefined, holdSize: [4, 3], arm: !cl.moving && cl.x < 12 ? 'up' : 'down' })));
-      rm.person(50, 24, 1, op(CREW.blue, { hold: P.paper, holdSize: [4, 3], arm: 'out' }));
-      player(rm, 38, 25, 3);
+      rm.person(27, 9, gd.dir, op(HELPER, op(gd.o, { z: gd.z, arm: take ? 'out' : gd.o.arm })));
+      const cl = route([[0, 9, 6, 2], [5.6, 9, 6, 2], [6.8, 9, 13, 3], [9.0, 9, 13, 3], [10, 9, 6, 2]], t), carry = t >= 6.8 && t < 9.5;
+      rm.person(cl.x, cl.y, cl.dir, wp(cl, op(CREW.wood, { hold: carry ? P.paper : undefined, holdSize: [4, 3], arm: !cl.moving && cl.y < 8 ? 'up' : 'down' })));
+      player(rm, 27, 20, 3);
       shut(rm);
     } };
 
 
-
   // ═════════ 2. Time Clock
-  const DEF_CLOCK = { id: 'clock', bd: ['stripes', '#3b3226', '#463c2e'], floor: { style: 'grid', a: '#4a4238', b: '#51483c', zones: [[0, 24, 44, 6, '#7a6128'], [46, 10, 12, 8, '#5c646b']] }, wall: { style: 'tile', tint: '#c9952b' } };
+  const DEF_CLOCK = { id: 'clock', bd: ['stripes', '#3b3226', '#463c2e'], floor: { style: 'grid', a: '#4a4238', b: '#51483c', zones: [[0, 17, 36, 5, '#7a6128'], [40, 12, 8, 8, '#5c646b']] }, wall: { style: 'tile', tint: '#c9952b' } };
   SCENES.clock = { L: 10, caps: caps('A worker punches in', 'The card goes back on the rack'), key: ['timeclock'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_CLOCK), ph = t / 10;
-      drawDoor(rm, P.amber);
-      const lit = t > 4.4 && t < 6.0, cutK = lit ? E(t, 4.4, 5.0) * (1 - E(t, 5.4, 6.0)) : 0;
-      rm.prop('timeclock', 8, 0, 6, { lit, cut: cutK });
-      rm.prop('fsclock', 16, 0, 8, { R: 4, hour: 6 + ph * 2, min: (54 + ph * 60) % 60 });
-      rm.prop('fscards', 30, 0, 6, { gone: t > 2.2 && t < 6.9 ? [0, 2] : null });
-      rm.prop('cabinet', 0, 4, 0, { face: 'x' });
-      rm.prop('outboard', 0, 12, 8, { face: 'x', w: 9, h: 14, rows: 4, state: [1, 2, 1, 0] });
-      rm.prop('bin', 46, 12, 0, { col: 'steel', fill: 3 }); rm.prop('fsbench', 36, 20, 0);
-      rm.prop('lamp', 2, 0, 0, { col: lit ? 'green' : 'amber', on: true });
-      const dOpen = E(t, 0, 0.4) * (1 - E(t, 0.9, 1.3)) + E(t, 8.2, 8.6) * (1 - E(t, 8.9, 9.3));
-      if (rm.full) { const g2 = rm.g; g2.isoPanel('y', 0, 50, 0, 10, 18, P.st1); g2.isoPanel('y', 0, 51, 0, 8, 17, dOpen > 0 ? '#5a5038' : P.dark); const lw = Math.round(8 * (1 - dOpen)); if (lw > 0) g2.isoPanel('y', 0, 51 + 8 - lw, 0, lw, 17, P.st2); g2.isoPanel('y', 0, 50, 18, 10, 1, P.amber); }
+      drawDoor(rm, P.amber, E(t, 0, 0.4) * (1 - E(t, 0.9, 1.3)) + E(t, 7.6, 8.0) * (1 - E(t, 8.6, 9.0)));
+      const lit = t > 3.9 && t < 5.4, cutK = lit ? E(t, 3.9, 4.5) * (1 - E(t, 4.9, 5.4)) : 0;
+      rm.prop('timeclock', 4, 0, 4, { lit, cut: cutK });
+      rm.prop('fscards', 16, 0, 4, { gone: t > 2.4 && t < 6.4 ? [0, 2] : null });
+      rm.prop('fsclock', 32, 0, 3, { R: 4, hour: 6 + ph * 2, min: (54 + ph * 60) % 60 });
+      rm.prop('lamp', 40, 3, 0, { col: lit ? 'green' : 'amber', on: true });
       const gd = reactOf(s, 1, { arm: 'down' });
-      rm.person(55, 18, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
-      const wk = route([[0.1, 54, 1, 1], [0.9, 54, 6, 1], [2.0, 37, 5, 3], [2.8, 37, 5, 3], [4.0, 12, 7, 3], [5.4, 12, 7, 3], [6.6, 37, 5, 3], [7.2, 37, 5, 3], [8.4, 54, 6, 3], [9.0, 54, 1, 3]], t);
-      const cardOut = (t > 2.0 && t < 2.8) || (t > 4.0 && t < 5.4) || (t > 6.6 && t < 7.2);
-      if (t >= 0.1 && t < 9.0) rm.person(wk.x, wk.y, wk.dir, wp(wk, op(CREW.navy, { arm: cardOut ? 'out' : 'down', card: cardOut ? P.amber : undefined })));
-      player(rm, 30, 25, 3);
+      rm.person(36, 10, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
+      const wk = route([[0.1, 1, LY, 0], [1.4, 23, 7, 3], [2.2, 23, 7, 3], [3.4, 8, 9, 3], [5.0, 8, 9, 3], [6.2, 23, 7, 3], [6.8, 23, 7, 3], [8.2, 1, LY, 2], [8.8, 1, LY, 2]], t);
+      const cardOut = (t > 1.4 && t < 2.2) || (t > 3.4 && t < 5.0) || (t > 6.2 && t < 6.8);
+      if (t >= 0.1 && t < 8.8) rm.person(wk.x, wk.y, wk.dir, wp(wk, op(CREW.navy, { arm: cardOut ? 'out' : 'down', card: cardOut ? P.amber : undefined })));
+      player(rm, 27, 20, 3);
       shut(rm);
     } };
 
   // ═════════ 3. Shop Floor (the hazards live in the hunt stage; here the floor is calm, and a wet sign stays once you have been through the hunt)
-  const DEF_FLOOR = { id: 'floor', bd: ['bands', '#14181a', '#1b2024'], floor: { style: 'epoxy', a: '#2b3035', b: '#30363c', zones: [[0, 24, 60, 1, P.amberD], [0, 31, 60, 1, P.amberD], [44, 20, 1, 12, P.amberD]] }, wall: { style: 'studs', tint: '#3fbf7f' } };
+  const DEF_FLOOR = { id: 'floor', bd: ['bands', '#14181a', '#1b2024'], floor: { style: 'epoxy', a: '#2b3035', b: '#30363c', zones: [[0, 16, 48, 1, P.amberD], [0, 22, 48, 1, P.amberD]] }, wall: { style: 'studs', tint: '#3fbf7f' } };
   SCENES.floor = { L: 12, caps: caps('Machines are running', 'Eyes up on the floor'), key: ['machine'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_FLOOR);
       drawDoor(rm, P.green);
       const door = (k) => E(t, k, k + 0.8) * (1 - E(t, k + 3, k + 3.8));
-      rm.prop('machine', 10, 0, 0, { door: door(1), spin: t * 0.5, run: 1, t, lamp: 'green' });
-      rm.prop('machine', 36, 0, 0, { door: door(6), spin: t * 0.5, run: 1, t: t + 2, lamp: 'amber' });
-      rm.prop('cabinet', 0, 4, 0, { face: 'x' });
-      rm.prop('pallet', 48, 22, 0, { w: 10, d: 10 }); rm.box(49, 23, 3, 4, 4, 5, 'card'); rm.box(54, 23, 3, 4, 4, 5, 'card'); rm.box(49, 23, 8, 4, 4, 5, 'card');
-      rm.prop('cart', 28, 16, 0, { col: 'steel' });
-      rm.prop('bin', 56, 6, 0, { col: 'steel', fill: 3 });
-      if (s.hunt && s.hunt.done) rm.prop('fswet', 14, 22, 0);
-      const gd = reactOf(s, 0, { arm: 'out' });
-      rm.person(6, 16, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z, hold: P.paper, holdSize: [4, 3] })));
-      rm.person(19, 17, 3, op(CREW.green, { arm: Math.floor(t / 1.5) % 2 ? 'out' : 'down' }));
-      rm.person(45, 17, 3, op(CREW.steel, { arm: Math.floor((t + 0.75) / 1.5) % 2 ? 'out' : 'down' }));
-      const dk = route([[0, 46, 27, 0], [1, 46, 27, 0], [3, 40, 27, 3], [4, 40, 27, 3], [6, 46, 27, 0], [12, 46, 27, 0]], t);
-      rm.person(dk.x, dk.y, dk.dir, wp(dk, op(CREW.wood, { hold: t > 1 && t < 4 ? P.card : undefined, holdSize: [5, 4], arm: t >= 3 && t < 4 ? 'out' : 'down' })));
-      player(rm, 22, 27, 0);
+      rm.prop('shelf', 4, 0, 0, { w: 18, h: 18, seed: 2 });
+      rm.prop('machine', 28, 0, 0, { door: door(4), spin: t * 0.5, run: 1, t, lamp: 'green' });
+      rm.box(1, 10, 0, 5, 5, 5, 'card'); rm.box(1, 10, 5, 5, 5, 5, 'card');
+      if (s.hunt && s.hunt.done) rm.prop('fswet', 12, 20, 0);
+      const gd = reactOf(s, 1, { arm: 'out' });
+      rm.person(32, 16, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z, hold: P.paper, holdSize: [4, 3] })));
+      player(rm, 24, 19, 0);
       shut(rm);
     } };
 
   // ═════════ 4. Break Room
-  const DEF_BREAK = { id: 'break', bd: ['stripes', '#2a3340', '#334050'], floor: { style: 'checker', a: '#2d3238', b: '#383e45', zones: [[0, 24, 36, 6, '#2b4f78']] }, wall: { style: 'tile', tint: '#3d6fa5' } };
+  const DEF_BREAK = { id: 'break', bd: ['stripes', '#2a3340', '#334050'], floor: { style: 'checker', a: '#2d3238', b: '#383e45', zones: [[0, 17, 36, 5, '#2b4f78']] }, wall: { style: 'tile', tint: '#3d6fa5' } };
   SCENES.break = { L: 10, caps: caps('The vending machine', 'Lunch at the break table'), key: ['fsvending'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_BREAK);
       drawDoor(rm, P.blueL);
-      rm.prop('fsvending', 6, 0, 0, { drop: t > 2.0 && t < 2.6 ? E(t, 2.0, 2.6) : null });
-      rm.prop('counter', 24, 0, 0, { w: 26, d: 8, top: 'counter' });
-      rm.prop('fscoffee', 28, 2, 11, { t }); rm.prop('fsmicro', 38, 2, 11, { on: Math.floor(t * 2) % 2 === 0 });
-      rm.prop('board', 30, 0, 14, { w: 14, h: 10, rows: 3, lit: 1 });
-      rm.prop('table', 32, 14, 0, { w: 22, d: 10, h: 9, top: 'wood' });
-      rm.box(36, 17, 9, 3, 2, 1, 'paper'); rm.box(46, 18, 9, 2, 2, 3, 'red');
-      rm.prop('fsplant', 1, 15, 0);
-      const buyer = Math.floor(t) % 1 === 0;
-      rm.person(12, 11, 3, op(CREW.green, { arm: (t > 1.2 && t < 2.0) || (t > 2.6 && t < 3.4) ? 'out' : 'down', hold: t >= 3.4 ? P.blueL : undefined, holdSize: [2, 3] }));
-      const bite = Math.floor(t * 1.2) % 2 === 0;
-      rm.person(35, 12, 1, op(CREW.steel, { arm: bite ? 'out' : 'down' }));
+      rm.prop('fsvending', 0, 1, 0, { face: 'x',  drop: t > 2.0 && t < 2.6 ? E(t, 2.0, 2.6) : null });
+      rm.prop('counter', 16, 0, 0, { w: 30, d: 8, top: 'counter' });
+      rm.prop('fscoffee', 20, 2, 11, { t }); rm.prop('fsmicro', 34, 2, 11, { on: Math.floor(t * 2) % 2 === 0 });
+      rm.prop('table', 22, 12, 0, { w: 20, d: 8, h: 9, top: 'wood' });
+      rm.box(26, 14, 9, 3, 2, 1, 'paper'); rm.box(36, 15, 9, 2, 2, 3, 'red');
+      rm.person(11, 7, 2, op(CREW.green, { arm: (t > 1.2 && t < 2.0) || (t > 2.6 && t < 3.4) ? 'out' : 'down', hold: t >= 3.4 ? P.blueL : undefined, holdSize: [2, 3] }));
+      rm.person(27, 10, 1, op(CREW.steel, { arm: Math.floor(t * 1.2) % 2 === 0 ? 'out' : 'down' }));
       const gd = reactOf(s, 1, { arm: 'out' });
-      rm.person(48, 12, gd.dir, op(CREW.blue, op(gd.o, { z: gd.z, hold: '#16191c', holdSize: [2, 3] })));
-      player(rm, 22, 24, 0);
-      void buyer;
+      rm.person(37, 10, gd.dir, op(CREW.blue, op(gd.o, { z: gd.z, hold: '#16191c', holdSize: [2, 3] })));
+      player(rm, 13, 20, 0);
       shut(rm);
     } };
 
   // ═════════ 5. IT Desk
-  const DEF_IT = { id: 'it', bd: ['bands', '#0b1015', '#121a23'], floor: { style: 'grid', a: '#242a31', b: '#2a3038', zones: [[0, 24, 40, 6, '#1d3550']] }, wall: { style: 'panel', tint: '#3d6fa5' } };
+  const DEF_IT = { id: 'it', X: 50, bd: ['bands', '#0b1015', '#121a23'], floor: { style: 'grid', a: '#242a31', b: '#2a3038', zones: [[0, 17, 24, 5, '#1d3550']] }, wall: { style: 'panel', tint: '#3d6fa5' } };
   SCENES.it = { L: 10, caps: caps('The server racks', 'A drive gets swapped'), key: ['fsrack'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_IT);
       drawDoor(rm, P.blue);
       const pull = t > 1 && t < 4 ? E(t, 1, 1.6) - E(t, 3.2, 3.8) : 0, clip = t > 5.6 && t < 8.6;
-      rm.prop('fsrack', 2, 0, 0, { t }); rm.prop('fsrack', 12, 0, 0, { t: t + 0.5, pull }); rm.prop('fsrack', 22, 0, 0, { t: t + 1 });
-      rm.prop('fswhite', 32, 0, 6, { d: E(t, 0.6, 6.0), wipe: t > 8 ? E(t, 8, 9.4) : 0 });
-      rm.prop('desk', 32, 14, 0, { w: 26, d: 12 });
-      rm.prop('monitor', 34, 16, 9, { rows: 4, screen: '#1d3550' }); rm.prop('monitor', 46, 16, 9, { rows: 3, screen: '#16301f' });
-      rm.prop('bin', 54, 6, 0, { col: 'steel' });
+      rm.prop('fsrack', 2, 0, 0, { t }); rm.prop('fsrack', 12, 0, 0, { t: t + 0.5, pull });
+      rm.prop('fswhite', 24, 0, 2, { d: E(t, 0.6, 6.0), wipe: t > 8 ? E(t, 8, 9.4) : 0 });
+      rm.prop('desk', 26, 10, 0, { w: 24, d: 12 });
+      rm.prop('monitor', 28, 12, 9, { rows: 4, screen: '#1d3550' }); rm.prop('monitor', 40, 12, 9, { rows: 3, screen: '#16301f' });
       const gd = reactOf(s, 1, { arm: 'out' });
-      rm.person(45, 12, gd.dir, op(HELPER, op(gd.o, { z: gd.z })));
+      rm.person(38, 8, gd.dir, op(HELPER, op(gd.o, { z: gd.z })));
       rm.person(16, 15, clip ? 1 : 3, op(CREW.navy, { arm: 'out', hold: clip ? P.paper : undefined, holdSize: [4, 3] }));
-      player(rm, 24, 27, 0);
+      player(rm, 8, 21, 0);
       shut(rm);
     } };
 
   // ═════════ 6. The Vault
-  const DEF_VAULT = { id: 'vault', bd: ['diag', '#4a5056', '#586067'], floor: { style: 'epoxy', a: '#5c646b', b: '#656d75', zones: [[0, 24, 40, 6, '#7d858c'], [34, 10, 24, 10, '#4a5258']] }, wall: { style: 'tile' } };
-  SCENES.vault = { L: 10, caps: caps('The vault door', 'A folder goes into a box'), key: ['fsvaultdoor'],
+  const DEF_VAULT = { id: 'vault', X: 44, H: 26, bd: ['diag', '#4a5056', '#586067'], floor: { style: 'epoxy', a: '#5c646b', b: '#656d75', zones: [[0, 17, 30, 5, '#7d858c'], [26, 6, 16, 12, '#4a5258']] }, wall: { style: 'tile' } };
+  SCENES.vault = { L: 10, caps: caps('The vault door', 'A folder goes into the vault'), key: ['fsvaultdoor'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_VAULT);
       drawDoor(rm, P.st3);
-      const open = t < 3 ? 0 : t < 4 ? E(t, 3, 4) : t < 7 ? 1 : t < 8 ? 1 - E(t, 7, 8) : 0, boxOpen = t > 3.0 && t < 4.4;
-      rm.prop('fsvaultdoor', 4, 0, 0, { open, spin: t < 3 ? t / 3 : t > 8 ? -(t - 8) / 2 : 0 });
-      rm.prop('fsdep', 34, 0, 2, { open: boxOpen ? [3, 2] : null });
-      rm.prop('shelf', 0, 2, 0, { face: 'x', w: 20, h: 22, seed: 3 });
-      rm.prop('table', 16, 12, 0, { w: 14, d: 8, h: 9, top: 'steel' });
-      if (t < 1.4 || t > 5.8) rm.box(19, 14, 9, 5, 4, 2, 'card');
-      const ck = route([[0, 24, 10, 0], [1.4, 24, 10, 0], [3.0, 48, 5, 3], [4.4, 48, 5, 3], [5.8, 24, 10, 0], [10, 24, 10, 0]], t);
-      const filing = t >= 3.0 && t < 4.4, hold = (t >= 1.4 && t < 3.0) || (t >= 7 && t < 10) ? false : (t >= 1.4 && t < 4.4);
-      rm.person(ck.x, ck.y, ck.dir, wp(ck, op(CREW.wood, { arm: filing ? 'up' : 'down', hold: hold && !filing ? P.card : undefined, holdSize: [5, 4] })));
+      const open = t < 3 ? 0 : t < 4 ? E(t, 3, 4) : t < 7 ? 1 : t < 8 ? 1 - E(t, 7, 8) : 0;
+      rm.prop('fsvaultdoor', 14, 0, 0, { open, spin: t < 3 ? t / 3 : t > 8 ? -(t - 8) / 2 : 0 });
+      rm.prop('shelf', 0, 2, 0, { face: 'x', w: 10, h: 18, seed: 3 });
+      rm.prop('table', 10, 8, 0, { w: 14, d: 8, h: 9, top: 'steel' });
+      if (t < 1.4 || t > 5.8) rm.box(13, 10, 9, 5, 4, 2, 'card');
+      const ck = route([[0, 26, 7, 0], [1.4, 26, 7, 0], [3.0, 27, 5, 3], [4.4, 27, 3.5, 3], [5.6, 27, 3.5, 3], [7.0, 26, 7, 0], [10, 26, 7, 0]], t);
+      if (!(t > 4.45 && t < 5.55)) rm.person(ck.x, ck.y, ck.dir, wp(ck, op(CREW.wood, { arm: 'down', hold: t >= 1.4 && t < 4.5 ? P.card : undefined, holdSize: [5, 4] })));
       const gd = reactOf(s, 1, { arm: 'down' });
-      rm.person(12, 19, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
-      player(rm, 24, 25, 3);
+      rm.person(36, 6, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
+      player(rm, 14, 20, 0);
       shut(rm);
     } };
 
   // ═════════ 7. HR Office
-  const DEF_HR = { id: 'hr', bd: ['stripes', '#4a3a28', '#56452f'], floor: { style: 'checker', a: '#5a4630', b: '#654e36', zones: [[0, 24, 40, 6, '#8a6a2a']] }, wall: { style: 'panel', tint: '#c9952b' } };
+  const DEF_HR = { id: 'hr', bd: ['stripes', '#4a3a28', '#56452f'], floor: { style: 'checker', a: '#5a4630', b: '#654e36', zones: [[0, 17, 30, 5, '#8a6a2a']] }, wall: { style: 'panel', tint: '#c9952b' } };
   SCENES.hr = { L: 10, caps: caps('The HR office', 'Files go in the cabinet'), key: ['desk'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_HR), ph = t / 10;
       drawDoor(rm, P.amber);
-      rm.prop('cabinet', 0, 2, 0, { face: 'x' }); rm.prop('cabinet', 0, 10, 0, { face: 'x' });
-      rm.prop('board', 8, 0, 8, { w: 16, h: 14, rows: 6 });
-      rm.prop('fswindow', 28, 0, 8, { ph });
-      rm.prop('shelf', 46, 0, 0, { w: 14, h: 22, seed: 7 });
-      rm.prop('desk', 26, 14, 0, { w: 26, d: 12 });
-      rm.prop('monitor', 30, 16, 9, { rows: 4, screen: '#1d3550' }); rm.prop('docs', 42, 17, 9, { n: 3 });
-      rm.prop('fsplant', 54, 22, 0);
+      rm.prop('cabinet', 0, 2, 0, { face: 'x' });
+      rm.prop('board', 6, 0, 3, { w: 16, h: 13, rows: 6 });
+      rm.prop('fswindow', 24, 0, 2, { ph });
+      rm.prop('shelf', 40, 0, 0, { w: 8, h: 18, seed: 7 });
+      rm.prop('desk', 22, 10, 0, { w: 26, d: 12 });
+      rm.prop('monitor', 26, 12, 9, { rows: 4, screen: '#1d3550' }); rm.prop('docs', 38, 14, 9, { n: 3 });
       const dr = t > 1.0 && t < 4.6 ? E(t, 1, 1.6) * (1 - E(t, 4.0, 4.6)) : 0;
       if (dr > 0 && rm.who) rm.L.box(8, 3, 8, Math.max(1, Math.round(dr * 2)), 6, 3, 'steel', { rim: false });
-      const cw = route([[0, 11, 6, 2], [5.2, 11, 6, 2], [6.4, 14, 14, 1], [9.2, 14, 14, 1], [10, 11, 6, 2]], t), reading = t > 5.6 && t < 9.4;
-      rm.person(cw.x, cw.y, cw.dir, wp(cw, op(CREW.blue, { arm: !cw.moving && cw.x < 12 ? (dr > 0 ? 'up' : 'out') : 'out', hold: reading ? P.paper : undefined, holdSize: [4, 3] })));
+      const cw = route([[0, 11, 6, 2], [5.2, 11, 6, 2], [6.4, 12, 13, 1], [9.2, 12, 13, 1], [10, 11, 6, 2]], t), reading = t > 5.6 && t < 9.4;
+      rm.person(cw.x, cw.y, cw.dir, wp(cw, op(CREW.blue, { arm: !cw.moving && cw.y < 8 ? (dr > 0 ? 'up' : 'out') : 'out', hold: reading ? P.paper : undefined, holdSize: [4, 3] })));
       const gd = reactOf(s, 1, { arm: 'write' });
-      rm.person(39, 11, gd.dir, op(HELPER, op(gd.o, { z: gd.z })));
-      player(rm, 18, 24, 0);
+      rm.person(35, 8, gd.dir, op(HELPER, op(gd.o, { z: gd.z })));
+      player(rm, 12, 20, 0);
       shut(rm);
     } };
 
 
   // ═════════ the mini-game stages. Each has its own room, so no stage repeats a room.
-  // Punch the clock: a close-up (zoom 2) of one wall, a big clock, the time clock, the card rack and a row of tally lamps
+  // Punch the clock: one wall close up, a big clock, the time clock, the card rack and a row of tally lamps
   const EVT = [6 * 60 + 58, 11 * 60 + 30, 12 * 60, 14 * 60 + 15, 15 * 60 + 30, 17 * 60];
-  const DEF_CLOCKSTAGE = { id: 'clockstage', X: 24, Y: 14, H: 20, cam: { x: 8, y: 3, zoom: 2 }, bd: ['diag', '#1b1613', '#2a211a'], floor: { style: 'grid', a: '#2e2b27', b: '#33302b', zones: [[0, 9, 24, 5, '#5a4720']] }, wall: { style: 'panel', tint: '#c9952b' } };
+  const DEF_CLOCKSTAGE = { id: 'clockstage', X: 46, Y: 26, H: 20, bd: ['diag', '#1b1613', '#2a211a'], floor: { style: 'grid', a: '#2e2b27', b: '#33302b', zones: [[0, 16, 40, 5, '#5a4720']] }, wall: { style: 'panel', tint: '#c9952b' } };
+  if (!ISO.PROPS.fstally) def('fstally', [12, 2, 3], (s, o) => { s.B(0, 0, 0, 12, 2, 3, 'dark', { rim: false }); for (let i = 0; i < 6; i++) s.F(1 + i * 2, 1, 2, 1, i < (o.n || 0) ? P.green : P.st1); });
   SCENES.clockStage = { L: 6, caps: [], key: ['timeclock'],
     draw(g, t, s) {
       const rm = begin(g, s, DEF_CLOCKSTAGE), L = rm.L;
@@ -479,58 +456,53 @@ function buildScenes(ISO) {
       for (let i = 0; i < EVT.length; i++) { const ta = 2.8 + i * 2.6; if (at >= ta - 2.6) m = lerp(i ? EVT[i - 1] : 6 * 60 + 30, EVT[i], E(at, ta - 2.6, ta - 1.6)); }
       const last = s.punches && s.punches.length ? s.punches[s.punches.length - 1] : null, a = last ? (s.still ? 9 : last.age) : 9, punching = a < 0.45;
       const okLast = last && last.ok && a < 1.2;
-      rm.prop('fsclock', 1, 0, 3, { R: 5, hour: (m / 60) % 12, min: m % 60 });
-      rm.prop('timeclock', 16, 0, 2, { lit: okLast, cut: okLast ? E(a, 0, 0.3) * (1 - E(a, 0.8, 1.2)) : 0 });
-      rm.prop('fstally', 3, 0, 17, { n: s.hits || 0 });
-      rm.prop('fscards', 0, 1, 3, { face: 'x', gone: punching ? [0, 2] : null });
-      rm.prop('lamp', 6, 12, 0, { col: okLast ? 'green' : 'amber', on: true });
+      rm.prop('fsclock', 6, 0, 2, { R: 5, hour: (m / 60) % 12, min: m % 60 });
+      rm.prop('timeclock', 28, 0, 2, { lit: okLast, cut: okLast ? E(a, 0, 0.3) * (1 - E(a, 0.8, 1.2)) : 0 });
+      rm.prop('fstally', 8, 0, 16, { n: s.hits || 0 });
+      rm.prop('fscards', 0, 6, 2, { face: 'x', gone: punching ? [0, 2] : null });
+      rm.prop('lamp', 40, 3, 0, { col: okLast ? 'green' : 'amber', on: true });
       const rk = last && a < 1.6 ? { ok: last.ok, age: a } : null;
       const gd = reactOf({ react: rk }, 1, { arm: 'down' });
-      rm.person(8, 9, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
-      const pr = s.react, me = reactOf({ react: pr }, 3, {});
-      L.person(19, 7, punching ? 3 : me.dir, op(s.me, { arm: punching ? 'out' : 'down', card: punching ? P.amber : undefined, z: me.z }));
+      rm.person(14, 12, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z })));
+      L.person(32, 8, 3, op(s.me, { arm: punching ? 'out' : 'down', card: punching ? P.amber : undefined }));
       shut(rm);
     } };
-  if (!ISO.PROPS.fstally) def('fstally', [12, 2, 3], (s, o) => { s.B(0, 0, 0, 12, 2, 3, 'dark', { rim: false }); for (let i = 0; i < 6; i++) s.F(1 + i * 2, 1, 2, 1, i < (o.n || 0) ? P.green : P.st1); });
 
   // Spot what is wrong: a machine bay with four hazards. HUNT_AT is where each one is (the click targets are made from these)
-  const DEF_HUNT = { id: 'hunt', bd: ['stripes', '#12161a', '#1b2127'], floor: { style: 'epoxy', a: '#2b3035', b: '#30363c', zones: [[0, 24, 60, 1, P.amberD], [0, 31, 60, 1, P.amberD]] }, wall: { style: 'studs', tint: '#c9952b' } };
-  const HUNT_AT = [[20, 18, 10], [58, 12, 10], [6, 27, 0], [46, 26, 10]];
-  SCENES.huntStage = { L: 12, caps: [], key: ['machine'], spots: HUNT_AT, cam: CAM,
+  const DEF_HUNT = { id: 'hunt', bd: ['stripes', '#12161a', '#1b2127'], floor: { style: 'epoxy', a: '#2b3035', b: '#30363c', zones: [[0, 17, 48, 1, P.amberD], [0, 23, 48, 1, P.amberD]] }, wall: { style: 'studs', tint: '#c9952b' } };
+  const HUNT_AT = [[15, 16, 10], [4, 17, 10], [10, 20, 0], [33, 16, 10]];
+  SCENES.huntStage = { L: 12, caps: [], key: ['machine'], spots: HUNT_AT,
     draw(g, t, s) {
       const rm = begin(g, s, DEF_HUNT), L = rm.L, hunt = s.hunt || { on: false, found: {} }, found = hunt.found || {};
       const fx = (i) => (found[i] == null ? null : (s.still ? 9 : found[i]));
       const door = (k) => E(t, k, k + 0.8) * (1 - E(t, k + 3, k + 3.8));
-      drawDoor(rm, P.amber);
-      rm.prop('machine', 12, 0, 0, { door: door(2), spin: t * 0.5, run: 1, t, lamp: 'green' });
-      rm.prop('machine', 36, 0, 0, { door: door(7), spin: t * 0.5, run: 1, t: t + 3, lamp: 'green' });
-      rm.prop('cabinet', 0, 4, 0, { face: 'x' }); rm.prop('cabinet', 0, 12, 0, { face: 'x' });
+      rm.prop('machine', 6, 0, 0, { door: door(2), spin: t * 0.5, run: 1, t, lamp: 'green' });
+      rm.prop('machine', 28, 0, 0, { door: door(7), spin: t * 0.5, run: 1, t: t + 3, lamp: 'green' });
       // the spill, and the wet sign once it is spotted
       const sp = fx(2), rad = sp == null ? 5 : 5 * (1 - E(sp, 0.4, 2.4));
-      if (rad >= 1) rm.L.flat(0, 21, 12, 12, (gg) => { gg.isoEll(6, 27, 0, Math.round(rad), '#4a6a7a'); gg.isoEll(5, 26, 0, Math.max(1, Math.round(rad * 0.4)), '#6a8a9a'); });
-      if (sp != null && sp > 0.4) rm.prop('fswet', 11, 24, 0);
+      if (rad >= 1) L.flat(5, 16, 10, 8, (gg) => { gg.isoEll(10, 20, 0, Math.min(4, Math.round(rad)), '#4a6a7a'); gg.isoEll(9, 19, 0, Math.max(1, Math.round(rad * 0.4)), '#6a8a9a'); });
+      if (sp != null && sp > 0.4) rm.prop('fswet', 15, 19, 0);
       // 0: both earbuds in, then one comes out
       const e0 = fx(0), ear = e0 == null || e0 < 0.5;
-      rm.person(20, 18, 3, op(CREW.green, { arm: e0 != null && e0 < 0.6 ? 'up' : (Math.floor(t / 1.5) % 2 ? 'out' : 'down') }));
-      if (ear) detail(L, rm.g, 20, 18, (sx, sy) => { rm.g.p(sx - 3, sy - 16, P.paper); rm.g.p(sx + 3, sy - 16, P.paper); rm.g.p(sx - 3, sy - 15, P.st3); rm.g.p(sx + 3, sy - 15, P.st3); });
+      rm.person(15, 16, 3, op(CREW.green, { arm: e0 != null && e0 < 0.6 ? 'up' : (Math.floor(t / 1.5) % 2 ? 'out' : 'down') }));
+      if (ear) detail(L, rm.g, 15, 16, (sx, sy) => { const Z = rm.g.Z; rm.g.r(sx - 3 * Z, sy - 16 * Z, Z, Z, P.paper); rm.g.r(sx + 3 * Z, sy - 16 * Z, Z, Z, P.paper); rm.g.r(sx - 3 * Z, sy - 15 * Z, Z, Z, P.st3); rm.g.r(sx + 3 * Z, sy - 15 * Z, Z, Z, P.st3); });
       // 1: watching a video on a phone, then it goes in a pocket
       const e1 = fx(1), ph = e1 == null || e1 < 0.5;
-      rm.person(58, 12, 1, op(CREW.steel, { arm: ph ? 'out' : 'down', hold: ph ? '#16191c' : undefined, holdSize: [2, 3] }));
-      if (ph) detail(L, rm.g, 58, 12, (sx, sy) => { rm.g.p(sx - 5, sy - 10, Math.floor(t * 3) % 2 ? P.blueL : P.blueT); rm.g.p(sx - 4, sy - 9, P.blueT); });
+      rm.person(4, 17, 1, op(CREW.steel, { arm: ph ? 'out' : 'down', hold: ph ? '#16191c' : undefined, holdSize: [2, 3] }));
+      if (ph) detail(L, rm.g, 4, 17, (sx, sy) => { const Z = rm.g.Z; rm.g.r(sx - 5 * Z, sy - 10 * Z, Z, Z, Math.floor(t * 3) % 2 ? P.blueL : P.blueT); rm.g.r(sx - 4 * Z, sy - 9 * Z, Z, Z, P.blueT); });
       // 3: smoking at the machine, then puts it out and steps away
-      const e3 = fx(3), sm = e3 == null ? { x: 46, y: 26, dir: 0, moving: false, step: undefined } : route([[0.3, 46, 26, 0], [1.9, 56, 29, 0], [99, 56, 29, 0]], e3), smoking = e3 == null || e3 < 0.3;
-      rm.person(sm.x, sm.y, sm.dir, wp(sm, op(HELPER, { arm: smoking ? 'out' : 'down' })));
-      if (smoking) detail(L, rm.g, 46, 26, (sx, sy) => { rm.g.p(sx + 3, sy - 14, P.paper); rm.g.p(sx + 4, sy - 14, P.red); for (let k = 0; k < 4; k++) rm.g.p(sx + 4 + Math.round(Math.sin(t * 2 + k) * 1.5), sy - 17 - k * 3 - Math.floor((t * 6) % 3), P.st3); });
-      const gd = reactOf(s, 1, { arm: 'out' });
-      rm.person(36, 22, gd.dir, op(CREW.amber, op(gd.o, { z: gd.z, hold: P.paper, holdSize: [4, 3] })));
-      L.person(30, 27, 0, op(s.me, { arm: 'down' }));
+      const e3 = fx(3), sm = e3 == null ? { x: 33, y: 16, dir: 0, moving: false, step: undefined } : route([[0.3, 33, 16, 0], [2.0, 41, 16, 0], [99, 41, 16, 0]], e3), smoking = e3 == null || e3 < 0.3;
+      if (e3 == null || e3 < 2.1) rm.person(sm.x, sm.y, sm.dir, wp(sm, op(HELPER, { arm: smoking ? 'out' : 'down' })));
+      if (smoking) detail(L, rm.g, 33, 16, (sx, sy) => { const Z = rm.g.Z; rm.g.r(sx + 3 * Z, sy - 14 * Z, Z, Z, P.paper); rm.g.r(sx + 4 * Z, sy - 14 * Z, Z, Z, P.red); for (let k = 0; k < 4; k++) rm.g.r(sx + (4 + Math.round(Math.sin(t * 2 + k) * 1.5)) * Z, sy - (17 + k * 3 + Math.floor((t * 6) % 3)) * Z, Z, Z, P.st3); });
+      L.person(25, 19, 0, op(s.me, { arm: 'down' }));
       shut(rm);
     } };
 
+  SCENES.huntStage.cam = camFor(RX, RY);
   // What stays in the vault: a records room. The folder you choose flies to the safe or to the talking table.
-  const DEF_SORT = { id: 'sort', X: 52, Y: 30, H: 22, cam: { x: 19.5, y: 8.5, zoom: 1 }, bd: ['bands', '#232a33', '#2d3540'], floor: { style: 'epoxy', a: '#444b53', b: '#4b525a', zones: [[2, 20, 30, 8, '#5c646b'], [30, 6, 20, 12, '#3a3128']] }, wall: { style: 'tile', tint: '#7d858c' } };
-  const SORT_AT = { keep: [12, 6, 9], talk: [40, 11, 10] };
-  SCENES.sortStage = { L: 8, caps: [], key: ['fssafe'], cam: DEF_SORT.cam, at: SORT_AT,
+  const DEF_SORT = { id: 'sort', X: 44, Y: 26, H: 20, bd: ['bands', '#232a33', '#2d3540'], floor: { style: 'epoxy', a: '#444b53', b: '#4b525a', zones: [[2, 18, 24, 6, '#5c646b'], [22, 10, 20, 12, '#3a3128']] }, wall: { style: 'tile', tint: '#7d858c' } };
+  const SORT_AT = { keep: [11, 10, 9], talk: [32, 15, 10] };
+  SCENES.sortStage = { L: 8, caps: [], key: ['fssafe'], at: SORT_AT,
     draw(g, t, s) {
       const rm = begin(g, s, DEF_SORT), L = rm.L, items = s.sorted || [];
       let n = 0, shutK = 0, talk = 0, react = null;
@@ -539,24 +511,23 @@ function buildScenes(ISO) {
         if (it.keep && a > land && a < land + 0.45) shutK = Math.max(shutK, 1 - Math.abs(a - land - 0.22) / 0.23);
         if (!it.keep && a > land) talk++;
         if (a < 1.6 && (!react || a < react.age)) react = { ok: it.pick === it.keep, age: a }; });
-      rm.prop('fssafe', 4, 0, 0, { n, shut: clamp(shutK) });
-      rm.prop('cabinet', 0, 12, 0, { face: 'x' }); rm.prop('cabinet', 0, 20, 0, { face: 'x' });
-      rm.prop('board', 24, 0, 8, { w: 16, h: 12, rows: 5, lit: 1 });
-      rm.prop('table', 30, 6, 0, { w: 20, d: 10, h: 9, top: 'wood' });
-      for (let k = 0; k < talk; k++) rm.L.box(33 + (k % 2) * 6, 9, 9 + Math.floor(k / 2), 5, 4, 1, k % 2 ? 'paper' : 'cream', { rim: false });
-      rm.person(35, 3, 1, op(CREW.blue, { arm: 'out', z: talk > 0 && Math.floor(t * 2) % 4 === 0 ? 1 : 0 }));
-      rm.person(45, 3, 1, op(CREW.green, { arm: 'out', z: talk > 0 && Math.floor(t * 2) % 4 === 2 ? 1 : 0 }));
+      rm.prop('fssafe', 3, 0, 0, { n, shut: clamp(shutK) });
+      rm.prop('board', 24, 0, 6, { w: 16, h: 10, rows: 4, lit: 1 });
+      rm.prop('table', 22, 10, 0, { w: 20, d: 10, h: 9, top: 'wood' });
+      for (let k = 0; k < talk; k++) rm.L.box(25 + (k % 2) * 6, 13, 9 + Math.floor(k / 2), 5, 4, 1, k % 2 ? 'paper' : 'cream', { rim: false });
+      rm.person(28, 7, 1, op(CREW.blue, { arm: 'out', z: talk > 0 && Math.floor(t * 2) % 4 === 0 ? 1 : 0 }));
+      rm.person(38, 7, 1, op(CREW.green, { arm: 'out', z: talk > 0 && Math.floor(t * 2) % 4 === 2 ? 1 : 0 }));
       const me = reactOf({ react }, 1, {});
-      L.person(22, 20, me.dir, op(s.me, { arm: me.o.arm === 'up' ? 'down' : me.o.arm || 'down', z: me.z }));
+      L.person(16, 18, me.dir, op(s.me, { arm: 'down', z: me.z }));
       shut(rm);
       // the folder in flight: to your choice, and if that was wrong, on to where it belongs
-      const proj = (p) => g.proj(p[0], p[1], p[2]), from = proj([22, 20, 14]);
+      const proj = (p) => g.proj(p[0], p[1], p[2]), from = proj([16, 18, 14]);
       items.forEach((it) => { const a = s.still ? 9 : it.age, right = it.pick === it.keep, d1 = proj(it.pick ? SORT_AT.keep : SORT_AT.talk), d2 = proj(it.keep ? SORT_AT.keep : SORT_AT.talk);
         let pos = null;
-        if (a < 0.6) { const k = E(a, 0, 0.6); pos = [lerp(from[0], d1[0], k), lerp(from[1], d1[1], k) - Math.round(Math.sin(k * Math.PI) * 14)]; }
+        if (a < 0.6) { const k = E(a, 0, 0.6); pos = [lerp(from[0], d1[0], k), lerp(from[1], d1[1], k) - Math.round(Math.sin(k * Math.PI) * 20)]; }
         else if (!right && a < 0.9) pos = [d1[0] + (Math.floor(a * 16) % 2 ? 1 : -1), d1[1]];
-        else if (!right && a < 1.5) { const k = E(a, 0.9, 1.5); pos = [lerp(d1[0], d2[0], k), lerp(d1[1], d2[1], k) - Math.round(Math.sin(k * Math.PI) * 18)]; }
-        if (pos) { g.r(pos[0] - 5, pos[1] - 3, 10, 7, P.card); g.r(pos[0] - 5, pos[1] - 4, 4, 1, P.cardT); g.r(pos[0] - 5, pos[1] - 3, 10, 1, P.cardT); } });
+        else if (!right && a < 1.5) { const k = E(a, 0.9, 1.5); pos = [lerp(d1[0], d2[0], k), lerp(d1[1], d2[1], k) - Math.round(Math.sin(k * Math.PI) * 26)]; }
+        if (pos) { g.r(pos[0] - 7, pos[1] - 4, 14, 10, P.card); g.r(pos[0] - 7, pos[1] - 6, 6, 2, P.cardT); g.r(pos[0] - 7, pos[1] - 4, 14, 2, P.cardT); } });
     } };
 
   // ═════════ the street: seven buildings along one side, the sidewalk, the road, lamp posts, the time clock by the gate
@@ -686,6 +657,9 @@ function buildScenes(ISO) {
   return { SC: SCENES, P, E, route, drawBadge, IDS, BLD, WORLD, KIOSK, LANE, DOORY, SY, CURB, BW, BCOL: BADGE, W, H, doorX, streetCam, HUNT_AT, SORT_AT };
 }
 // ── SCENES:END
+
+
+
 
 
 
