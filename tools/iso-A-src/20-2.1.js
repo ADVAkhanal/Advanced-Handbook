@@ -2,7 +2,7 @@
   (function () {
     var VALS = ['Accountability', 'Dedication', 'Versatility', 'Advancement', 'Nurture', 'Craftsmanship', 'Excellence', 'Drive'];
     var COLS = [P.red, P.amber, P.green, P.blueT, '#d9a0c4', '#e0c060', P.redT, '#6ad79f'];
-    var C1 = cam(22, 4, 14, 120, 80), C2 = cam(23, 0, 14, 150, 72), C3 = cam(28, 4, 12, 196, 80);
+    var C1 = cam(22, 4, 14, 132, 80), C2 = cam(23, 0, 14, 162, 72), C3 = cam(28, 4, 12, 196, 80);
     function noteSeq() { return VALS.map(function (v, i) { return { a: 0.7 + i * 0.78, b: 1.45 + i * 0.78, x: 192, y: 60, text: v }; }); }
     make({ sid: '2.1', key: 'a21', title: 'About the company', std: 'Welcome & Company', blurb: 'The ADVANCED name is an acronym: each letter is one of our core values.',
       X: 44, Y: 28, H: 26, backdrop: ['stripes', '#12181a', '#182024'],

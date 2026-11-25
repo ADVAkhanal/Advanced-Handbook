@@ -178,13 +178,30 @@
   }
 
   /* ------------------------------------------------------------------ zones (pure estimate; the live one measures the DOM) */
+  /* the speaker face: a step (or a spec with speaker:'auto') shows a named character's face and name in the marquee sign, beside the step number.
+     step.speaker = 'forrest' | { who, face, talk:false } | false. 'auto' = the named character who is most often in the step. Needs iso-actions.js; without it, no face. */
+  function speakerOf(step) {
+    var s = step && step.speaker; if (!s || s === 'auto') return null;
+    return typeof s === 'string' ? { who: s.toLowerCase() } : (s.who ? { who: String(s.who).toLowerCase(), face: s.face, talk: s.talk } : null);
+  }
+  function resolveStep(spec, i) {
+    var st = spec.steps[i]; if (st.speaker === false || (!st.speaker && spec.speaker !== 'auto')) return st;
+    if (st.speaker && st.speaker !== 'auto') return st;
+    var cnt = {}, best = null;
+    probe(spec, i).forEach(function (s) { s.boxes.forEach(function (b) { if (b.who) { cnt[b.who] = (cnt[b.who] || 0) + 1; if (!best || cnt[b.who] > cnt[best]) best = b.who; } }); });
+    if (!best) return st;
+    var c = {}, k; for (k in st) c[k] = st[k]; c.speaker = best; return c;
+  }
+  var FACE_TOL = 0.02;   /* how much more of a person or key prop (averaged over the step) the wider sign may cover before the face is left out of that step */
+  function faceOf(step) { var s = speakerOf(step); return s && ISO.ACTIONS && ISO.ACTIONS[s.who] ? s : null; }
   function estimateZones(stageW, step, o) {
     o = o || {};
     var G = geom(stageW, o), s = sizes(stageW, o), narrow = s.mode === 'narrow', u = s.u;
     step = step || {};
     var bd = s.mqBorder, tpx = s.title;
     var availW = 0.94 * stageW, badge = 1.65 * s.badge;
-    var colAvail = availW - 2 * bd - badge - 0.45 * tpx - 1.04 * tpx;
+    var spkF = faceOf(step), fH = spkF ? Math.min((narrow ? 2.0 : 2.6) * tpx, Math.max(badge, tpx)) : 0, fW = spkF ? fH * 0.95 + 0.45 * tpx : 0;
+    var colAvail = availW - 2 * bd - badge - 0.45 * tpx - 1.04 * tpx - fW;
     var rows = tpx * 1.0, tgPx = s.tag;
     var title = step.title || 'TITLE', sub = step.sub || '', chips = narrow ? null : step.chips;
     var titleW = tw(title, tpx, 'bebas', 0.04);
@@ -198,7 +215,7 @@
       rows += s.gap + cr * chipH + (cr - 1) * s.gap;
     }
     h = Math.max(rows, badge) + 0.52 * tpx + 2 * bd;
-    var w = Math.min(availW, inner + badge + 0.45 * tpx + 1.04 * tpx + 2 * bd);
+    var w = Math.min(availW, inner + badge + 0.45 * tpx + 1.04 * tpx + 2 * bd + fW);
     var sx = (stageW - w) / 2, sy = 0.026 * G.stageH;
     var sign = [sx, sy, sx + w, sy + h];
     var tag = null;
@@ -224,7 +241,7 @@
     var mg = 3 * G.scale;
     var free = [mg, sign[3] + 2 * G.scale, stageW - mg, (cap ? cap[1] : G.stageH - ticks) - 2 * G.scale];
     function cv(r) { return r ? toCanvas(G, r) : null; }
-    var out = { W: G.W, H: G.H, scale: G.scale, mode: s.mode, narrow: narrow, stageW: stageW, stageH: G.stageH, sign: cv(sign), tag: cv(tag), cap: cv(cap), card: cv(card), free: cv(free), bigPos: pos, big: bl, live: false };
+    var out = { W: G.W, H: G.H, scale: G.scale, mode: s.mode, narrow: narrow, stageW: stageW, stageH: G.stageH, sign: cv(sign), tag: cv(tag), cap: cv(cap), card: cv(card), free: cv(free), bigPos: pos, big: bl, faceH: fH, live: false };
     if (card && (pos === 'left' || pos === 'bottom-left')) out.free[0] = Math.min(out.free[2] - 20, out.card[2] + 2);
     if (card && (pos === 'right' || pos === 'bottom-right')) out.free[2] = Math.max(out.free[0] + 20, out.card[0] - 2);
     out.free[1] = Math.min(out.free[1], out.free[3] - 20);
@@ -286,7 +303,7 @@
       t = lerp(Math.min(camDur, st.dur * 0.5), st.dur - 0.05, k / (N - 1));
       g.watch = []; rectLog.length = 0;
       try { render(spec, g, i, t); } catch (e) { void e; }
-      boxes = g.watch.filter(function (b) { return b.kind === 'person' || keyMatch(st, b.name); }).map(function (b) { return { kind: b.kind, name: b.name, box: b.box, cells: cellsOf(rectLog, b.m0 * 4, b.m1 * 4) }; });
+      boxes = g.watch.filter(function (b) { return b.kind === 'person' || keyMatch(st, b.name); }).map(function (b) { return { kind: b.kind, name: b.name, who: b.who, box: b.box, cells: cellsOf(rectLog, b.m0 * 4, b.m1 * 4) }; });
       g.watch = null; rectLog.length = 0;
       out.push({ t: t, boxes: boxes });
     }
@@ -301,9 +318,17 @@
   /* zones for a spec step at a stage width, with the card side resolved (auto) from the focus or the probe */
   function zonesFor(spec, i, stageW, o) {
     o = o || {};
-    var st = spec.steps[i], oo = { aspect: o.aspect, fill: o.fill || spec.fill, W: spec.W || (o.aspect === '16:9' && !(o.fill || spec.fill) ? 320 : 240), H: spec.H || 180 };
+    var st = resolveStep(spec, i), oo = { aspect: o.aspect, fill: o.fill || spec.fill, W: spec.W || (o.aspect === '16:9' && !(o.fill || spec.fill) ? 320 : 240), H: spec.H || 180 };
     if (st.big) oo.bigPos = resolveBigPos(spec, i, st.big.pos === 'auto' && !st.focus ? keyCentroidX(probe(spec, i)) : null);
-    return estimateZones(stageW, st, oo);
+    var Zw = estimateZones(stageW, st, oo);
+    if (Zw.faceH) {
+      /* the face makes the sign wider: keep it only when that wider sign covers no more of the people and key props than the sign without it */
+      var st0 = {}, k0; for (k0 in st) st0[k0] = st[k0]; st0.speaker = false;
+      var Zn = estimateZones(stageW, st0, oo), sm = probe(spec, i);
+      var cov = function (r) { var c = 0; sm.forEach(function (sp) { sp.boxes.forEach(function (b) { c += ovl(b.box, r) / Math.max(1, area(b.box)); }); }); return c / Math.max(1, sm.length); };
+      if (cov(Zw.sign) > cov(Zn.sign) + FACE_TOL) return Zn;
+    }
+    return Zw;
   }
 
   /* ------------------------------------------------------------------ keep-out plan: the camera nudge (canvas px) for a step */
@@ -440,6 +465,7 @@
     }
     g.setCam(cam);
     if (spec.backdrop) g.backdrop(spec.backdrop[0], spec.backdrop[1], spec.backdrop[2]); else g.fill(spec.bg || P.bg);
+    ISO.poseClock = t;      /* the named characters' action poses follow the step clock (iso-actions.js), so every render of a moment is the same picture */
     st.build(t, g, fx);
     if (st.big && st.big.dim) g.veil(st.big.dim * E(t, 0.1, 0.9), P.bg);
     var veil = 0;
@@ -458,6 +484,14 @@
     '.isx-stage canvas{position:absolute;inset:0;display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}',
     '.isx.fillw .isx-stage canvas{inset:auto;left:0;width:100%}',
     '.isx-mq{position:absolute;left:50%;top:2.6%;transform:translateX(-50%);width:max-content;max-width:94%;box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:.45em;align-items:center;font-size:var(--t);background:var(--isx-cream);color:#16191c;border:var(--bw) solid #16191c;padding:.26em .7em .26em .34em;text-align:left;white-space:nowrap}',
+    '.isx-mq .isx-spk{display:none;grid-column:2;grid-row:1/4;align-self:center;text-align:center}',
+    '.isx-mq.hasface{grid-template-columns:auto auto minmax(0,1fr)}',
+    '.isx-narrow .isx-mq .isx-spk canvas{height:1.8em}',
+    '.isx-narrow .isx-mq .isx-spk span{display:none}',
+    '.isx-mq.hasface .isx-spk{display:block}',
+    '.isx-mq.hasface h3,.isx-mq.hasface small,.isx-mq.hasface .chips{grid-column:3}',
+    '.isx-mq .isx-spk canvas{position:static;display:block;height:2.3em;width:auto;margin:0 auto;image-rendering:pixelated;image-rendering:crisp-edges;background:#2a2f33;border:max(1px,calc(var(--u)*.3)) solid #16191c}',
+    '.isx-mq .isx-spk span{display:block;margin-top:.12em;font:700 .26em/1 var(--isx-body);letter-spacing:.1em;text-transform:uppercase;color:#16191c}',
     '.isx-mq b{grid-column:1;grid-row:1/4;align-self:center;display:block;box-sizing:border-box;width:1.65em;height:1.65em;border-radius:50%;background:#e03131;color:#fff;font:400 var(--bd)/1.65 var(--isx-display);text-align:center}',
     '.isx-mq h3{grid-column:2;margin:0;font:400 var(--t)/1 var(--isx-display);letter-spacing:.04em;text-transform:uppercase;color:#16191c}',
     '.isx-mq small{grid-column:2;display:block;margin-top:.1em;font:700 var(--s)/1.15 var(--isx-body);color:#3d4349;white-space:normal}',
@@ -557,6 +591,7 @@
     self.cv.setAttribute('role', 'img'); self.cv.setAttribute('aria-label', spec.title + ', animated illustration');
     self.g = ISO.make(self.cv.getContext('2d'), { W: self.W, H: self.H });
     self.mq = el('div', 'isx-mq', self.stage); self.mqNo = el('b', '', self.mq); self.mqH = el('h3', '', self.mq); self.mqS = el('small', '', self.mq); self.mqC = el('div', 'chips', self.mq);
+    self.mqF = el('div', 'isx-spk', self.mq); self.mqFc = el('canvas', '', self.mqF); self.mqFc.setAttribute('role', 'img'); self.mqFn = el('span', '', self.mqF); self.faceKey = '';
     self.tag = el('div', 'isx-tag', self.stage);
     self.notes = []; self.cap = el('div', 'isx-cap', self.stage);
     self.big = el('div', 'isx-big', self.stage); self.bigN = el('b', '', self.big); self.bigL = el('span', '', self.big);
@@ -705,9 +740,36 @@
     var out = { W: G.W, H: G.H, sign: rect(this.mq), tag: this.narrow ? null : rect(this.tag), cap: cap, card: this.big.className.indexOf('on') >= 0 ? rect(this.big) : null, narrow: this.narrow, live: true };
     void self; return out;
   };
+  var TALK = [1, 2, 1, 3, 5, 0];
+  function drawFace(cv, who, f) {
+    var A = ISO.ACTIONS && ISO.ACTIONS[who], hd = A && A.heads[f]; if (!hd) return false;
+    cv.width = hd.w; cv.height = hd.h; var c = cv.getContext('2d'); c.clearRect(0, 0, hd.w, hd.h);
+    var cols = [], i, rows = hd.d.split('/'), re = /([A-Za-z.])([0-9]*)/g, m, x, y, n, ch;
+    for (i = 0; i + 6 <= hd.pal.length; i += 6) cols.push('#' + hd.pal.slice(i, i + 6));
+    for (y = 0; y < rows.length; y++) { re.lastIndex = 0; x = 0; while ((m = re.exec(rows[y]))) { ch = m[1]; n = m[2] ? parseInt(m[2], 10) : 1; if (ch !== '.') { c.fillStyle = cols[ch.charCodeAt(0) - (ch >= 'a' ? 71 : 65)]; c.fillRect(x, y, n, 1); } x += n; } }
+    return true;
+  }
+  /* the face in the sign: the expression follows the clock (listening, speaking, emphasis, a smile); reduce motion keeps the first face */
+  Inst.prototype.paintFace = function (i, t) {
+    var st = resolveStep(this.spec, i), spk = faceOf(st), box = this.mqF;
+    if (!spk) { if (this.mq.className.indexOf('hasface') >= 0) this.mq.className = this.mq.className.replace(' hasface', ''); return; }
+    var f = typeof spk.face === 'number' ? spk.face : (reduced || spk.talk === false ? 0 : TALK[Math.floor(Math.max(0, t) * 2.2) % TALK.length]);
+    var key = spk.who + '|' + f;
+    if (key !== this.faceKey) {
+      this.faceKey = key; drawFace(this.mqFc, spk.who, f);
+      var info = ISO.characters && ISO.characters.info ? ISO.characters.info(spk.who) : null;
+      this.mqFn.textContent = info ? info.name : spk.who; this.mqFc.setAttribute('aria-label', (info ? info.name : spk.who) + (info && info.role ? ', ' + info.role : ''));
+    }
+    var Zf = zonesFor(this.spec, i, this.stageW, this.opts());
+    if (!Zf || !Zf.faceH) { if (this.mq.className.indexOf('hasface') >= 0) this.mq.className = this.mq.className.replace(' hasface', ''); return; }
+    this.mqFc.style.height = Zf.faceH + 'px';
+    if (this.mq.className.indexOf('hasface') < 0) this.mq.className += ' hasface';
+    void box;
+  };
   Inst.prototype.overlay = function (i, t, now) {
     var st = this.spec.steps[i], self = this;
     if (i !== this.shown) this.setStep(i);
+    this.paintFace(i, t);
     var f = t / st.dur;
     if (st.cap) {
       var c = f >= 0.12 && f < 0.48 ? 0 : (f >= 0.5 && f < 0.94 ? 1 : -1);

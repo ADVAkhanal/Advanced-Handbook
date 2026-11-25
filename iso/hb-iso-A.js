@@ -203,7 +203,7 @@
   (function () {
     var VALS = ['Accountability', 'Dedication', 'Versatility', 'Advancement', 'Nurture', 'Craftsmanship', 'Excellence', 'Drive'];
     var COLS = [P.red, P.amber, P.green, P.blueT, '#d9a0c4', '#e0c060', P.redT, '#6ad79f'];
-    var C1 = cam(22, 4, 14, 120, 80), C2 = cam(23, 0, 14, 150, 72), C3 = cam(28, 4, 12, 196, 80);
+    var C1 = cam(22, 4, 14, 132, 80), C2 = cam(23, 0, 14, 162, 72), C3 = cam(28, 4, 12, 196, 80);
     function noteSeq() { return VALS.map(function (v, i) { return { a: 0.7 + i * 0.78, b: 1.45 + i * 0.78, x: 192, y: 60, text: v }; }); }
     make({ sid: '2.1', key: 'a21', title: 'About the company', std: 'Welcome & Company', blurb: 'The ADVANCED name is an acronym: each letter is one of our core values.',
       X: 44, Y: 28, H: 26, backdrop: ['stripes', '#12181a', '#182024'],
@@ -431,7 +431,7 @@
           S: function (t, fx) { return { t: t, s1: t > 1.2, s2: t > 2.6, pop: t > 1.2 && t < 2.4 ? [5, 19, 9] : (t > 2.6 && t < 3.8 ? [43, 18, 9] : null) }; } },
         { title: 'It is an outline', sub: 'Duties can change with business needs', dur: 8, cam: C2, key: ['machine'], cap: ['You may be asked to do more', 'Duties not in your written description'],
           S: function (t, fx) { var m = fx.walk([[40, 24], [30, 20], [20, 17]], t, 0.4, 3.0, { endDir: 2 }); return { t: t, s1: true, s2: true, noW2: true, mgr: m, mgrHold: t < 4.6, mgrArm: t > 3.4 && t < 4.8 ? 'out' : 'down', crate: t > 4.6 ? { x: 15, y: 21 } : null, w1Arm: t > 3.4 && t < 4.8 ? 'out' : 'out' }; } },
-        { title: 'Ask your manager', sub: 'Questions about your duties', dur: 6.5, cam: C3, big: { n: 'OUTLINE', label: 'only, not every duty', pos: 'left' },
+        { title: 'Ask your manager', sub: 'Questions about your duties', dur: 6.5, cam: C3, speaker: false, big: { n: 'OUTLINE', label: 'only, not every duty', pos: 'left' },
           S: function (t, fx) { return { t: t, s1: true, s2: true, mgr: { x: 49, y: 18, dir: 2 }, mgrArm: 'out', w2Arm: 'out' }; } }
       ] });
   })();
@@ -725,7 +725,7 @@
     });
   }
   var FIX = {
-    "1.1": {"1":{"who":{"raul":[0,1]}},"2":{"who":{"pam":[1,0]}},"3":{"who":{"pam":[1,0]}}},
+    "1.1": {"1":{"who":{"raul":[0,1]}},"2":{"who":{"pam":[2,-1]}},"3":{"who":{"pam":[1,0]}}},
     "1.2": {"3":{"who":{"scott":[-1,0]}}},
     "2.1": {"1":{"who":{"scott":[2,0]}}},
     "2.2": {"1":{"cam":4},"3":{"who":{"raul":[1,0]}}},

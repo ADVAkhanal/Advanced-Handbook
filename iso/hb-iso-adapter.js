@@ -23,7 +23,7 @@
   'use strict';
   if (window.HBIso) return;
 
-  var VERSION = '4';   /* cache key for the kit and batch files: v1.2.1 kit (named characters, sharper faces) */
+  var VERSION = '5';   /* cache key for the kit and batch files: v1.2.1 kit (named characters, sharper faces) */
   /* batch files, one per group of policies (each registers window.HB_ISO['<section id>'] = spec) */
   var BATCHES = ['hb-iso-A.js', 'hb-iso-B.js', 'hb-iso-C.js', 'hb-iso-D.js'];
   /* ids that are known to have a spec, so the first open shows a placeholder instead of the old scene while the files load.
@@ -73,9 +73,10 @@
   function start() {
     if (state !== 'idle') return;
     state = 'loading';
-    loadScript(BASE + 'iso-kit.js?v=' + VERSION).then(function () { return loadScript(BASE + 'iso-explainer.js?v=' + VERSION); })
+    loadScript(BASE + 'iso-kit.js?v=' + VERSION).then(function () { return loadScript(BASE + 'iso-actions.js?v=' + VERSION).then(function () { if (window.ISO) window.ISO.noPoses = true; /* faces in the sign, standing sprites in the scenes (the poses widen the figures; checked with --no-poses) */ }).catch(function (e) { if (window.console) console.warn('HBIso: no action poses or faces (' + e.message + ')'); }); }).then(function () { return loadScript(BASE + 'iso-explainer.js?v=' + VERSION); })
       .then(function () { return Promise.all(BATCHES.map(function (f) { return loadScript(BASE + f + '?v=' + VERSION).catch(function (e) { if (window.console) console.warn('HBIso: ' + e.message); }); })); })
-      .then(function () { state = (window.ISOX && window.HB_ISO) ? 'ready' : 'failed'; flush(); })
+      .then(function () { var all = (window.ISOX && window.ISOX.specs ? window.ISOX.specs : []).concat(Object.keys(window.HB_ISO || {}).map(function (k) { return window.HB_ISO[k]; }));
+        all.forEach(function (s) { if (s && s.steps && !s.speaker) s.speaker = 'auto'; });   /* the speaker face in the sign (checked with --speaker-auto) */ state = (window.ISOX && window.HB_ISO) ? 'ready' : 'failed'; flush(); })
       .catch(function (e) { state = 'failed'; if (window.console) console.warn('HBIso: ' + e.message); flush(); });
   }
   function flush() { var w = waiters; waiters = []; w.forEach(function (fn) { try { fn(); } catch (e) { /* never breaks the page */ } }); }

@@ -24,7 +24,7 @@
           S: function (t, fx) { return { t: t, s1: t > 1.2, s2: t > 2.6, pop: t > 1.2 && t < 2.4 ? [5, 19, 9] : (t > 2.6 && t < 3.8 ? [43, 18, 9] : null) }; } },
         { title: 'It is an outline', sub: 'Duties can change with business needs', dur: 8, cam: C2, key: ['machine'], cap: ['You may be asked to do more', 'Duties not in your written description'],
           S: function (t, fx) { var m = fx.walk([[40, 24], [30, 20], [20, 17]], t, 0.4, 3.0, { endDir: 2 }); return { t: t, s1: true, s2: true, noW2: true, mgr: m, mgrHold: t < 4.6, mgrArm: t > 3.4 && t < 4.8 ? 'out' : 'down', crate: t > 4.6 ? { x: 15, y: 21 } : null, w1Arm: t > 3.4 && t < 4.8 ? 'out' : 'out' }; } },
-        { title: 'Ask your manager', sub: 'Questions about your duties', dur: 6.5, cam: C3, big: { n: 'OUTLINE', label: 'only, not every duty', pos: 'left' },
+        { title: 'Ask your manager', sub: 'Questions about your duties', dur: 6.5, cam: C3, speaker: false, big: { n: 'OUTLINE', label: 'only, not every duty', pos: 'left' },
           S: function (t, fx) { return { t: t, s1: true, s2: true, mgr: { x: 49, y: 18, dir: 2 }, mgrArm: 'out', w2Arm: 'out' }; } }
       ] });
   })();

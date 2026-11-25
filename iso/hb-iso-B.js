@@ -239,7 +239,7 @@
   /* the step record every policy uses: chips name the layer, the sign title names it too */
   function step(i, o) {
     return { title: o.title, sub: o.sub, dur: o.dur || 7, cam: o.cam, tag: o.tag || 'REAL SPEED', chips: CH, chipAt: function () { return i; },
-      cap: o.cap, notes: o.notes, key: o.key || [], big: o.big, build: o.build };
+      cap: o.cap, notes: o.notes, key: o.key || [], big: o.big, speaker: o.speaker, build: o.build };
   }
   function reg(id, num, o) {
     var spec = { id: 'hb-b-' + String(id).toLowerCase().replace(/[^a-z0-9.]+/g, '-'), title: o.title, std: 'Employee handbook, ' + num, blurb: o.blurb,
@@ -349,7 +349,7 @@
             S.lit = (t > 0.9 && t < 2.8) || t > 6.2; S.litRow = t > 1.5 && t < 4.4 ? 1 : t > 6.2 ? 2 : -1; S.done = t > 4.4 ? 2 : 1;
             world(g, fx, S);
           } }),
-        step(2, { title: 'NEVER OFF THE CLOCK', sub: 'Falsifying time entries is prohibited', cam: cam3, key: ['machine'], big: { n: 'ALL', label: 'hours worked are paid', pos: 'bottom-right' },
+        step(2, { speaker: false, title: 'NEVER OFF THE CLOCK', sub: 'Falsifying time entries is prohibited', cam: cam3, key: ['machine'], big: { n: 'ALL', label: 'hours worked are paid', pos: 'bottom-right' },
           cap: ['Working off the clock is falsifying time', 'Tell HR about any pay discrepancy'],
           build: function (t, g, fx) {
             var S = base(); S.done = 5; S.lit = true; S.run = t < 3.6 ? 1 : 0; S.lamp = t < 3.6 ? 'green' : 'red'; S.no = t > 1.2;
@@ -1234,7 +1234,7 @@
     "5.5": {"1":{"cam":12}},
     "5.6": {"2":{"cam":8}},
     "5.8": {"2":{"who":{"raul":[2,2]}},"3":{"cam":4,"who":{"raul":[1,0]}}},
-    "5.9": {"2":{"cam":12,"who":{"forrest":[1,0]}}},
+    "5.9": {"2":{"cam":12,"who":{"forrest":[1,2]}}},
     "5.11": {"1":{"cam":8}},
     "5.12": {"2":{"cam":4}},
     "4.6": {"2":{"cam":8}},

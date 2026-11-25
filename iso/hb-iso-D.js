@@ -1149,13 +1149,13 @@
     "7.15": {"1":{"who":{"kim":[0,-2]}},"2":{"cam":8,"who":{"kim":[2,-2]}},"3":{"who":{"kim":[2,-2]}}},
     "7.8": {"3":{"cam":16}},
     "7.9": {"1":{"who":{"forrest":[0,1]}},"2":{"who":{"forrest":[0,1]}}},
-    "8.1": {"3":{"who":{"scott":[0,1]}}},
-    "8.3": {"1":{"who":{"scott":[-2,-5],"forrest":[-1,0]}},"3":{"who":{"scott":[1,1]}}},
+    "8.1": {"3":{"who":{"scott":[2,1]}}},
+    "8.3": {"1":{"who":{"scott":[-2,-5],"forrest":[-1,0],"pam":[-3,0]}},"3":{"who":{"scott":[1,1]}}},
     "OK-Jury Duty Leave": {"3":{"who":{"steve":[1,1],"pk":[-1,1]}}},
-    "OK-Voting Leave": {"1":{"who":{"kim":[1,0]}},"2":{"who":{"kim":[-1,-1]}}},
+    "OK-Voting Leave": {"1":{"who":{"kim":[2,0]}},"2":{"who":{"kim":[-1,-1]}}},
     "9.1": {"3":{"who":{"pk":[-1,0]}}},
     "CLOSE-Acknowledgment of Re": {"1":{"who":{"pam":[-2,-2]}},"2":{"cam":4,"who":{"forrest":[2,2]}},"3":{"cam":4,"who":{"forrest":[2,2]}}},
-    "CLOSE-Closing Statement": {"3":{"who":{"randel":[-1,0]}}}
+    "CLOSE-Closing Statement": {"3":{"who":{"randel":[2,0],"kim":[3,0]}}}
   };
   if (!globalThis.HB_NOFIX) applyFix(HB, FIX);
   /*FIX:END*/

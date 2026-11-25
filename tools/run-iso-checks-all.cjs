@@ -7,5 +7,5 @@ const path = require('path'), fs = require('fs'), cp = require('child_process');
 const ROOT = path.resolve(__dirname, '..'), KIT_TOOLS = path.resolve(ROOT, '..', 'iso-explainer-kit', 'tools', 'check-specs.cjs');
 if (!fs.existsSync(KIT_TOOLS)) { console.error('check-specs.cjs not found (expected ../iso-explainer-kit/tools)'); process.exit(2); }
 const iso = path.join(ROOT, 'iso'), files = ['A', 'B', 'C', 'D'].map((b) => path.join(iso, 'hb-iso-' + b + '.js'));
-const r = cp.spawnSync(process.execPath, [KIT_TOOLS, iso, ...files, ...process.argv.slice(2)], { stdio: 'inherit' });
+const r = cp.spawnSync(process.execPath, [KIT_TOOLS, iso, ...files, '--actions', '--no-poses', '--speaker-auto', ...process.argv.slice(2)], { stdio: 'inherit' });
 process.exit(r.status === null ? 2 : r.status);
